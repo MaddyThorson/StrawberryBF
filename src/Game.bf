@@ -12,9 +12,6 @@ namespace Strawberry
 	public class Game : SDLApp
 	{
 		public List<VirtualInput> VirtualInputs;
-		public float DeltaTime { get; private set; }
-		public float Time { get; private set; }
-		public float PreviousTime { get; private set; }
 
 		private Scene scene;
 		private Scene switchToScene;
@@ -26,7 +23,6 @@ namespace Strawberry
 		{
 			Game = this;
 			VirtualInputs = new List<VirtualInput>();
-			DeltaTime = 1 / 60f;
 
 			mTitle.Set(windowTitle);
 			mWidth = width;
@@ -72,8 +68,8 @@ namespace Strawberry
 			if (scene != null)
 				scene.Update();
 
-			PreviousTime = Time;
-			Time += DeltaTime;
+			Time.PreviousElapsed = Time.Elapsed;
+			Time.Elapsed += Time.Delta;
 		}
 
 		public override void Draw()

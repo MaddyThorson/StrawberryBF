@@ -50,16 +50,16 @@ namespace Strawberry
 
 			//Press
 			if (!last && Check)
-				lastPress = Game.Time;
-			Pressed = Check && lastPress > lastPressClear && Game.Time - lastPress <= pressBuffer;
+				lastPress = Time.Elapsed;
+			Pressed = Check && lastPress > lastPressClear && Time.Elapsed - lastPress <= pressBuffer;
 
 			//Repeat
-			if (Check && repeatStart > 0 && Game.Time - lastPress >= repeatStart)
+			if (Check && repeatStart > 0 && Time.Elapsed - lastPress >= repeatStart)
 			{
 				Repeating = true;
 
-				int a = (int)((Game.PreviousTime - lastPress) / repeatInterval);
-				int b = (int)((Game.Time - lastPress) / repeatInterval);
+				int a = (int)((Time.PreviousElapsed - lastPress) / repeatInterval);
+				int b = (int)((Time.Elapsed - lastPress) / repeatInterval);
 				if (a != b)
 					Pressed = true;
 			}
@@ -68,18 +68,18 @@ namespace Strawberry
 
 			//Release
 			if (last && !Check)
-				lastRelease = Game.Time;
-			Released = !Check && lastRelease > lastReleaseClear && Game.Time - lastRelease <= releaseBuffer;
+				lastRelease = Time.Elapsed;
+			Released = !Check && lastRelease > lastReleaseClear && Time.Elapsed - lastRelease <= releaseBuffer;
 		}
 
 		public void ClearPressBuffer()
 		{
-			lastPressClear = Game.Time;
+			lastPressClear = Time.Elapsed;
 		}
 
 		public void ClearReleaseBuffer()
 		{
-			lastReleaseClear = Game.Time;
+			lastReleaseClear = Time.Elapsed;
 		}
 
 		// Setup Calls
