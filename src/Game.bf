@@ -2,7 +2,7 @@ using SDL2;
 using System;
 using System.Collections;
 
-namespace BeefMonocle
+namespace Strawberry
 {
 	static
 	{

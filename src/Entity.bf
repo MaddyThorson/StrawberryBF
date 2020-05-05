@@ -1,7 +1,7 @@
 using System;
 using System.Collections;
 
-namespace BeefMonocle
+namespace Strawberry
 {
 	public class Entity
 	{
