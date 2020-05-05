@@ -5,6 +5,8 @@ namespace Strawberry
 {
 	public class Scene
 	{
+		public float TimeStarted { get; private set; }
+
 		private List<Entity> entities;
 		private HashSet<Entity> toRemove;
 		private HashSet<Entity> toAdd;
@@ -33,7 +35,7 @@ namespace Strawberry
 
 		public virtual void Started()
 		{
-			
+			TimeStarted = Time.Elapsed;
 		}
 
 		public virtual void Update()
@@ -93,6 +95,36 @@ namespace Strawberry
 
 				toAdd.Clear();
 			}
+		}
+
+		// Time
+
+		public float TimeElapsed
+		{
+			[Inline]
+			get
+			{
+				return Time.Elapsed - TimeStarted;
+			}
+		}
+
+		public float PreviousTimeElapsed
+		{
+			[Inline]
+			get
+			{
+				return Time.PreviousElapsed - TimeStarted;
+			}
+		}
+
+		public bool TimeOnInterval(float interval, float offset = 0)
+		{
+			return (int)((TimeElapsed - offset) / interval) != (int)((PreviousTimeElapsed - offset) / interval);
+		}
+
+		public bool TimeBetweenInterval(float interval, float offset = 0)
+		{
+			return (TimeElapsed - offset) % (interval * 2) >= interval;
 		}
 
 		// Finding Entities
