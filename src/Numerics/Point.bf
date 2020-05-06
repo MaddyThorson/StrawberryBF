@@ -27,6 +27,23 @@ namespace Strawberry
 			Y = y;
 		}
 
+		public override void ToString(String strBuffer)
+		{
+			let s = scope String;
+
+			strBuffer.Set("[ ");
+
+			X.ToString(s);
+			strBuffer.Append(s);
+
+			strBuffer.Append(", ");
+
+			Y.ToString(s);
+			strBuffer.Append(s);
+
+			strBuffer.Append(" ]");
+		}
+
 		static public explicit operator Point(Vector a)
 		{
 			return Point((int)a.X, (int)a.Y);

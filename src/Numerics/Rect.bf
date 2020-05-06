@@ -111,6 +111,33 @@ namespace Strawberry
 			return point.X >= X && point.X < X + Width && point.Y >= Y && point.Y < Y + Height;
 		}
 
+		public override void ToString(String strBuffer)
+		{
+			let s = scope String;
+
+			strBuffer.Set("[ ");
+
+			X.ToString(s);
+			strBuffer.Append(s);
+
+			strBuffer.Append(", ");
+
+			Y.ToString(s);
+			strBuffer.Append(s);
+
+			strBuffer.Append(", ");
+
+			Width.ToString(s);
+			strBuffer.Append(s);
+
+			strBuffer.Append(", ");
+
+			Height.ToString(s);
+			strBuffer.Append(s);
+
+			strBuffer.Append(" ]");
+		}
+
 		static public bool operator==(Rect a, Rect b)
 		{
 			return a.X == b.X && a.Y == b.Y && a.Width == b.Width && a.Height == b.Height;

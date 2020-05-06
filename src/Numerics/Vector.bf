@@ -51,6 +51,23 @@ namespace Strawberry
 			return Point((int)Math.Round(X), (int)Math.Round(Y));
 		}
 
+		public override void ToString(String strBuffer)
+		{
+			let s = scope String;
+
+			strBuffer.Set("[ ");
+
+			X.ToString(s);
+			strBuffer.Append(s);
+
+			strBuffer.Append(", ");
+
+			Y.ToString(s);
+			strBuffer.Append(s);
+
+			strBuffer.Append(" ]");
+		}
+
 		static public operator Vector(Point a)
 		{
 			return Vector(a.X, a.Y);

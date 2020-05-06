@@ -7,6 +7,8 @@ namespace Strawberry
 	{
 		private Vector remainder;
 
+		public Point Pushed;
+
 		public this(Point position)
 			: base(position)
 		{
@@ -28,9 +30,18 @@ namespace Strawberry
 			return CheckOutside(jumpThru, .(0, 1));
 		}
 
-		public virtual void Squish()
+		public virtual void Squish(Collision collision)
 		{
 			RemoveSelf();
+		}
+
+		public override void Update()
+		{
+			base.Update();
+
+			if (Pushed != Point.Zero)
+				Calc.Log(Pushed);
+			Pushed = Point.Zero;
 		}
 
 		public bool MoveX(float amount, Action<Collision> onCollide = null)

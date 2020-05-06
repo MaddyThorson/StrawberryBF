@@ -23,8 +23,11 @@ namespace Strawberry
 				let riders = GetRiders(scope List<Actor>);
 	
 				X += amount;
-				for (var r in riders)
-					r.MoveExactX(amount);
+				for (var a in riders)
+				{
+					a.MoveExactX(amount);
+					a.Pushed += Point.UnitX * amount;
+				}
 			}
 			else
 				X += amount;
@@ -39,8 +42,14 @@ namespace Strawberry
 				if (amount < 0)
 				{
 					for (var a in Scene.All<Actor>(scope List<Actor>))
+					{
 						if (riders.Contains(a) || CheckOutside(a, Point.UnitY * amount))
-							a.MoveExactY((Top + amount) - a.Bottom);
+						{
+							let move = (Top + amount) - a.Bottom;
+							a.MoveExactY(move);
+							a.Pushed += Point.UnitY * move;
+						}
+					}
 					Y += amount;
 				}
 				else
@@ -48,7 +57,10 @@ namespace Strawberry
 					Collidable = false;
 
 					for (var a in riders)
+					{
 						a.MoveExactY(amount);
+						a.Pushed += Point.UnitY * amount;
+					}
 
 					Collidable = true;
 					Y += amount;
