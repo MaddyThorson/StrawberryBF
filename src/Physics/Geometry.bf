@@ -3,7 +3,7 @@ using System.Collections;
 
 namespace Strawberry
 {
-	public abstract class Platform : Entity
+	public abstract class Geometry : Entity
 	{
 		private Vector remainder;
 
@@ -13,30 +13,30 @@ namespace Strawberry
 
 		}
 
-		public void MoveX(float amount, Action onCollide = null)
+		public void MoveX(float amount)
 		{
 			remainder.X += amount;
 			let move = (int)Math.Round(remainder.X);
 			if (move != 0)
 			{
 				remainder.X -= move;
-				MoveExactX(move, onCollide);
+				MoveExactX(move);
 			}
 		}
 
-		public void MoveY(float amount, Action onCollide = null)
+		public void MoveY(float amount)
 		{
 			remainder.Y += amount;
 			let move = (int)Math.Round(remainder.Y);
 			if (move != 0)
 			{
 				remainder.Y -= move;
-				MoveExactY(move, onCollide);
+				MoveExactY(move);
 			}
 		}
 
-		public abstract void MoveExactX(int amount, Action onCollide = null);
-		public abstract void MoveExactY(int amount, Action onCollide = null);
+		public abstract void MoveExactX(int amount);
+		public abstract void MoveExactY(int amount);
 		public abstract List<Actor> GetRiders(List<Actor> into);
 
 		public void ZeroRemainderX()
@@ -49,7 +49,7 @@ namespace Strawberry
 			remainder.Y = 0;
 		}
 
-		public void ZeroRemainder()
+		public void ZeroRemainders()
 		{
 			remainder = Vector.Zero;
 		}

@@ -42,6 +42,11 @@ namespace Strawberry
 			
 		}
 
+		public void RemoveSelf()
+		{
+			Scene?.Remove(this);
+		}
+
 		// ===== Position =====
 
 		public Vector Positionf;

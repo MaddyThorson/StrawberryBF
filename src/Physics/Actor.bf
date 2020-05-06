@@ -25,10 +25,10 @@ namespace Strawberry
 
 		public virtual void Squish()
 		{
-
+			Scene.Remove(this);
 		}
 
-		public bool MoveX(float amount, Action onCollide = null)
+		public bool MoveX(float amount, Action<Collision> onCollide = null)
 		{
 			remainder.X += amount;
 			let move = (int)Math.Round(remainder.X);
@@ -41,7 +41,7 @@ namespace Strawberry
 				return false;
 		}
 
-		public bool MoveY(float amount, Action onCollide = null)
+		public bool MoveY(float amount, Action<Collision> onCollide = null)
 		{
 			remainder.Y += amount;
 			let move = (int)Math.Round(remainder.Y);
@@ -54,16 +54,26 @@ namespace Strawberry
 				return false;
 		}
 
-		public bool MoveExactX(int amount, Action onCollide = null)
+		public bool MoveExactX(int amount, Action<Collision> onCollide = null, Geometry pusher = null)
 		{
 			int move = amount;
 			int sign = Math.Sign(amount);
 			while (move != 0)
 			{
-				if (Check<Solid>(.(sign, 0)))
+				let hit = First<Solid>(.(sign, 0));
+				if (hit != null)
 				{
 					ZeroRemainderX();
-					onCollide?.Invoke();
+
+					let c = Collision(
+						Point.Right * sign,
+						Math.Abs(amount),
+						Math.Abs(amount - move),
+						hit,
+						pusher
+					);
+
+					onCollide?.Invoke(c);
 					return true;
 				}
 
@@ -74,16 +84,26 @@ namespace Strawberry
 			return false;
 		}
 
-		public bool MoveExactY(int amount, Action onCollide = null)
+		public bool MoveExactY(int amount, Action<Collision> onCollide = null, Geometry pusher = null)
 		{
 			int move = amount;
 			int sign = Math.Sign(amount);
 			while (move != 0)
 			{
-				if (Check<Solid>(.(0, sign)))
+				let hit = First<Solid>(.(0, sign));
+				if (hit != null)
 				{
 					ZeroRemainderY();
-					onCollide?.Invoke();
+
+					let c = Collision(
+						Point.Right * sign,
+						Math.Abs(amount),
+						Math.Abs(amount - move),
+						hit,
+						pusher
+					);
+
+					onCollide?.Invoke(c);
 					return true;
 				}
 
@@ -104,7 +124,7 @@ namespace Strawberry
 			remainder.Y = 0;
 		}
 
-		public void ZeroRemainder()
+		public void ZeroRemainders()
 		{
 			remainder = Vector.Zero;
 		}

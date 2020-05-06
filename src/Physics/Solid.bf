@@ -2,7 +2,7 @@ using System.Collections;
 
 namespace Strawberry
 {
-	public class Solid : Platform
+	public class Solid : Geometry
 	{
 		public this(int x, int y, Rect hitbox)
 			: base(x, y)
@@ -23,7 +23,7 @@ namespace Strawberry
 			return into;
 		}
 
-		public override void MoveExactX(int amount, System.Action onCollide = null)
+		public override void MoveExactX(int amount)
 		{
 			if (amount != 0)
 			{
@@ -31,7 +31,7 @@ namespace Strawberry
 			}
 		}
 
-		public override void MoveExactY(int amount, System.Action onCollide = null)
+		public override void MoveExactY(int amount)
 		{
 			if (amount != 0)
 			{
