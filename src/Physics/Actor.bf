@@ -7,7 +7,7 @@ namespace Strawberry
 	{
 		private Vector remainder;
 
-		public Point Pushed;
+		public Point MovedByGeometry;
 
 		public this(Point position)
 			: base(position)
@@ -39,9 +39,7 @@ namespace Strawberry
 		{
 			base.Update();
 
-			if (Pushed != Point.Zero)
-				Calc.Log(Pushed);
-			Pushed = Point.Zero;
+			MovedByGeometry = Point.Zero;
 		}
 
 		public bool MoveX(float amount, Action<Collision> onCollide = null)
