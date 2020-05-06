@@ -3,7 +3,7 @@ using System.Collections;
 
 namespace Strawberry
 {
-	public class Entity
+	public abstract class Entity
 	{
 		public Scene Scene { get; private set; }
 		public int Depth;
@@ -12,9 +12,21 @@ namespace Strawberry
 		public bool Collidable = true;
 		public bool DeleteOnRemove = true;
 
+		private List<Component> components = new List<Component>() ~ delete _;
+		private HashSet<Component> toAdd = new HashSet<Component>() ~ delete _;
+		private HashSet<Component> toRemove = new HashSet<Component>() ~ delete _;
+
 		public this(Point position)
 		{
 			Positionf = position;
+		}
+
+		public ~this()
+		{
+			for (var c in components)
+				delete c;
+			for (var c in toAdd)
+				delete c;
 		}
 
 		public void Added(Scene scene)
@@ -29,23 +41,70 @@ namespace Strawberry
 
 		public virtual void Started()
 		{
-
+			for (var c in components)
+				c.Started();
 		}
 
 		public virtual void Update()
 		{
-
+			for (var c in components)
+				if (c.Active)
+					c.Update();
 		}
 
 		public virtual void Draw()
 		{
-			
+			for (var c in components)
+				if (c.Visible)
+					c.Draw();
 		}
 
 		[Inline]
 		public void RemoveSelf()
 		{
 			Scene?.Remove(this);
+		}
+
+		// ===== Components =====
+
+		public T Add<T>(T component) where T : Component
+		{
+			if (component.Entity == null)
+				toAdd.Add(component);
+			return component;
+		}
+
+		public T Remove<T>(T component) where T : Component
+		{
+			if (component.Entity == this)
+				toRemove.Add(component);
+			return component;
+		}
+
+		public void UpdateLists()
+		{
+			if (toRemove.Count > 0)
+			{
+				for (var c in toRemove)
+				{
+					components.Remove(c);
+					c.Removed();
+					delete c;
+				}
+
+				toRemove.Clear();
+			}
+
+			if (toAdd.Count > 0)
+			{
+				for (var c in toAdd)
+				{
+					components.Add(c);
+					c.Added(this);
+				}
+
+				toAdd.Clear();
+			}
 		}
 
 		// ===== Position =====

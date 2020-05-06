@@ -89,7 +89,13 @@ namespace Strawberry
 					entities.Add(e);
 					e.Added(this);
 				}
+			}
 
+			for (var e in entities)
+				e.UpdateLists();
+
+			if (toAdd.Count > 0)
+			{
 				for (var e in toAdd)
 					e.Started();
 
