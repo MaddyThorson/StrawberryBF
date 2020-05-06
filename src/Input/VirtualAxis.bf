@@ -8,7 +8,7 @@ namespace Strawberry
 		public enum OverlapBehaviors { TakeNewer, TakeOlder, CancelOut }
 
 		public float Value { get; private set; }
-		public int IntValue { get; private set; }
+		public int Valuei { get; private set; }
 		public bool Pressed { get; private set; }
 		public bool Released { get; private set; }
 		public bool Repeating { get; private set; }
@@ -42,7 +42,7 @@ namespace Strawberry
 				n.Update();
 
 			//Value
-			let last = IntValue;
+			let last = Valuei;
 			Value = 0;
 			for (var n in nodes)
 			{
@@ -52,15 +52,15 @@ namespace Strawberry
 					break;
 				}
 			}
-			IntValue = Math.Sign(Value);
+			Valuei = Math.Sign(Value);
 
 			//Press
-			if (last != IntValue && IntValue != 0)
+			if (last != Valuei && Valuei != 0)
 				lastPress = Time.Elapsed;
-			Pressed = IntValue != 0 && lastPress > lastPressClear && Time.Elapsed - lastPress <= pressBuffer;
+			Pressed = Valuei != 0 && lastPress > lastPressClear && Time.Elapsed - lastPress <= pressBuffer;
 
 			//Repeat
-			if (IntValue != 0 && repeatStart > 0 && Time.Elapsed - lastPress >= repeatStart)
+			if (Valuei != 0 && repeatStart > 0 && Time.Elapsed - lastPress >= repeatStart)
 			{
 				Repeating = true;
 
@@ -73,9 +73,9 @@ namespace Strawberry
 				Repeating = false;
 
 			//Release
-			if (last != 0 && IntValue == 0)
+			if (last != 0 && Valuei == 0)
 				lastRelease = Time.Elapsed;
-			Released = IntValue == 0 && lastRelease > lastReleaseClear && Time.Elapsed - lastRelease <= releaseBuffer;
+			Released = Valuei == 0 && lastRelease > lastReleaseClear && Time.Elapsed - lastRelease <= releaseBuffer;
 		}
 
 		public void ClearPressBuffer()

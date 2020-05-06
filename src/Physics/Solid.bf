@@ -4,15 +4,10 @@ namespace Strawberry
 {
 	public class Solid : Geometry
 	{
-		public this(int x, int y, Rect hitbox)
-			: base(x, y)
+		public this(Point position, Rect hitbox)
+			: base(position)
 		{
 			Hitbox = hitbox;
-		}
-
-		public override void Draw()
-		{
-			DrawHitbox(.(255, 255, 255, 255));
 		}
 
 		public override List<Actor> GetRiders(List<Actor> into)
@@ -37,6 +32,11 @@ namespace Strawberry
 			{
 
 			}
+		}
+
+		public override void Draw()
+		{
+			DrawHitbox(.(255, 255, 255, 255));
 		}
 	}
 }

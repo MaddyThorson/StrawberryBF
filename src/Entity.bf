@@ -12,9 +12,9 @@ namespace Strawberry
 		public bool Collidable = true;
 		public bool DeleteOnRemove = true;
 
-		public this(int x, int y)
+		public this(Point position)
 		{
-			Positionf = .(x, y);
+			Positionf = position;
 		}
 
 		public void Added(Scene scene)
@@ -42,6 +42,7 @@ namespace Strawberry
 			
 		}
 
+		[Inline]
 		public void RemoveSelf()
 		{
 			Scene?.Remove(this);

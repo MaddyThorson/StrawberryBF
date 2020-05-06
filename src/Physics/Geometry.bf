@@ -7,8 +7,8 @@ namespace Strawberry
 	{
 		private Vector remainder;
 
-		public this(int x, int y)
-			: base(x, y)
+		public this(Point position)
+			: base(position)
 		{
 
 		}

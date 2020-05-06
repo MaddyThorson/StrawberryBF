@@ -7,15 +7,15 @@ namespace Strawberry
 	{
 		private Vector remainder;
 
-		public this(int x, int y)
-			: base(x, y)
+		public this(Point position)
+			: base(position)
 		{
 
 		}
 
 		public bool GroundCheck(int distance = 1)
 		{
-			return Check<Solid>(.(0, distance));
+			return Check<Solid>(.(0, distance)) || CheckOutside<JumpThru>(.(0, distance));
 		}
 
 		public virtual bool IsRiding(Solid solid)
@@ -23,9 +23,14 @@ namespace Strawberry
 			return Check(solid, .(0, 1));
 		}
 
+		public virtual bool IsRiding(JumpThru jumpThru)
+		{
+			return CheckOutside(jumpThru, .(0, 1));
+		}
+
 		public virtual void Squish()
 		{
-			Scene.Remove(this);
+			RemoveSelf();
 		}
 
 		public bool MoveX(float amount, Action<Collision> onCollide = null)
@@ -90,7 +95,10 @@ namespace Strawberry
 			int sign = Math.Sign(amount);
 			while (move != 0)
 			{
-				let hit = First<Solid>(.(0, sign));
+				Geometry hit = First<Solid>(.(0, sign));
+				if (hit == null && sign == 1)
+					hit = FirstOutside<JumpThru>(.(0, sign));
+
 				if (hit != null)
 				{
 					ZeroRemainderY();
