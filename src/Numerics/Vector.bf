@@ -4,12 +4,14 @@ namespace Strawberry
 {
 	public struct Vector
 	{
-		static public readonly Vector Right = Vector(1, 0);
-		static public readonly Vector Left = Vector(-1, 0);
-		static public readonly Vector Up = Vector(0, -1);
-		static public readonly Vector Down = Vector(0, 1);
-		static public readonly Vector Zero = Vector(0, 0);
-		static public readonly Vector One = Vector(1, 1);
+		static public readonly Vector Right = .(1, 0);
+		static public readonly Vector Left = .(-1, 0);
+		static public readonly Vector Up = .(0, -1);
+		static public readonly Vector Down = .(0, 1);
+		static public readonly Vector UnitX = .(1, 0);
+		static public readonly Vector UnitY = .(0, 1);
+		static public readonly Vector Zero = .(0, 0);
+		static public readonly Vector One = .(1, 1);
 
 		public float X;
 		public float Y;

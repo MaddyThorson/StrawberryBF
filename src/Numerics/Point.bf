@@ -4,12 +4,14 @@ namespace Strawberry
 {
 	public struct Point
 	{
-		static public readonly Point Right = Point(1, 0);
-		static public readonly Point Left = Point(-1, 0);
-		static public readonly Point Up = Point(0, -1);
-		static public readonly Point Down = Point(0, 1);
-		static public readonly Point Zero = Point(0, 0);
-		static public readonly Point One = Point(1, 1);
+		static public readonly Point Right = .(1, 0);
+		static public readonly Point Left = .(-1, 0);
+		static public readonly Point Up = .(0, -1);
+		static public readonly Point Down = .(0, 1);
+		static public readonly Point UnitX = .(1, 0);
+		static public readonly Point UnitY = .(0, 1);
+		static public readonly Point Zero = .(0, 0);
+		static public readonly Point One = .(1, 1);
 
 		public int X;
 		public int Y;
