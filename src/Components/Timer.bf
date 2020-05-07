@@ -8,7 +8,7 @@ namespace Strawberry
 		private float value;
 
 		public Action OnComplete ~ delete _;
-		public bool DestroyOnComplete;
+		public bool RemoveOnComplete;
 
 		public this()
 			: base(false, false)
@@ -21,7 +21,7 @@ namespace Strawberry
 		{
 			Value = value;
 			OnComplete = onComplete;
-			DestroyOnComplete = destroyOnComplete;
+			RemoveOnComplete = destroyOnComplete;
 		}
 
 		public float Value
@@ -49,7 +49,7 @@ namespace Strawberry
 					Active = false;
 
 					OnComplete?.Invoke();
-					if (DestroyOnComplete)
+					if (RemoveOnComplete)
 						RemoveSelf();
 				}
 			}

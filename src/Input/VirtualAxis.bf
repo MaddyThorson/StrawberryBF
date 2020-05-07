@@ -141,9 +141,9 @@ namespace Strawberry
 
 			public override void Update()
 			{
-				if (Game.IsKeyDown(PositiveKeycode))
+				if (Input.KeyCheck(PositiveKeycode))
 				{
-				    if (Game.IsKeyDown(NegativeKeycode))
+				    if (Input.KeyCheck(NegativeKeycode))
 				    {
 				        switch (OverlapBehavior)
 				        {
@@ -170,7 +170,7 @@ namespace Strawberry
 				        value = 1;
 				    }
 				}
-				else if (Game.IsKeyDown(NegativeKeycode))
+				else if (Input.KeyCheck(NegativeKeycode))
 				{
 				    turned = false;
 				    value = -1;

@@ -26,7 +26,7 @@ namespace Strawberry
 				for (var a in riders)
 				{
 					a.MoveExactX(amount);
-					a.Pushed += Point.UnitX * amount;
+					a.MovedByGeometry += Point.UnitX * amount;
 				}
 			}
 			else
@@ -47,7 +47,7 @@ namespace Strawberry
 						{
 							let move = (Top + amount) - a.Bottom;
 							a.MoveExactY(move);
-							a.Pushed += Point.UnitY * move;
+							a.MovedByGeometry += Point.UnitY * move;
 						}
 					}
 					Y += amount;
@@ -59,7 +59,7 @@ namespace Strawberry
 					for (var a in riders)
 					{
 						a.MoveExactY(amount);
-						a.Pushed += Point.UnitY * amount;
+						a.MovedByGeometry += Point.UnitY * amount;
 					}
 
 					Collidable = true;

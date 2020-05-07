@@ -129,7 +129,7 @@ namespace Strawberry
 			{
 				get
 				{
-					 return Game.IsKeyDown(Keycode);
+					 return Input.KeyCheck(Keycode);
 				}
 			}
 		}
