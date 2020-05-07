@@ -1,5 +1,6 @@
 using System.Collections;
 using System;
+using SDL2;
 
 namespace Strawberry
 {
@@ -88,9 +89,21 @@ namespace Strawberry
 
 		// Setup Calls
 
-		public VirtualAxis Keys(SDL2.SDL.Scancode negativeKey, SDL2.SDL.Scancode positiveKey, OverlapBehaviors overlapBehavior = .TakeNewer)
+		public VirtualAxis AddKeys(SDL.Scancode negativeKey, SDL.Scancode positiveKey, OverlapBehaviors overlapBehavior = .TakeNewer)
 		{
 			nodes.Add(new KeyboardKeys(negativeKey, positiveKey, overlapBehavior));
+			return this;
+		}
+
+		public VirtualAxis AddButtons(SDL.SDL_GameControllerButton negativeButton, SDL.SDL_GameControllerButton positiveButton, OverlapBehaviors overlapBehavior = .TakeNewer)
+		{
+			nodes.Add(new GamepadButtons(negativeButton, positiveButton, overlapBehavior));
+			return this;
+		}
+
+		public VirtualAxis AddAxis(SDL.SDL_GameControllerAxis axis, float deadzone)
+		{
+			nodes.Add(new GamepadAxis(axis, deadzone));
 			return this;
 		}
 
@@ -124,13 +137,13 @@ namespace Strawberry
 		private class KeyboardKeys : Node
 		{
 			public OverlapBehaviors OverlapBehavior;
-			public SDL2.SDL.Scancode NegativeKeycode;
-			public SDL2.SDL.Scancode PositiveKeycode;
+			public SDL.Scancode NegativeKeycode;
+			public SDL.Scancode PositiveKeycode;
 
 			private float value;
 			private bool turned;
 
-			public this(SDL2.SDL.Scancode negativeKey, SDL2.SDL.Scancode positiveKey, OverlapBehaviors overlapBehavior = .TakeNewer)
+			public this(SDL.Scancode negativeKey, SDL.Scancode positiveKey, OverlapBehaviors overlapBehavior = .TakeNewer)
 			{
 				NegativeKeycode = negativeKey;
 				PositiveKeycode = positiveKey;
@@ -185,6 +198,98 @@ namespace Strawberry
 				get
 				{
 					return value;
+				}
+			}
+		}
+
+		private class GamepadButtons : Node
+		{
+			public OverlapBehaviors OverlapBehavior;
+			public SDL.SDL_GameControllerButton NegativeButton;
+			public SDL.SDL_GameControllerButton PositiveButton;
+
+			private float value;
+			private bool turned;
+
+			public this(SDL.SDL_GameControllerButton negativeButton, SDL.SDL_GameControllerButton positiveButton, OverlapBehaviors overlapBehavior = .TakeNewer)
+			{
+				NegativeButton = negativeButton;
+				PositiveButton = positiveButton;
+				OverlapBehavior = overlapBehavior;
+			}
+
+			public override void Update()
+			{
+				if (Game.GamepadButtonCheck(PositiveButton))
+				{
+				    if (Game.GamepadButtonCheck(NegativeButton))
+				    {
+				        switch (OverlapBehavior)
+				        {
+				            case OverlapBehaviors.CancelOut:
+				                value = 0;
+				                break;
+
+				            case OverlapBehaviors.TakeNewer:
+				                if (!turned)
+				                {
+				                    value *= -1;
+				                    turned = true;
+				                }
+				                break;
+
+				            case OverlapBehaviors.TakeOlder:
+				                //value stays the same
+				                break;
+				        }
+				    }
+				    else
+				    {
+				        turned = false;
+				        value = 1;
+				    }
+				}
+				else if (Game.GamepadButtonCheck(NegativeButton))
+				{
+				    turned = false;
+				    value = -1;
+				}
+				else
+				{
+				    turned = false;
+				    value = 0;
+				}
+			}
+
+			public override float Value
+			{
+				get
+				{
+					return value;
+				}
+			}
+		}
+
+		private class GamepadAxis : Node
+		{
+			public SDL.SDL_GameControllerAxis Axis;
+			public float Deadzone;
+
+			public this(SDL.SDL_GameControllerAxis axis, float deadzone)
+			{
+				Axis = axis;
+				Deadzone = deadzone;
+			}
+
+			public override float Value
+			{
+				get
+				{
+					let val = Game.GamepadAxisCheck(Axis);
+					if (Math.Abs(val) < Deadzone)
+						return 0;
+					else
+						return val;
 				}
 			}
 		}

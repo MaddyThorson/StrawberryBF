@@ -85,13 +85,13 @@ namespace Strawberry
 
 		// Setup Calls
 
-		public VirtualButton Key(SDL.Scancode keycode)
+		public VirtualButton AddKey(SDL.Scancode keycode)
 		{
 			nodes.Add(new KeyboardKey(keycode));
 			return this;
 		}
 
-		public VirtualButton Button(SDL.SDL_GameControllerButton button)
+		public VirtualButton AddButton(SDL.SDL_GameControllerButton button)
 		{
 			nodes.Add(new GamepadButton(button));
 			return this;
