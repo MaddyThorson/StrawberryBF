@@ -1,6 +1,7 @@
 using System.Collections;
 using System;
 using System.Diagnostics;
+using SDL2;
 
 namespace Strawberry
 {
@@ -84,9 +85,15 @@ namespace Strawberry
 
 		// Setup Calls
 
-		public VirtualButton Key(SDL2.SDL.Scancode keycode)
+		public VirtualButton Key(SDL.Scancode keycode)
 		{
 			nodes.Add(new KeyboardKey(keycode));
+			return this;
+		}
+
+		public VirtualButton Button(SDL.SDL_GameControllerButton button)
+		{
+			nodes.Add(new GamepadButton(button));
 			return this;
 		}
 
@@ -118,9 +125,9 @@ namespace Strawberry
 
 		private class KeyboardKey : Node
  		{
-			public SDL2.SDL.Scancode Keycode;
+			public SDL.Scancode Keycode;
 
-			public this(SDL2.SDL.Scancode keycode)
+			public this(SDL.Scancode keycode)
 			{
 				Keycode = keycode;
 			}
@@ -129,7 +136,50 @@ namespace Strawberry
 			{
 				get
 				{
-					 return Input.KeyCheck(Keycode);
+					 return Game.KeyCheck(Keycode);
+				}
+			}
+		}
+
+		private class GamepadButton : Node
+		{
+			public SDL.SDL_GameControllerButton Button;
+
+			public this(SDL.SDL_GameControllerButton button)
+			{
+				Button = button;
+			}
+
+			override public bool Check
+			{
+				get
+				{
+					 return Game.GamepadButtonCheck(Button);
+				}
+			}
+		}
+
+		private class GamepadAxis : Node
+		{
+			public SDL.SDL_GameControllerAxis Axis;
+			public float Threshold;
+			public ThresholdConditions Condition;
+
+			public this(SDL.SDL_GameControllerAxis axis, float threshold, ThresholdConditions condition = .GreaterThan)
+			{
+				Axis = axis;
+				Threshold = threshold;
+				Condition = condition;
+			}
+
+			override public bool Check
+			{
+				get
+				{
+					if (Condition == .GreaterThan)
+					 	return Game.GamepadAxisCheck(Axis) >= Threshold;
+					else
+						return Game.GamepadAxisCheck(Axis) <= Threshold;
 				}
 			}
 		}

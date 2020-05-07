@@ -5,8 +5,6 @@ namespace Strawberry
 {
 	public class VirtualAxis : VirtualInput
 	{
-		public enum OverlapBehaviors { TakeNewer, TakeOlder, CancelOut }
-
 		public float Value { get; private set; }
 		public int Valuei { get; private set; }
 		public bool Pressed { get; private set; }
@@ -141,9 +139,9 @@ namespace Strawberry
 
 			public override void Update()
 			{
-				if (Input.KeyCheck(PositiveKeycode))
+				if (Game.KeyCheck(PositiveKeycode))
 				{
-				    if (Input.KeyCheck(NegativeKeycode))
+				    if (Game.KeyCheck(NegativeKeycode))
 				    {
 				        switch (OverlapBehavior)
 				        {
@@ -170,7 +168,7 @@ namespace Strawberry
 				        value = 1;
 				    }
 				}
-				else if (Input.KeyCheck(NegativeKeycode))
+				else if (Game.KeyCheck(NegativeKeycode))
 				{
 				    turned = false;
 				    value = -1;

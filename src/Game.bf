@@ -25,12 +25,12 @@ namespace Strawberry
 		private bool updating;
 
 		public SDL.Renderer* Renderer { get; private set; }
-		public bool* KeyboardState { get; private set; }
-		public bool* PreviousKeyboardState { get; private set; }
 
 		private SDL.Rect screenRect;
 		private SDL.Window* window;
 		private SDL.Surface* screen;
+		private bool* keyboardState;
+		private SDL.SDL_GameController* gamepad;
 		private int32 updateCounter;
 
 		public this(String windowTitle, int32 width, int32 height)
@@ -44,6 +44,31 @@ namespace Strawberry
 			Height = height;
 
 			screenRect = SDL.Rect(0, 0, width, height);
+
+			String exePath = scope .();
+			Environment.GetExecutableFilePath(exePath);
+			String exeDir = scope .();
+			Path.GetDirectoryPath(exePath, exeDir);
+			Directory.SetCurrentDirectory(exeDir);
+
+			SDL.Init(.Video | .Events | .Audio | .GameController);
+			SDL.EventState(.JoyAxisMotion, .Disable);
+			SDL.EventState(.JoyBallMotion, .Disable);
+			SDL.EventState(.JoyHatMotion, .Disable);
+			SDL.EventState(.JoyButtonDown, .Disable);
+			SDL.EventState(.JoyButtonUp, .Disable);
+			SDL.EventState(.JoyDeviceAdded, .Disable);
+			SDL.EventState(.JoyDeviceRemoved, .Disable);
+
+			window = SDL.CreateWindow(Title, .Centered, .Centered, screenRect.w, screenRect.h, .Shown);
+			Renderer = SDL.CreateRenderer(window, -1, .Accelerated);
+			screen = SDL.GetWindowSurface(window);
+			SDLImage.Init(.PNG | .JPG);
+			SDLMixer.OpenAudio(44100, SDLMixer.MIX_DEFAULT_FORMAT, 2, 4096);
+
+			SDLTTF.Init();
+
+			gamepad = SDL.GameControllerOpen(0);
 		}
 
 		public ~this()
@@ -83,8 +108,8 @@ namespace Strawberry
 				}
 				else
 				{
-					PreviousKeyboardState = KeyboardState;
-					KeyboardState = SDL.GetKeyboardState(null);
+					keyboardState = SDL.GetKeyboardState(null);
+					SDL.GameControllerUpdate();
 
 					addTicks = Math.Min(addTicks, 20); // Limit catchup
 					if (addTicks > 0)
@@ -102,32 +127,6 @@ namespace Strawberry
 
 				curPhysTickCount = newPhysTickCount;
 			}
-		}
-
-		public virtual void Init()
-		{
-			String exePath = scope .();
-			Environment.GetExecutableFilePath(exePath);
-			String exeDir = scope .();
-			Path.GetDirectoryPath(exePath, exeDir);
-			Directory.SetCurrentDirectory(exeDir);
-
-			SDL.Init(.Video | .Events | .Audio);
-			SDL.EventState(.JoyAxisMotion, .Disable);
-			SDL.EventState(.JoyBallMotion, .Disable);
-			SDL.EventState(.JoyHatMotion, .Disable);
-			SDL.EventState(.JoyButtonDown, .Disable);
-			SDL.EventState(.JoyButtonUp, .Disable);
-			SDL.EventState(.JoyDeviceAdded, .Disable);
-			SDL.EventState(.JoyDeviceRemoved, .Disable);
-
-			window = SDL.CreateWindow(Title, .Centered, .Centered, screenRect.w, screenRect.h, .Shown);
-			Renderer = SDL.CreateRenderer(window, -1, .Accelerated);
-			screen = SDL.GetWindowSurface(window);
-			SDLImage.Init(.PNG | .JPG);
-			SDLMixer.OpenAudio(44100, SDLMixer.MIX_DEFAULT_FORMAT, 2, 4096);
-
-			SDLTTF.Init();
 		}
 
 		public virtual void Update()
@@ -156,14 +155,14 @@ namespace Strawberry
 		{
 			SDL.SetRenderDrawColor(Renderer, 0, 0, 0, 255);
 			SDL.RenderClear(Renderer);
-			if (Scene != null)
-				Scene.Draw();
+			Draw();
 			SDL.RenderPresent(Renderer);
 		}
 
 		public virtual void Draw()
 		{
-			
+			if (Scene != null)
+				Scene.Draw();
 		}
 
 		public Scene Scene
@@ -179,6 +178,36 @@ namespace Strawberry
 					delete switchToScene;
 				switchToScene = value;
 			}
+		}
+
+		// Input
+
+		public bool KeyCheck(SDL.Scancode key)
+		{
+			if (keyboardState == null)
+				return false;
+			return keyboardState[(int)key];
+		}
+
+		public bool GamepadButtonCheck(SDL.SDL_GameControllerButton button)
+		{
+			if (gamepad == null)
+				return false;
+			return SDL.GameControllerGetButton(gamepad, button) == 1;
+		}
+
+		public float GamepadAxisCheck(SDL.SDL_GameControllerAxis axis)
+		{
+			if (gamepad == null)
+				return 0;
+
+			let val = SDL.GameControllerGetAxis(gamepad, axis);
+			if (val == 0)
+				return 0;
+			else if (val > 0)
+				return val / 32767f;
+			else
+				return val / 32768f;
 		}
 	}
 }
