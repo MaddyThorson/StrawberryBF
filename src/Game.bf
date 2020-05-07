@@ -30,10 +30,10 @@ namespace Strawberry
 		private SDL.Window* window;
 		private SDL.Surface* screen;
 		private bool* keyboardState;
-		private SDL.SDL_GameController* gamepad;
+		private SDL.SDL_GameController*[] gamepads;
 		private int32 updateCounter;
 
-		public this(String windowTitle, int32 width, int32 height)
+		public this(String windowTitle, int32 width, int32 height, int gamepadLimit = 1)
 			: base()
 		{
 			Game = this;
@@ -51,7 +51,10 @@ namespace Strawberry
 			Path.GetDirectoryPath(exePath, exeDir);
 			Directory.SetCurrentDirectory(exeDir);
 
-			SDL.Init(.Video | .Events | .Audio | .GameController);
+			SDL.InitFlag init = .Video | .Events | .Audio;
+			if (gamepadLimit > 0)
+				init |= .GameController;
+			SDL.Init(init);
 			SDL.EventState(.JoyAxisMotion, .Disable);
 			SDL.EventState(.JoyBallMotion, .Disable);
 			SDL.EventState(.JoyHatMotion, .Disable);
@@ -68,7 +71,9 @@ namespace Strawberry
 
 			SDLTTF.Init();
 
-			gamepad = SDL.GameControllerOpen(0);
+			this.gamepads = new SDL.SDL_GameController*[gamepadLimit];
+			for (let i < this.gamepads.Count)
+				this.gamepads[i] = SDL.GameControllerOpen((int32)i);
 		}
 
 		public ~this()
@@ -79,8 +84,16 @@ namespace Strawberry
 			if (switchToScene != scene && switchToScene != null)
 				delete switchToScene;
 
-			delete VirtualInputs;
+			{
+				let list = scope List<VirtualInput>();
+				for (var i in VirtualInputs)
+					list.Add(i);
+				for (var i in list)
+					delete i;
+				delete VirtualInputs;
+			}
 
+			delete gamepads;
 			Game = null;
 		}
 
@@ -94,7 +107,9 @@ namespace Strawberry
 			{
 				SDL.Event event;
 				if (SDL.PollEvent(out event) != 0 && event.type == .Quit)
+				{
 					return;
+				}
 
 				// Fixed 60 Hz update
 				double msPerTick = 1000 / 60.0;
@@ -189,19 +204,19 @@ namespace Strawberry
 			return keyboardState[(int)key];
 		}
 
-		public bool GamepadButtonCheck(SDL.SDL_GameControllerButton button)
+		public bool GamepadButtonCheck(int gamepadID, SDL.SDL_GameControllerButton button)
 		{
-			if (gamepad == null)
+			if (gamepads == null)
 				return false;
-			return SDL.GameControllerGetButton(gamepad, button) == 1;
+			return SDL.GameControllerGetButton(gamepads[gamepadID], button) == 1;
 		}
 
-		public float GamepadAxisCheck(SDL.SDL_GameControllerAxis axis)
+		public float GamepadAxisCheck(int gamepadID, SDL.SDL_GameControllerAxis axis)
 		{
-			if (gamepad == null)
+			if (gamepads == null)
 				return 0;
 
-			let val = SDL.GameControllerGetAxis(gamepad, axis);
+			let val = SDL.GameControllerGetAxis(gamepads[gamepadID], axis);
 			if (val == 0)
 				return 0;
 			else if (val > 0)

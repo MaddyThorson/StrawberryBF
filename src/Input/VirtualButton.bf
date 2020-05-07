@@ -91,9 +91,15 @@ namespace Strawberry
 			return this;
 		}
 
-		public VirtualButton AddButton(SDL.SDL_GameControllerButton button)
+		public VirtualButton AddButton(int gamepadID, SDL.SDL_GameControllerButton button)
 		{
-			nodes.Add(new GamepadButton(button));
+			nodes.Add(new GamepadButton(gamepadID, button));
+			return this;
+		}
+
+		public VirtualButton AddAxis(int gamepadID, SDL.SDL_GameControllerAxis axis, float threshold, ThresholdConditions condition = .GreaterThan)
+		{
+			nodes.Add(new GamepadAxis(gamepadID, axis, threshold, condition));
 			return this;
 		}
 
@@ -143,10 +149,12 @@ namespace Strawberry
 
 		private class GamepadButton : Node
 		{
+			public int GamepadID;
 			public SDL.SDL_GameControllerButton Button;
 
-			public this(SDL.SDL_GameControllerButton button)
+			public this(int gamepadID, SDL.SDL_GameControllerButton button)
 			{
+				GamepadID = gamepadID;
 				Button = button;
 			}
 
@@ -154,19 +162,21 @@ namespace Strawberry
 			{
 				get
 				{
-					 return Game.GamepadButtonCheck(Button);
+					 return Game.GamepadButtonCheck(GamepadID, Button);
 				}
 			}
 		}
 
 		private class GamepadAxis : Node
 		{
+			public int GamepadID;
 			public SDL.SDL_GameControllerAxis Axis;
 			public float Threshold;
 			public ThresholdConditions Condition;
 
-			public this(SDL.SDL_GameControllerAxis axis, float threshold, ThresholdConditions condition = .GreaterThan)
+			public this(int gamepadID, SDL.SDL_GameControllerAxis axis, float threshold, ThresholdConditions condition = .GreaterThan)
 			{
+				GamepadID = gamepadID;
 				Axis = axis;
 				Threshold = threshold;
 				Condition = condition;
@@ -177,9 +187,9 @@ namespace Strawberry
 				get
 				{
 					if (Condition == .GreaterThan)
-					 	return Game.GamepadAxisCheck(Axis) >= Threshold;
+					 	return Game.GamepadAxisCheck(GamepadID, Axis) >= Threshold;
 					else
-						return Game.GamepadAxisCheck(Axis) <= Threshold;
+						return Game.GamepadAxisCheck(GamepadID, Axis) <= Threshold;
 				}
 			}
 		}

@@ -95,15 +95,15 @@ namespace Strawberry
 			return this;
 		}
 
-		public VirtualAxis AddButtons(SDL.SDL_GameControllerButton negativeButton, SDL.SDL_GameControllerButton positiveButton, OverlapBehaviors overlapBehavior = .TakeNewer)
+		public VirtualAxis AddButtons(int gamepadID, SDL.SDL_GameControllerButton negativeButton, SDL.SDL_GameControllerButton positiveButton, OverlapBehaviors overlapBehavior = .TakeNewer)
 		{
-			nodes.Add(new GamepadButtons(negativeButton, positiveButton, overlapBehavior));
+			nodes.Add(new GamepadButtons(gamepadID, negativeButton, positiveButton, overlapBehavior));
 			return this;
 		}
 
-		public VirtualAxis AddAxis(SDL.SDL_GameControllerAxis axis, float deadzone)
+		public VirtualAxis AddAxis(int gamepadID, SDL.SDL_GameControllerAxis axis, float deadzone)
 		{
-			nodes.Add(new GamepadAxis(axis, deadzone));
+			nodes.Add(new GamepadAxis(gamepadID, axis, deadzone));
 			return this;
 		}
 
@@ -204,6 +204,7 @@ namespace Strawberry
 
 		private class GamepadButtons : Node
 		{
+			public int GamepadID;
 			public OverlapBehaviors OverlapBehavior;
 			public SDL.SDL_GameControllerButton NegativeButton;
 			public SDL.SDL_GameControllerButton PositiveButton;
@@ -211,8 +212,9 @@ namespace Strawberry
 			private float value;
 			private bool turned;
 
-			public this(SDL.SDL_GameControllerButton negativeButton, SDL.SDL_GameControllerButton positiveButton, OverlapBehaviors overlapBehavior = .TakeNewer)
+			public this(int gamepadID, SDL.SDL_GameControllerButton negativeButton, SDL.SDL_GameControllerButton positiveButton, OverlapBehaviors overlapBehavior = .TakeNewer)
 			{
+				GamepadID = gamepadID;
 				NegativeButton = negativeButton;
 				PositiveButton = positiveButton;
 				OverlapBehavior = overlapBehavior;
@@ -220,9 +222,9 @@ namespace Strawberry
 
 			public override void Update()
 			{
-				if (Game.GamepadButtonCheck(PositiveButton))
+				if (Game.GamepadButtonCheck(GamepadID, PositiveButton))
 				{
-				    if (Game.GamepadButtonCheck(NegativeButton))
+				    if (Game.GamepadButtonCheck(GamepadID, NegativeButton))
 				    {
 				        switch (OverlapBehavior)
 				        {
@@ -249,7 +251,7 @@ namespace Strawberry
 				        value = 1;
 				    }
 				}
-				else if (Game.GamepadButtonCheck(NegativeButton))
+				else if (Game.GamepadButtonCheck(GamepadID, NegativeButton))
 				{
 				    turned = false;
 				    value = -1;
@@ -272,11 +274,13 @@ namespace Strawberry
 
 		private class GamepadAxis : Node
 		{
+			public int GamepadID;
 			public SDL.SDL_GameControllerAxis Axis;
 			public float Deadzone;
 
-			public this(SDL.SDL_GameControllerAxis axis, float deadzone)
+			public this(int gamepadID, SDL.SDL_GameControllerAxis axis, float deadzone)
 			{
+				GamepadID = gamepadID;
 				Axis = axis;
 				Deadzone = deadzone;
 			}
@@ -285,7 +289,7 @@ namespace Strawberry
 			{
 				get
 				{
-					let val = Game.GamepadAxisCheck(Axis);
+					let val = Game.GamepadAxisCheck(GamepadID, Axis);
 					if (Math.Abs(val) < Deadzone)
 						return 0;
 					else
