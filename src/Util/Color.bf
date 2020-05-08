@@ -4,19 +4,22 @@ namespace Strawberry
 {
 	public struct Color
 	{
-		static public readonly Color White = Color(255, 255, 255);
-		static public readonly Color Black = Color(0, 0, 0);
-		static public readonly Color Transparent = Color(0, 0, 0, 0);
-		static public readonly Color Red = Color(255, 0, 0);
-		static public readonly Color Green = Color(0, 255, 0);
-		static public readonly Color Blue = Color(0, 0, 255);
+		static public readonly Color White 			= 0xFFFFFFFF;
+		static public readonly Color Black 			= 0x000000FF;
+		static public readonly Color Transparent 	= 0x00000000;
+		static public readonly Color Red 			= 0xFF0000FF;
+		static public readonly Color Green 			= 0x00FF00FF;
+		static public readonly Color Blue 			= 0x0000FFFF;
+		static public readonly Color Cyan 			= 0xFF00FFFF;
+		static public readonly Color Magenta 		= 0xFFFF00FF;
+		static public readonly Color Yellow 		= 0x00FFFFFF;
 
 		public uint8 R;
 		public uint8 G;
 		public uint8 B;
 		public uint8 A;
 
-		public this(uint8 red, uint8 green, uint8 blue, uint8 alpha)
+		public this(uint8 red, uint8 green, uint8 blue, uint8 alpha = 255)
 		{
 			R = red;
 			G = green;
@@ -24,24 +27,12 @@ namespace Strawberry
 			A = alpha;
 		}
 
-		public this(uint8 red, uint8 green, uint8 blue)
-			: this(red, green, blue, 255)
-		{
-
-		}
-
-		public this(float red, float green, float blue, float alpha)
+		public this(float red, float green, float blue, float alpha = 1f)
 		{
 			R = (uint8)(red * 255);
 			G = (uint8)(green * 255);
 			B = (uint8)(blue * 255);
 			A = (uint8)(alpha * 255);
-		}
-
-		public this(float red, float green, float blue)
-			: this(red, green, blue, 1f)
-		{
-
 		}
 
 		public float Rf
@@ -104,6 +95,19 @@ namespace Strawberry
 			}
 		}
 
+		public override void ToString(String strBuffer)
+		{
+			strBuffer.Set("Color [ ");
+			((uint)R).ToString(strBuffer);
+			strBuffer.Append(", ");
+			((uint)G).ToString(strBuffer);
+			strBuffer.Append(", ");
+			((uint)B).ToString(strBuffer);
+			strBuffer.Append(", ");
+			((uint)A).ToString(strBuffer);
+			strBuffer.Append(" ]");
+		}
+
 		static public Color Lerp(Color a, Color b, float t)
 		{
 			return Color(
@@ -112,6 +116,21 @@ namespace Strawberry
 				Math.Lerp(a.Bf, b.Bf, t),
 				Math.Lerp(a.Af, b.Af, t)
 			);
+		}
+
+		static public implicit operator Color(uint32 from)
+		{
+			return Color(
+				(uint8)((from >> 24) & 0xFF),
+				(uint8)((from >> 16) & 0xFF),
+				(uint8)((from >> 8) & 0xFF),
+				(uint8)(from & 0xFF)
+			);
+		}
+
+		static public implicit operator uint32(Color from)
+		{
+			return (((uint32)from.R) << 24) | (((uint32)from.G) << 16) | (((uint32)from.B) << 8) | ((uint32)from.A);
 		}
 
 		static public Color operator/(Color a, Color b)

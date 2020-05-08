@@ -26,7 +26,7 @@ namespace Strawberry
 		private bool updating;
 
 		public SDL.Renderer* Renderer { get; private set; }
-		public Color ClearColor = Color.Black;
+		public Color ClearColor = .Black;
 
 		private SDL.Rect screenRect;
 		private SDL.Window* window;
