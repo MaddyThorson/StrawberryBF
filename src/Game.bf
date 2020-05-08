@@ -19,6 +19,7 @@ namespace Strawberry
 		public readonly String Title;
 		public readonly int Width;
 		public readonly int Height;
+		public readonly int WindowScale;
 		
 		private Scene scene;
 		private Scene switchToScene;
@@ -33,7 +34,7 @@ namespace Strawberry
 		private SDL.SDL_GameController*[] gamepads;
 		private int32 updateCounter;
 
-		public this(String windowTitle, int32 width, int32 height, int gamepadLimit = 1)
+		public this(String windowTitle, int32 width, int32 height, int32 windowScale, int gamepadLimit = 1)
 			: base()
 		{
 			Game = this;
@@ -42,8 +43,9 @@ namespace Strawberry
 			Title = windowTitle;
 			Width = width;
 			Height = height;
+			WindowScale = windowScale;
 
-			screenRect = SDL.Rect(0, 0, width, height);
+			screenRect = SDL.Rect(0, 0, width * windowScale, height * windowScale);
 
 			String exePath = scope .();
 			Environment.GetExecutableFilePath(exePath);
@@ -175,6 +177,7 @@ namespace Strawberry
 		{
 			SDL.SetRenderDrawColor(Renderer, 0, 0, 0, 255);
 			SDL.RenderClear(Renderer);
+			SDL.RenderSetScale(Renderer, WindowScale, WindowScale);
 			Draw();
 			SDL.RenderPresent(Renderer);
 		}
