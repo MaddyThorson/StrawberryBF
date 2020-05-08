@@ -113,28 +113,14 @@ namespace Strawberry
 
 		public override void ToString(String strBuffer)
 		{
-			let s = scope String;
-
-			strBuffer.Set("[ ");
-
-			X.ToString(s);
-			strBuffer.Append(s);
-
+			strBuffer.Set("Rect [ ");
+			X.ToString(strBuffer);
 			strBuffer.Append(", ");
-
-			Y.ToString(s);
-			strBuffer.Append(s);
-
+			Y.ToString(strBuffer);
 			strBuffer.Append(", ");
-
-			Width.ToString(s);
-			strBuffer.Append(s);
-
+			Width.ToString(strBuffer);
 			strBuffer.Append(", ");
-
-			Height.ToString(s);
-			strBuffer.Append(s);
-
+			Height.ToString(strBuffer);
 			strBuffer.Append(" ]");
 		}
 
