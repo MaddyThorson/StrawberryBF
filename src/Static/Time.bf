@@ -4,7 +4,11 @@ namespace Strawberry
 	{
 		static public float Elapsed;
 		static public float PreviousElapsed;
-		static public float Delta = 1 / 60f;
+		static public float Rate = 1f;
+		static public float Freeze;
+
+		static public float RawDelta => (1 / 60f);
+		static public float Delta => RawDelta * Rate;
 
 		static public bool OnInterval(float interval, float offset = 0)
 		{

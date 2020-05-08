@@ -105,23 +105,8 @@ namespace Strawberry
 
 		// Time
 
-		public float TimeElapsed
-		{
-			[Inline]
-			get
-			{
-				return Time.Elapsed - TimeStarted;
-			}
-		}
-
-		public float PreviousTimeElapsed
-		{
-			[Inline]
-			get
-			{
-				return Time.PreviousElapsed - TimeStarted;
-			}
-		}
+		public float TimeElapsed =>	Time.Elapsed - TimeStarted;
+		public float PreviousTimeElapsed =>	Time.PreviousElapsed - TimeStarted;
 
 		public bool TimeOnInterval(float interval, float offset = 0)
 		{

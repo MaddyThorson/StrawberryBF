@@ -159,11 +159,16 @@ namespace Strawberry
 				scene.Started();
 			}
 
-			if (scene != null)
-				scene.Update();
+			if (Time.Freeze > 0)
+				Time.Freeze -= Time.RawDelta;
+			else
+			{
+				if (scene != null)
+					scene.Update();
 
-			Time.PreviousElapsed = Time.Elapsed;
-			Time.Elapsed += Time.Delta;
+				Time.PreviousElapsed = Time.Elapsed;
+				Time.Elapsed += Time.Delta;
+			}
 		}
 
 		public void Render()
