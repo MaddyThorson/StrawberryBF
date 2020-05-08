@@ -26,6 +26,7 @@ namespace Strawberry
 		private bool updating;
 
 		public SDL.Renderer* Renderer { get; private set; }
+		public Color ClearColor = Color.Black;
 
 		private SDL.Rect screenRect;
 		private SDL.Window* window;
@@ -175,7 +176,7 @@ namespace Strawberry
 
 		public void Render()
 		{
-			SDL.SetRenderDrawColor(Renderer, 0, 0, 0, 255);
+			SDL.SetRenderDrawColor(Renderer, ClearColor.R, ClearColor.G, ClearColor.B, ClearColor.A);
 			SDL.RenderClear(Renderer);
 			SDL.RenderSetScale(Renderer, WindowScale, WindowScale);
 			Draw();

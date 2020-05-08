@@ -399,7 +399,7 @@ namespace Strawberry
 
 		// ===== Misc =====
 
-		public void DrawHitbox(SDL2.SDL.Color color)
+		public void DrawHitbox(Color color)
 		{
 			Draw.Rect(SceneHitbox, color);
 		}
