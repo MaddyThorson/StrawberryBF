@@ -1,7 +1,7 @@
 FileVersion = 1
 LastConfig = "Debug"
 LastPlatform = "Win64"
-RecentFilesList = ["c:\\Users\\Matt\\Documents\\Projects\\Strawberry\\src\\Static\\Ease.bf", "c:\\Program Files\\BeefLang\\BeefLibs\\corlib\\src\\Action.bf", "c:\\Users\\Matt\\Documents\\Projects\\Strawberry\\SampleGame\\src\\MovingJumpThru.bf", "c:\\Users\\Matt\\Documents\\Projects\\Strawberry\\SampleGame\\src\\Player.bf", "c:\\Users\\Matt\\Documents\\Projects\\Strawberry\\src\\Struct\\Color.bf", "c:\\Users\\Matt\\Documents\\Projects\\Strawberry\\SampleGame\\src\\Level.bf", "c:\\Users\\Matt\\Documents\\Projects\\Strawberry\\src\\Physics\\JumpThru.bf", "c:\\Users\\Matt\\Documents\\Projects\\Strawberry\\src\\Components\\Timer.bf", "c:\\Users\\Matt\\Documents\\Projects\\Strawberry\\src\\Physics\\Actor.bf", "c:\\Users\\Matt\\Documents\\Projects\\Strawberry\\src\\Physics\\Solid.bf"]
+RecentFilesList = ["c:\\Users\\Matt\\Documents\\Projects\\Strawberry\\SampleGame\\src\\Level.bf", "c:\\Users\\Matt\\Documents\\Projects\\Strawberry\\SampleGame\\src\\MovingJumpThru.bf", "c:\\Users\\Matt\\Documents\\Projects\\Strawberry\\src\\Physics\\Geometry.bf", "c:\\Users\\Matt\\Documents\\Projects\\Strawberry\\src\\Struct\\Vector.bf", "c:\\Users\\Matt\\Documents\\Projects\\Strawberry\\src\\Static\\Ease.bf", "c:\\Program Files\\BeefLang\\BeefLibs\\corlib\\src\\Action.bf", "c:\\Users\\Matt\\Documents\\Projects\\Strawberry\\SampleGame\\src\\Player.bf", "c:\\Users\\Matt\\Documents\\Projects\\Strawberry\\src\\Struct\\Color.bf", "c:\\Users\\Matt\\Documents\\Projects\\Strawberry\\src\\Physics\\JumpThru.bf", "c:\\Users\\Matt\\Documents\\Projects\\Strawberry\\src\\Components\\Timer.bf"]
 
 [MainWindow]
 X = 64
@@ -42,6 +42,24 @@ DefaultDocumentsTabbedView = true
 Type = "TabbedView"
 
 [[MainDockingFrame.DockedWidgets.DockedWidgets.Tabs]]
+TabLabel = "Geometry.bf"
+TabWidth = 109.7143
+Type = "SourceViewPanel"
+FilePath = "c:\\Users\\Matt\\Documents\\Projects\\Strawberry\\src\\Physics\\Geometry.bf"
+CursorPos = 929
+VertPos = 910.0
+ProjectName = "Strawberry"
+
+[[MainDockingFrame.DockedWidgets.DockedWidgets.Tabs]]
+TabLabel = "Vector.bf"
+TabWidth = 89.14286
+Type = "SourceViewPanel"
+FilePath = "c:\\Users\\Matt\\Documents\\Projects\\Strawberry\\src\\Struct\\Vector.bf"
+CursorPos = 1041
+VertPos = 802.5
+ProjectName = "Strawberry"
+
+[[MainDockingFrame.DockedWidgets.DockedWidgets.Tabs]]
 TabLabel = "Action.bf"
 TabWidth = 89.14286
 Type = "SourceViewPanel"
@@ -49,12 +67,11 @@ FilePath = "c:\\Program Files\\BeefLang\\BeefLibs\\corlib\\src\\Action.bf"
 ProjectName = "corlib"
 
 [[MainDockingFrame.DockedWidgets.DockedWidgets.Tabs]]
-Active = true
 TabLabel = "Ease.bf"
 TabWidth = 78.85714
 Type = "SourceViewPanel"
 FilePath = "c:\\Users\\Matt\\Documents\\Projects\\Strawberry\\src\\Static\\Ease.bf"
-CursorPos = 206
+CursorPos = 362
 ProjectName = "Strawberry"
 
 [[MainDockingFrame.DockedWidgets.DockedWidgets.Tabs]]
@@ -62,7 +79,7 @@ TabLabel = "MovingJumpThru.bf"
 TabWidth = 151.4286
 Type = "SourceViewPanel"
 FilePath = "c:\\Users\\Matt\\Documents\\Projects\\Strawberry\\SampleGame\\src\\MovingJumpThru.bf"
-CursorPos = 406
+CursorPos = 886
 ProjectName = "SampleGame"
 
 [[MainDockingFrame.DockedWidgets.DockedWidgets.Tabs]]
@@ -126,11 +143,12 @@ VertPos = 2180.5
 ProjectName = "SampleGame"
 
 [[MainDockingFrame.DockedWidgets.DockedWidgets.Tabs]]
+Active = true
 TabLabel = "Level.bf"
 TabWidth = 72.85714
 Type = "SourceViewPanel"
 FilePath = "c:\\Users\\Matt\\Documents\\Projects\\Strawberry\\SampleGame\\src\\Level.bf"
-CursorPos = 190
+CursorPos = 260
 ProjectName = "SampleGame"
 
 [[MainDockingFrame.DockedWidgets.DockedWidgets.Tabs]]
