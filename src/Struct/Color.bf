@@ -13,6 +13,9 @@ namespace Strawberry
 		static public readonly Color Cyan 			= 0xFF00FFFF;
 		static public readonly Color Magenta 		= 0xFFFF00FF;
 		static public readonly Color Yellow 		= 0x00FFFFFF;
+		static public readonly Color DarkGray		= 0x3F3F3FFF;
+		static public readonly Color Gray			= 0x7F7F7FFF;
+		static public readonly Color LightGray		= 0xBFBFBFFF;
 
 		public uint8 R;
 		public uint8 G;

@@ -6,14 +6,7 @@ namespace Strawberry
 		public this(Point position, int width)
 			: base(position)
 		{
-			Hitbox = Rect(0, 0, width, 6);
-		}
-
-		public override void Update()
-		{
-			base.Update();
-
-			MoveY(-10 * Time.Delta);
+			Hitbox = Rect(0, 0, width, 2);
 		}
 
 		public override void MoveExactX(int amount)
@@ -80,7 +73,7 @@ namespace Strawberry
 
 		public override void Draw()
 		{
-			DrawHitbox(.(255, 255, 255, 255));
+			DrawHitbox(.LightGray);
 		}
 	}
 }

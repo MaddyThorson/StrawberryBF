@@ -1,0 +1,5 @@
+FileVersion = 1
+Projects = {SampleGame = {Path = "."}, Strawberry = {Path = ".."}, SDL2 = "*"}
+
+[Workspace]
+StartupProject = "SampleGame"

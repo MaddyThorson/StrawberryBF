@@ -77,8 +77,6 @@ namespace Strawberry
 				let hit = First<Solid>(.(sign, 0));
 				if (hit != null)
 				{
-					ZeroRemainderX();
-
 					let c = Collision(
 						Point.Right * sign,
 						Math.Abs(amount),
@@ -110,8 +108,6 @@ namespace Strawberry
 
 				if (hit != null)
 				{
-					ZeroRemainderY();
-
 					let c = Collision(
 						Point.Right * sign,
 						Math.Abs(amount),

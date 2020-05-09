@@ -26,16 +26,25 @@ namespace Strawberry
 
 		public float Value
 		{
+			[Inline]
 			get
 			{
 				return value;
 			}
 
+			[Inline]
 			set
 			{
 				this.value = Math.Max(0, value);
 				Active = (this.value > 0);
 			}
+		}
+
+		[Inline]
+		public void Clear()
+		{
+			value = 0;
+			Active = false;
 		}
 
 		public override void Update()
@@ -53,6 +62,11 @@ namespace Strawberry
 						RemoveSelf();
 				}
 			}
+		}
+
+		static public implicit operator bool(Timer timer)
+		{
+			return timer.value > 0;
 		}
 	}
 }

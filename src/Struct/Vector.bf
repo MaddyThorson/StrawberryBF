@@ -51,6 +51,16 @@ namespace Strawberry
 			return Point((int)Math.Round(X), (int)Math.Round(Y));
 		}
 
+		static public Vector Lerp(Vector a, Vector b, float t)
+		{
+			if (t == 0)
+				return a;
+			else if (t == 1)
+				return b;
+			else
+				return a + (b - a) * t;
+		}
+
 		public override void ToString(String strBuffer)
 		{
 			strBuffer.Set("Vector [ ");

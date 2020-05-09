@@ -10,13 +10,6 @@ namespace Strawberry
 			Hitbox = hitbox;
 		}
 
-		public override void Update()
-		{
-			base.Update();
-
-			MoveY(0.1f);
-		}
-
 		public override List<Actor> GetRiders(List<Actor> into)
 		{
 			for (var a in Scene.All<Actor>(scope List<Actor>))
