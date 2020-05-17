@@ -17,7 +17,7 @@ namespace Strawberry
 
 		public bool GroundCheck(int distance = 1)
 		{
-			return Check<Solid>(.(0, distance)) || CheckOutside<JumpThru>(.(0, distance));
+			return Check<Solid>(.(0, distance)) || Check(Scene, .(0, distance)) || CheckOutside<JumpThru>(.(0, distance));
 		}
 
 		public virtual bool IsRiding(Solid solid)
@@ -89,6 +89,20 @@ namespace Strawberry
 					return true;
 				}
 
+				if (Check(Scene.SolidGrid, .(sign, 0)))
+				{
+					let c = Collision(
+						Point.Right * sign,
+						Math.Abs(amount),
+						Math.Abs(amount - move),
+						null,
+						pusher
+					);
+
+					onCollide?.Invoke(c);
+					return true;
+				}
+
 				X += sign;
 				move -= sign;
 			}
@@ -113,6 +127,20 @@ namespace Strawberry
 						Math.Abs(amount),
 						Math.Abs(amount - move),
 						hit,
+						pusher
+					);
+
+					onCollide?.Invoke(c);
+					return true;
+				}
+
+				if (Check(Scene.SolidGrid, .(0, sign)))
+				{
+					let c = Collision(
+						Point.Right * sign,
+						Math.Abs(amount),
+						Math.Abs(amount - move),
+						null,
 						pusher
 					);
 

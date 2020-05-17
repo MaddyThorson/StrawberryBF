@@ -301,6 +301,26 @@ namespace Strawberry
 			return SceneHitbox.Intersects(rect);
 		}
 
+		public bool Check(Scene scene)
+		{
+			return scene.SolidGrid != null && Check(scene.SolidGrid);
+		}
+
+		public bool Check(Scene scene, Point offset)
+		{
+			return scene.SolidGrid != null && Check(scene.SolidGrid, offset);
+		}
+
+		public bool Check(Grid grid)
+		{
+			return grid.Check(SceneHitbox);
+		}
+
+		public bool Check(Grid grid, Point offset)
+		{
+			return grid.Check(SceneHitbox + offset);
+		}
+
 		public bool Check(Entity other)
 		{
 			return other.Collidable && SceneHitbox.Intersects(other.SceneHitbox);

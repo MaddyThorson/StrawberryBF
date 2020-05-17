@@ -22,6 +22,12 @@ namespace Strawberry
 			Height = height;
 		}
 
+		public this(JSON json)
+			: this(json["x"], json["y"], json["width"], json["height"])
+		{
+
+		}
+
 		public int Left
 		{
 			[Inline]
@@ -82,6 +88,8 @@ namespace Strawberry
 			}
 		}
 
+		public Point Origin => .(X, Y);
+
 		public Rect MirrorX(int axis = 0)
 		{
 			var rect = this;
@@ -137,6 +145,26 @@ namespace Strawberry
 		static public Rect operator-(Rect a, Point b)
 		{
 			return Rect(a.X - b.X, a.Y - b.Y, a.Width, a.Height);
+		}
+
+		static public Rect operator/(Rect a, int b)
+		{
+			return Rect(a.X / b, a.Y / b, a.Width / b, a.Height / b);
+		}
+
+		static public Rect operator/(Rect a, Point b)
+		{
+			return Rect(a.X / b.X, a.Y / b.Y, a.Width / b.X, a.Height / b.Y);
+		}
+
+		static public Rect operator*(Rect a, int b)
+		{
+			return Rect(a.X * b, a.Y * b, a.Width * b, a.Height * b);
+		}
+
+		static public Rect operator*(Rect a, Point b)
+		{
+			return Rect(a.X * b.X, a.Y * b.Y, a.Width * b.X, a.Height * b.Y);
 		}
 	}
 }

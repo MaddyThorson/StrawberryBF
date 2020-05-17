@@ -9,6 +9,12 @@ namespace Strawberry
 			Hitbox = Rect(0, 0, width, 2);
 		}
 
+		public this(JSON json)
+			: this(.(json), json["width"])
+		{
+
+		}
+
 		public override void MoveExactX(int amount)
 		{
 			if (Collidable)

@@ -14,9 +14,12 @@ namespace Strawberry
 		public enum Types { Null, Bool, Number, String, Array, Object };
 
 		public Types Type { get; private set; }
-		public bool Bool;
-		public float Number;
-		public String String;
+		public readonly bool Bool;
+		public readonly float Number;
+		public readonly String String;
+
+		public int Int => (int)Number;
+		public char8 Char => String[0];
 
 		private List<JSON> array;
 		private Dictionary<String, JSON> children;
@@ -102,6 +105,15 @@ namespace Strawberry
 			}
 		}
 
+		public int ArrayLength
+		{
+			get
+			{
+				Runtime.Assert(Type == .Array);
+				return array.Count;
+			}
+		}
+
 		public void ArrayPush(JSON json)
 		{
 			Runtime.Assert(Type == .Array);
@@ -122,6 +134,15 @@ namespace Strawberry
 			for (let a in array)
 				delete a;
 			array.Clear();
+		}
+
+		public List<JSON>.Enumerator ArrayEnumerator
+		{
+			get
+			{
+				Runtime.Assert(Type == .Array);
+				return array.GetEnumerator();
+			}
 		}
 
 		// Object
@@ -157,6 +178,33 @@ namespace Strawberry
 				delete children.GetAndRemove(key).Value.value;
 		}
 
+		public Dictionary<String, JSON>.Enumerator ObjectEnumerator
+		{
+			get
+			{
+				Runtime.Assert(Type == .Object);
+				return children.GetEnumerator();
+			}
+		}
+
+		public Dictionary<String, JSON>.KeyEnumerator ObjectKeyEnumerator
+		{
+			get
+			{
+				Runtime.Assert(Type == .Object);
+				return children.Keys;
+			}
+		}
+
+		public Dictionary<String, JSON>.ValueEnumerator ObjectValueEnumerator
+		{
+			get
+			{
+				Runtime.Assert(Type == .Object);
+				return children.Values;
+			}
+		}
+
 		// Operators
 
 		static public implicit operator JSON(bool val)
@@ -177,6 +225,13 @@ namespace Strawberry
 		static public implicit operator JSON(String val)
 		{
 			return new JSON(val);
+		}
+
+		static public implicit operator JSON(char8 val)
+		{
+			let str = scope String();
+			str.Concat(val);
+			return new JSON(str);
 		}
 
 		static public implicit operator bool(JSON json)
@@ -201,6 +256,12 @@ namespace Strawberry
 		{
 			Runtime.Assert(json.Type == .String);
 			return json.String;
+		}
+
+		static public implicit operator char8(JSON json)
+		{
+			Runtime.Assert(json.Type == .String);
+			return json.String[0];
 		}
 
 		static public JSON CreateArray()

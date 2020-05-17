@@ -6,6 +6,7 @@ namespace Strawberry
 	public class Scene
 	{
 		public float TimeStarted { get; private set; }
+		public Grid SolidGrid;
 
 		private List<Entity> entities;
 		private HashSet<Entity> toRemove;
@@ -20,6 +21,9 @@ namespace Strawberry
 
 		public ~this()
 		{
+			if (SolidGrid != null)
+				delete SolidGrid;
+
 			for (var e in entities)
 				if (e.DeleteOnRemove)
 					delete e;

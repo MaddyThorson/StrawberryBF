@@ -27,6 +27,12 @@ namespace Strawberry
 			Y = y;
 		}
 
+		public this(JSON json)
+			: this(json["x"], json["y"])
+		{
+
+		}
+
 		public override void ToString(String strBuffer)
 		{
 			strBuffer.Set("Point [ ");
@@ -61,9 +67,19 @@ namespace Strawberry
 			return Point(a.X * b, a.Y * b);
 		}
 
+		static public Point operator*(Point a, Point b)
+		{
+			return Point(a.X * b.X, a.Y * b.Y);
+		}
+
 		static public Point operator/(Point a, int b)
 		{
 			return Point(a.X / b, a.Y / b);
+		}
+
+		static public Point operator/(Point a, Point b)
+		{
+			return Point(a.X / b.X, a.Y / b.Y);
 		}
 	}
 }
