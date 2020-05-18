@@ -32,7 +32,6 @@ namespace Strawberry
 		private SDL.Window* window;
 		private SDL.Surface* screen;
 		private bool* keyboardState;
-		private SDL.SDL_GameController*[] gamepads;
 		private int32 updateCounter;
 
 		public this(String windowTitle, int32 width, int32 height, int32 windowScale, int gamepadLimit = 1)
@@ -71,12 +70,8 @@ namespace Strawberry
 			screen = SDL.GetWindowSurface(window);
 			SDLImage.Init(.PNG | .JPG);
 			SDLMixer.OpenAudio(44100, SDLMixer.MIX_DEFAULT_FORMAT, 2, 4096);
-
 			SDLTTF.Init();
-
-			this.gamepads = new SDL.SDL_GameController*[gamepadLimit];
-			for (let i < this.gamepads.Count)
-				this.gamepads[i] = SDL.GameControllerOpen((int32)i);
+			Input.Init(gamepadLimit);
 		}
 
 		public ~this()
@@ -96,7 +91,7 @@ namespace Strawberry
 				delete VirtualInputs;
 			}
 
-			delete gamepads;
+			Input.Dispose();
 			Game = null;
 		}
 
@@ -126,16 +121,15 @@ namespace Strawberry
 				}
 				else
 				{
-					keyboardState = SDL.GetKeyboardState(null);
-					SDL.GameControllerUpdate();
-
 					addTicks = Math.Min(addTicks, 20); // Limit catchup
 					if (addTicks > 0)
 					{
 						for (int i < addTicks)
 						{
+							Input.BeforeUpdate();
 							updateCounter++;
 							Update();
+							Input.AfterUpdate();
 						}
 						Render();
 					}
@@ -202,36 +196,6 @@ namespace Strawberry
 					delete switchToScene;
 				switchToScene = value;
 			}
-		}
-
-		// Input
-
-		public bool KeyCheck(SDL.Scancode key)
-		{
-			if (keyboardState == null)
-				return false;
-			return keyboardState[(int)key];
-		}
-
-		public bool GamepadButtonCheck(int gamepadID, SDL.SDL_GameControllerButton button)
-		{
-			if (gamepads == null)
-				return false;
-			return SDL.GameControllerGetButton(gamepads[gamepadID], button) == 1;
-		}
-
-		public float GamepadAxisCheck(int gamepadID, SDL.SDL_GameControllerAxis axis)
-		{
-			if (gamepads == null)
-				return 0;
-
-			let val = SDL.GameControllerGetAxis(gamepads[gamepadID], axis);
-			if (val == 0)
-				return 0;
-			else if (val > 0)
-				return val / 32767f;
-			else
-				return val / 32768f;
 		}
 	}
 }

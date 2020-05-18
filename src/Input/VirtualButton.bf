@@ -142,7 +142,7 @@ namespace Strawberry
 			{
 				get
 				{
-					 return Game.KeyCheck(Keycode);
+					 return Input.KeyCheck(Keycode);
 				}
 			}
 		}
@@ -162,7 +162,7 @@ namespace Strawberry
 			{
 				get
 				{
-					 return Game.GamepadButtonCheck(GamepadID, Button);
+					 return Input.GamepadButtonCheck(GamepadID, Button);
 				}
 			}
 		}
@@ -187,9 +187,9 @@ namespace Strawberry
 				get
 				{
 					if (Condition == .GreaterThan)
-					 	return Game.GamepadAxisCheck(GamepadID, Axis) >= Threshold;
+					 	return Input.GamepadAxisCheck(GamepadID, Axis) >= Threshold;
 					else
-						return Game.GamepadAxisCheck(GamepadID, Axis) <= Threshold;
+						return Input.GamepadAxisCheck(GamepadID, Axis) <= Threshold;
 				}
 			}
 		}

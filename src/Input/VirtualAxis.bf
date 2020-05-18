@@ -152,9 +152,9 @@ namespace Strawberry
 
 			public override void Update()
 			{
-				if (Game.KeyCheck(PositiveKeycode))
+				if (Input.KeyCheck(PositiveKeycode))
 				{
-				    if (Game.KeyCheck(NegativeKeycode))
+				    if (Input.KeyCheck(NegativeKeycode))
 				    {
 				        switch (OverlapBehavior)
 				        {
@@ -181,7 +181,7 @@ namespace Strawberry
 				        value = 1;
 				    }
 				}
-				else if (Game.KeyCheck(NegativeKeycode))
+				else if (Input.KeyCheck(NegativeKeycode))
 				{
 				    turned = false;
 				    value = -1;
@@ -222,9 +222,9 @@ namespace Strawberry
 
 			public override void Update()
 			{
-				if (Game.GamepadButtonCheck(GamepadID, PositiveButton))
+				if (Input.GamepadButtonCheck(GamepadID, PositiveButton))
 				{
-				    if (Game.GamepadButtonCheck(GamepadID, NegativeButton))
+				    if (Input.GamepadButtonCheck(GamepadID, NegativeButton))
 				    {
 				        switch (OverlapBehavior)
 				        {
@@ -251,7 +251,7 @@ namespace Strawberry
 				        value = 1;
 				    }
 				}
-				else if (Game.GamepadButtonCheck(GamepadID, NegativeButton))
+				else if (Input.GamepadButtonCheck(GamepadID, NegativeButton))
 				{
 				    turned = false;
 				    value = -1;
@@ -289,7 +289,7 @@ namespace Strawberry
 			{
 				get
 				{
-					let val = Game.GamepadAxisCheck(GamepadID, Axis);
+					let val = Input.GamepadAxisCheck(GamepadID, Axis);
 					if (Math.Abs(val) < Deadzone)
 						return 0;
 					else
