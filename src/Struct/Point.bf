@@ -33,6 +33,11 @@ namespace Strawberry
 
 		}
 
+		public Point Perpendicular()
+		{
+			return .(-Y, X);
+		}
+
 		public override void ToString(String strBuffer)
 		{
 			strBuffer.Set("Point [ ");

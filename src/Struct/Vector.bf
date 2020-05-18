@@ -27,6 +27,11 @@ namespace Strawberry
 			Y = y;
 		}
 
+		public Vector Perpendicular()
+		{
+			return .(-Y, X);
+		}
+
 		public float Length
 		{
 			[Inline]
