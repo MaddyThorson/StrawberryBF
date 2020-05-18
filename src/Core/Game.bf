@@ -20,6 +20,7 @@ namespace Strawberry
 		public readonly int Width;
 		public readonly int Height;
 		public readonly int WindowScale;
+		public readonly String ContentRoot;
 		
 		private Scene scene;
 		private Scene switchToScene;
@@ -44,8 +45,13 @@ namespace Strawberry
 			Width = width;
 			Height = height;
 			WindowScale = windowScale;
-
 			screenRect = SDL.Rect(0, 0, width * windowScale, height * windowScale);
+
+#if DEBUG
+			ContentRoot = "../../../src/Content/";
+#else
+			ContentRoot = "Content/";
+#endif
 
 			String exePath = scope .();
 			Environment.GetExecutableFilePath(exePath);
