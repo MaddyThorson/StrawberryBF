@@ -7,6 +7,7 @@ namespace Strawberry
 	{
 		public float TimeStarted { get; private set; }
 		public Grid SolidGrid;
+		public Rect Bounds;
 
 		private List<Entity> entities;
 		private HashSet<Entity> toRemove;

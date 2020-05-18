@@ -1,4 +1,5 @@
 using System;
+using Strawberry;
 
 namespace Strawberry
 {
@@ -69,6 +70,63 @@ namespace Strawberry
 
 		public int CellsX => contents.GetLength(0);
 		public int CellsY => contents.GetLength(1);
+
+		//Expand Edges
+
+		public enum ExpandDirections { Left, Right, Up, Down };
+
+		public void ExpandEdge(ExpandDirections direction, int add = 1)
+		{
+			Runtime.Assert(add > 0);
+
+			char8[,] newContents;
+			if (direction == .Left || direction == .Right)
+				newContents = new char8[CellsX + add, CellsY];
+			else
+				newContents = new char8[CellsX, CellsY + add];
+
+			switch (direction)
+			{
+			case .Left:
+				Offset.X -= CellSize.X * add;
+				for (let x < CellsX)
+					for (let y < CellsY)
+						newContents[x + add, y] = contents[x, y];
+				for (let x < add)
+					for (let y < CellsY)
+						newContents[x, y] = contents[0, y];
+
+			case .Right:
+				for (let x < CellsX)
+					for (let y < CellsY)
+						newContents[x, y] = contents[x, y];
+				for (let x < add)
+					for (let y < CellsY)
+						newContents[CellsX + x, y] = contents[CellsX - 1, y];
+
+			case .Up:
+				Offset.Y -= CellSize.Y * add;
+				for (let x < CellsX)
+					for (let y < CellsY)
+						newContents[x, y + add] = contents[x, y];
+				for (let x < CellsX)
+					for (let y < add)
+						newContents[x, y] = contents[x, 0];
+
+			case .Down:
+				for (let x < CellsX)
+					for (let y < CellsY)
+						newContents[x, y] = contents[x, y];
+				for (let x < CellsX)
+					for (let y < add)
+						newContents[x, CellsY + y] = contents[x, CellsY - 1];
+			}
+
+			delete contents;
+			contents = newContents;
+		}
+
+		//Collision Checks
 
 		public bool IsInBounds(Point p)
 		{
