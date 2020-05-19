@@ -313,12 +313,12 @@ namespace Strawberry
 
 		public bool Check(Grid grid)
 		{
-			return grid.Check(SceneHitbox);
+			return grid != null && grid.Check(SceneHitbox);
 		}
 
 		public bool Check(Grid grid, Point offset)
 		{
-			return grid.Check(SceneHitbox + offset);
+			return grid != null && grid.Check(SceneHitbox + offset);
 		}
 
 		public bool Check(Entity other)

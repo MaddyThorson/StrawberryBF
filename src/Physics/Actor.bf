@@ -89,7 +89,7 @@ namespace Strawberry
 					return true;
 				}
 
-				if (Check(Scene.SolidGrid, .(sign, 0)))
+				if (Check(Scene, .(sign, 0)))
 				{
 					let c = Collision(
 						Point.Right * sign,
@@ -134,7 +134,7 @@ namespace Strawberry
 					return true;
 				}
 
-				if (Check(Scene.SolidGrid, .(0, sign)))
+				if (Check(Scene, .(0, sign)))
 				{
 					let c = Collision(
 						Point.Right * sign,
