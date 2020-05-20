@@ -12,7 +12,7 @@ namespace Strawberry
 
 		public override List<Actor> GetRiders(List<Actor> into)
 		{
-			for (var a in Scene.All<Actor>(scope List<Actor>))
+			for (var a in Scene.All<Actor>(scope List<Actor>()))
 				if (a.IsRiding(this))
 					into.Add(a);
 			return into;
@@ -22,12 +22,12 @@ namespace Strawberry
 		{
 			if (Collidable)
 			{
-				let riders = GetRiders(scope List<Actor>);
+				let riders = GetRiders(scope List<Actor>());
 
 				X += amount;
 				Collidable = false;
 
-				for (Actor a in Scene.All<Actor>(scope List<Actor>))
+				for (Actor a in Scene.All<Actor>(scope List<Actor>()))
 				{
 					if (Check(a))
 					{
@@ -56,12 +56,12 @@ namespace Strawberry
 		{
 			if (Collidable)
 			{
-				let riders = GetRiders(scope List<Actor>);
+				let riders = GetRiders(scope List<Actor>());
 
 				Y += amount;
 				Collidable = false;
 
-				for (Actor a in Scene.All<Actor>(scope List<Actor>))
+				for (Actor a in Scene.All<Actor>(scope List<Actor>()))
 				{
 					if (Check(a))
 					{

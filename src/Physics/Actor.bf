@@ -43,7 +43,7 @@ namespace Strawberry
 			MovedByGeometry = Point.Zero;
 		}
 
-		public bool MoveX(float amount, Action<Collision> onCollide = null)
+		public bool MoveX(float amount, delegate void(Collision) onCollide = null)
 		{
 			remainder.X += amount;
 			let move = (int)Math.Round(remainder.X);
@@ -56,7 +56,7 @@ namespace Strawberry
 				return false;
 		}
 
-		public bool MoveY(float amount, Action<Collision> onCollide = null)
+		public bool MoveY(float amount, delegate void(Collision) onCollide = null)
 		{
 			remainder.Y += amount;
 			let move = (int)Math.Round(remainder.Y);
@@ -72,16 +72,16 @@ namespace Strawberry
 		[Inline]
 		public void MoveToX(float x)
 		{
-			MoveX(x - (X + remainder.X));
+			MoveX(x - (X + remainder.X), null);
 		}
 
 		[Inline]
 		public void MoveToY(float y)
 		{
-			MoveY(y - (Y + remainder.Y));
+			MoveY(y - (Y + remainder.Y), null);
 		}
 
-		public bool MoveExactX(int amount, Action<Collision> onCollide = null, Geometry pusher = null, Geometry carrier = null)
+		public bool MoveExactX(int amount, delegate void(Collision) onCollide = null, Geometry pusher = null, Geometry carrier = null)
 		{
 			int move = amount;
 			int sign = Math.Sign(amount);
@@ -127,7 +127,7 @@ namespace Strawberry
 			return false;
 		}
 
-		public bool MoveExactY(int amount, Action<Collision> onCollide = null, Geometry pusher = null, Geometry carrier = null)
+		public bool MoveExactY(int amount, delegate void(Collision) onCollide = null, Geometry pusher = null, Geometry carrier = null)
 		{
 			int move = amount;
 			int sign = Math.Sign(amount);
@@ -194,6 +194,23 @@ namespace Strawberry
 		private void MoveByGeometry(Point amount)
 		{
 			MovedByGeometry += amount;
+		}
+
+
+		public bool CornerCorrection(Cardinals direction, int maxAmount, int lookAhead = 1, int onlySign = 0)
+		{
+			Point pt = direction;
+
+			if (pt.X != 0)
+			{
+
+			}
+			else
+			{
+
+			}
+
+			return false;
 		}
 	}
 }

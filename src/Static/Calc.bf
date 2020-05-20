@@ -49,7 +49,7 @@ namespace Strawberry
 		[Inline]
 		static public void Log<T>(T v)
 		{
-			String string = scope String;
+			String string = scope String();
 			v.ToString(string);
 			Debug.WriteLine(string);
 		}

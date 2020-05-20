@@ -338,7 +338,7 @@ namespace Strawberry
 
 		public bool Check<T>() where T : Entity
 		{
-			for (var e in Scene.All<T>(scope List<T>))
+			for (var e in Scene.All<T>(scope List<T>()))
 				if (Check(e))
 					return true;
 
@@ -347,7 +347,7 @@ namespace Strawberry
 
 		public bool Check<T>(Point offset) where T : Entity
 		{
-			for (var e in Scene.All<T>(scope List<T>))
+			for (var e in Scene.All<T>(scope List<T>()))
 				if (Check(e, offset))
 					return true;
 
@@ -356,7 +356,7 @@ namespace Strawberry
 
 		public bool CheckOutside<T>(Point offset) where T : Entity
 		{
-			for (var e in Scene.All<T>(scope List<T>))
+			for (var e in Scene.All<T>(scope List<T>()))
 				if (CheckOutside(e, offset))
 					return true;
 
@@ -365,7 +365,7 @@ namespace Strawberry
 
 		public T First<T>() where T : Entity
 		{
-			for (var e in Scene.All<T>(scope List<T>))
+			for (var e in Scene.All<T>(scope List<T>()))
 				if (Check(e))
 					return e;
 
@@ -374,7 +374,7 @@ namespace Strawberry
 
 		public T First<T>(Point offset) where T : Entity
 		{
-			for (var e in Scene.All<T>(scope List<T>))
+			for (var e in Scene.All<T>(scope List<T>()))
 				if (Check(e, offset))
 					return e;
 
@@ -383,7 +383,7 @@ namespace Strawberry
 
 		public T FirstOutside<T>(Point offset) where T : Entity
 		{
-			for (var e in Scene.All<T>(scope List<T>))
+			for (var e in Scene.All<T>(scope List<T>()))
 				if (CheckOutside(e, offset))
 					return e;
 
@@ -392,7 +392,7 @@ namespace Strawberry
 
 		public List<T> All<T>(List<T> into) where T : Entity
 		{
-			for (var e in Scene.All<T>(scope List<T>))
+			for (var e in Scene.All<T>(scope List<T>()))
 				if (Check(e))
 					into.Add(e);
 
@@ -401,7 +401,7 @@ namespace Strawberry
 
 		public List<T> All<T>(Point offset, List<T> into) where T : Entity
 		{
-			for (var e in Scene.All<T>(scope List<T>))
+			for (var e in Scene.All<T>(scope List<T>()))
 				if (Check(e, offset))
 					into.Add(e);
 
@@ -410,7 +410,7 @@ namespace Strawberry
 
 		public List<T> AllOutside<T>(Point offset, List<T> into) where T : Entity
 		{
-			for (var e in Scene.All<T>(scope List<T>))
+			for (var e in Scene.All<T>(scope List<T>()))
 				if (CheckOutside(e, offset))
 					into.Add(e);
 

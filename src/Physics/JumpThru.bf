@@ -20,7 +20,7 @@ namespace Strawberry
 		{
 			if (Collidable)
 			{
-				let riders = GetRiders(scope List<Actor>);
+				let riders = GetRiders(scope List<Actor>());
 	
 				X += amount;
 				for (var a in riders)
@@ -34,11 +34,11 @@ namespace Strawberry
 		{
 			if (Collidable)
 			{
-				let riders = GetRiders(scope List<Actor>);
+				let riders = GetRiders(scope List<Actor>());
 
 				if (amount < 0)
 				{
-					for (var a in Scene.All<Actor>(scope List<Actor>))
+					for (var a in Scene.All<Actor>(scope List<Actor>()))
 					{
 						if (riders.Contains(a) || CheckOutside(a, Point.UnitY * amount))
 						{
@@ -65,7 +65,7 @@ namespace Strawberry
 
 		public override List<Actor> GetRiders(List<Actor> into)
 		{
-			for (var a in Scene.All<Actor>(scope List<Actor>))
+			for (var a in Scene.All<Actor>(scope List<Actor>()))
 				if (a.IsRiding(this))
 					into.Add(a);
 			return into;
