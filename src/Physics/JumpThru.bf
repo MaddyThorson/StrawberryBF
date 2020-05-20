@@ -1,4 +1,5 @@
 using System.Collections;
+using System;
 namespace Strawberry
 {
 	public class JumpThru : Geometry
@@ -23,10 +24,7 @@ namespace Strawberry
 	
 				X += amount;
 				for (var a in riders)
-				{
-					a.MoveExactX(amount);
-					a.MovedByGeometry += Point.UnitX * amount;
-				}
+					a.MoveExactX(amount, null, null, this);
 			}
 			else
 				X += amount;
@@ -45,8 +43,7 @@ namespace Strawberry
 						if (riders.Contains(a) || CheckOutside(a, Point.UnitY * amount))
 						{
 							let move = (Top + amount) - a.Bottom;
-							a.MoveExactY(move);
-							a.MovedByGeometry += Point.UnitY * move;
+							a.MoveExactY(move, null, null, this);
 						}
 					}
 					Y += amount;
@@ -56,10 +53,7 @@ namespace Strawberry
 					Collidable = false;
 
 					for (var a in riders)
-					{
-						a.MoveExactY(amount);
-						a.MovedByGeometry += Point.UnitY * amount;
-					}
+						a.MoveExactY(amount, null, null, this);
 
 					Collidable = true;
 					Y += amount;

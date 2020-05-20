@@ -38,13 +38,11 @@ namespace Strawberry
 						else
 							move = Left - a.Right;
 						a.MoveExactX(move, scope => a.Squish, this);
-						a.MovedByGeometry += Point.UnitX * move;
 					}
 					else if (riders.Contains(a))
 					{
 						//Carry
-						a.MoveExactX(amount);
-						a.MovedByGeometry += Point.UnitX * amount;
+						a.MoveExactX(amount, null, null, this);
 					}
 				}
 
@@ -74,13 +72,11 @@ namespace Strawberry
 						else
 							move = Top - a.Bottom;
 						a.MoveExactY(move, scope => a.Squish, this);
-						a.MovedByGeometry += Point.UnitY * move;
 					}
 					else if (riders.Contains(a))
 					{
 						//Carry
-						a.MoveExactY(amount);
-						a.MovedByGeometry += Point.UnitY * amount;
+						a.MoveExactY(amount, null, null, this);
 					}
 				}
 

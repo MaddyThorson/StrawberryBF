@@ -7,7 +7,8 @@ namespace Strawberry
 	{
 		private Vector remainder;
 
-		public Point MovedByGeometry;
+		// The amount that geometry has pushed or carried this Actor since the last frame
+		public Point MovedByGeometry { get; private set; }
 
 		public this(Point position)
 			: base(position)
@@ -68,10 +69,24 @@ namespace Strawberry
 				return false;
 		}
 
-		public bool MoveExactX(int amount, Action<Collision> onCollide = null, Geometry pusher = null)
+		[Inline]
+		public void MoveToX(float x)
+		{
+			MoveX(x - (X + remainder.X));
+		}
+
+		[Inline]
+		public void MoveToY(float y)
+		{
+			MoveY(y - (Y + remainder.Y));
+		}
+
+		public bool MoveExactX(int amount, Action<Collision> onCollide = null, Geometry pusher = null, Geometry carrier = null)
 		{
 			int move = amount;
 			int sign = Math.Sign(amount);
+			bool byGeometry = carrier != null || pusher != null;
+
 			while (move != 0)
 			{
 				let hit = First<Solid>(.(sign, 0));
@@ -104,16 +119,20 @@ namespace Strawberry
 				}
 
 				X += sign;
+				if (byGeometry)
+					MovedByGeometry.X += sign;
 				move -= sign;
 			}
 
 			return false;
 		}
 
-		public bool MoveExactY(int amount, Action<Collision> onCollide = null, Geometry pusher = null)
+		public bool MoveExactY(int amount, Action<Collision> onCollide = null, Geometry pusher = null, Geometry carrier = null)
 		{
 			int move = amount;
 			int sign = Math.Sign(amount);
+			bool byGeometry = carrier != null || pusher != null;
+
 			while (move != 0)
 			{
 				Geometry hit = First<Solid>(.(0, sign));
@@ -149,6 +168,8 @@ namespace Strawberry
 				}
 
 				Y += sign;
+				if (byGeometry)
+					MovedByGeometry.Y += sign;
 				move -= sign;
 			}
 
@@ -168,6 +189,11 @@ namespace Strawberry
 		public void ZeroRemainders()
 		{
 			remainder = Vector.Zero;
+		}
+
+		private void MoveByGeometry(Point amount)
+		{
+			MovedByGeometry += amount;
 		}
 	}
 }
