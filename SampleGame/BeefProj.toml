@@ -1,5 +1,5 @@
 FileVersion = 1
-Dependencies = {corlib = "*", SDL2 = "*", Strawberry = "*"}
+Dependencies = {corlib = "*", Strawberry = "*"}
 
 [Project]
 Name = "SampleGame"
