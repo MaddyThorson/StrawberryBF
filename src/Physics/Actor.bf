@@ -199,15 +199,31 @@ namespace Strawberry
 
 		public bool CornerCorrection(Cardinals direction, int maxAmount, int lookAhead = 1, int onlySign = 0)
 		{
-			Point pt = direction;
+			Point dir = direction;
+			Point perp = dir.Perpendicular();
+			perp.X = Math.Abs(perp.X);
+			perp.Y = Math.Abs(perp.Y);
 
-			if (pt.X != 0)
-			{
-
-			}
+			delegate bool(Point) checker;
+ 			if (dir == Point.Down)
+				checker = scope:: (p) => !Check(Scene, p) && !Check<Solid>(p) && !CheckOutside<JumpThru>(p);
 			else
-			{
+				checker = scope:: (p) => !Check(Scene, p) && !Check<Solid>(p);
 
+			for (let i < maxAmount)
+			{
+				for (int j = -1; j <= 1; j += 2)
+				{
+					if (onlySign != 0 && onlySign != j)
+						continue;
+
+					let offset = dir * lookAhead + perp * i * j;
+					if (checker(offset))
+					{
+						Position += offset;
+						return true;
+					}	
+				}
 			}
 
 			return false;
