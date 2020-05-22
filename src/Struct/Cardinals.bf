@@ -1,3 +1,5 @@
+using System;
+
 namespace Strawberry
 {
 	public enum Cardinals
@@ -65,6 +67,34 @@ namespace Strawberry
 			case .Down:
 				return Point.Down;
 			}
+		}
+
+		static public Result<Cardinals> FromPoint(Point p)
+		{
+			if (p.X > 0 && p.Y == 0)
+				return .Right;
+			else if (p.X < 0 && p.Y == 0)
+				return .Left;
+			else if (p.Y < 0 && p.X == 0)
+				return .Up;
+			else if (p.Y > 0 && p.X == 0)
+				return .Down;
+			else
+				return .Err;
+		}
+
+		static public Result<Cardinals> FromVector(Vector v)
+		{
+			if (v.X > 0 && v.Y == 0)
+				return .Right;
+			else if (v.X < 0 && v.Y == 0)
+				return .Left;
+			else if (v.Y < 0 && v.X == 0)
+				return .Up;
+			else if (v.Y > 0 && v.X == 0)
+				return .Down;
+			else
+				return .Err;
 		}
 	}
 }

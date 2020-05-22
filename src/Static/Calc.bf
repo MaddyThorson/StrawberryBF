@@ -53,5 +53,13 @@ namespace Strawberry
 			v.ToString(string);
 			Debug.WriteLine(string);
 		}
+
+		[Inline]
+		static public void Log(delegate void(String) del)
+		{
+			String string = scope String();
+			del(string);
+			Debug.WriteLine(string);
+		}
 	}
 }

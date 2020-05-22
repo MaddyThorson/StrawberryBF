@@ -88,6 +88,7 @@ namespace Strawberry
 				for (var c in toRemove)
 				{
 					components.Remove(c);
+					Scene.[Friend]UntrackComponent(c);
 					c.Removed();
 					delete c;
 				}
@@ -100,6 +101,7 @@ namespace Strawberry
 				for (var c in toAdd)
 				{
 					components.Add(c);
+					Scene.[Friend]TrackComponent(c);
 					c.Added(this);
 				}
 
