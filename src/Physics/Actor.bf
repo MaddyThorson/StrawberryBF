@@ -210,7 +210,7 @@ namespace Strawberry
 			else
 				checker = scope:: (p) => !Check(Scene, p) && !Check<Solid>(p);
 
-			for (let i < maxAmount)
+			for (int i = 1; i <= maxAmount; i++)
 			{
 				for (int j = -1; j <= 1; j += 2)
 				{

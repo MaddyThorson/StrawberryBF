@@ -10,7 +10,7 @@ namespace Strawberry
 		static private bool[] previousKeyboard;
 		static private SDL.SDL_GameController*[] gamepads;
 
-		static public void Init(int gamepadLimit)
+		static private void Init(int gamepadLimit)
 		{
 			keyboard = SDL.GetKeyboardState(null);
 			previousKeyboard = new bool[(int)SDL.Scancode.NUMSCANCODES];
@@ -20,7 +20,7 @@ namespace Strawberry
 				gamepads[i] = SDL.GameControllerOpen((int32)i);
 		}
 
-		static public void Dispose()
+		static private void Dispose()
 		{
 			delete previousKeyboard;
 			delete gamepads;

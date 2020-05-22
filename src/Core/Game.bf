@@ -77,7 +77,7 @@ namespace Strawberry
 			SDLImage.Init(.PNG | .JPG);
 			SDLMixer.OpenAudio(44100, SDLMixer.MIX_DEFAULT_FORMAT, 2, 4096);
 			SDLTTF.Init();
-			Input.Init(gamepadLimit);
+			Input.[Friend]Init(gamepadLimit);
 		}
 
 		public ~this()
@@ -97,7 +97,7 @@ namespace Strawberry
 				delete VirtualInputs;
 			}
 
-			Input.Dispose();
+			Input.[Friend]Dispose();
 			Game = null;
 		}
 
