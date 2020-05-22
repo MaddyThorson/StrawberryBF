@@ -7,7 +7,7 @@ To run the sample game, in the Beef IDE select Open Workspace, and select the St
 
 Related tools:
 
-~Beef Language (programming language, free) https://github.com/beefytech/Beef
+~Beef Language (programming language and IDE, free) https://github.com/beefytech/Beef
 
 ~Ogmo Editor 3 (level editing, free) https://ogmo-editor-3.github.io/
 
