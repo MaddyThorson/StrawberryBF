@@ -107,6 +107,10 @@ namespace Strawberry
 			sw.Start();
 			int curPhysTickCount = 0;
 
+			/*
+				Game loop adapted from Brian Fiete's SDLApp.bf in the Beef SDL2 Library
+			*/
+
 			while (true)
 			{
 				SDL.Event event;
