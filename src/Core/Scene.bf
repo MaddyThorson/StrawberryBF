@@ -8,6 +8,7 @@ namespace Strawberry
 		public float TimeStarted { get; private set; }
 		public Grid SolidGrid;
 		public Rect Bounds;
+		public Vector Camera;
 
 		private List<Entity> entities;
 		private HashSet<Entity> toRemove;
@@ -22,11 +23,11 @@ namespace Strawberry
 			toRemove = new HashSet<Entity>();
 
 			entityTracker = new Dictionary<Type, List<Entity>>();
-			for (let type in TypeTree.[Friend]EntityAssignableLists.Keys)
+			for (let type in Game.[Friend]entityAssignableLists.Keys)
 				entityTracker.Add(type, new List<Entity>());
 
 			componentTracker = new Dictionary<Type, List<Component>>();
-			for (let type in TypeTree.[Friend]ComponentAssignableLists.Keys)
+			for (let type in Game.[Friend]componentAssignableLists.Keys)
 				componentTracker.Add(type, new List<Component>());
 		}
 
@@ -63,6 +64,8 @@ namespace Strawberry
 
 		public virtual void Update()
 		{
+			Camera.X += 20 * Time.Delta;
+
 			UpdateLists();
 			for (var e in entities)
 				if (e.Active)
@@ -132,7 +135,7 @@ namespace Strawberry
 
 		private void TrackEntity(Entity e)
 		{
-			for (let t in TypeTree.[Friend]EntityAssignableLists[e.GetType()])
+			for (let t in Game.[Friend]entityAssignableLists[e.GetType()])
 				entityTracker[t].Add(e);
 
 			for (let c in e.[Friend]components)
@@ -141,7 +144,7 @@ namespace Strawberry
 
 		private void UntrackEntity(Entity e)
 		{
-			for (let t in TypeTree.[Friend]EntityAssignableLists[e.GetType()])
+			for (let t in Game.[Friend]entityAssignableLists[e.GetType()])
 				entityTracker[t].Remove(e);
 
 			for (let c in e.[Friend]components)
@@ -150,13 +153,13 @@ namespace Strawberry
 
 		private void TrackComponent(Component c)
 		{
-			for (let t in TypeTree.[Friend]ComponentAssignableLists[c.GetType()])
+			for (let t in Game.[Friend]componentAssignableLists[c.GetType()])
 				componentTracker[t].Add(c);
 		}
 
 		private void UntrackComponent(Component c)
 		{
-			for (let t in TypeTree.[Friend]ComponentAssignableLists[c.GetType()])
+			for (let t in Game.[Friend]componentAssignableLists[c.GetType()])
 				componentTracker[t].Remove(c);
 		}
 
