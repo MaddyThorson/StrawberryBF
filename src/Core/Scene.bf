@@ -64,8 +64,6 @@ namespace Strawberry
 
 		public virtual void Update()
 		{
-			Camera.X += 20 * Time.Delta;
-
 			UpdateLists();
 			for (var e in entities)
 				if (e.Active)
