@@ -78,7 +78,7 @@ namespace Strawberry
 		private bool CallEnter()
 		{
 			let s = states[state];
-			if (s != null)
+			if (s != null && s.Enter != null)
 			{
 				inStateCall = true;
 				let set = s.Enter();
@@ -92,7 +92,7 @@ namespace Strawberry
 		private bool CallUpdate()
 		{
 			let s = states[state];
-			if (s != null)
+			if (s != null && s.Update != null)
 			{
 				inStateCall = true;
 				let set = s.Update();
@@ -106,7 +106,7 @@ namespace Strawberry
 		private bool CallExit()
 		{
 			let s = states[state];
-			if (s != null)
+			if (s != null && s.Exit != null)
 			{
 				inStateCall = true;
 				let set = s.Exit();

@@ -9,6 +9,44 @@ namespace Strawberry
 		case Left;
 		case Up;
 
+		public int X
+		{
+			get
+			{
+				switch (this)
+				{
+				case .Left:
+					return -1;
+				case .Right:
+					return 1;
+				case .Up:
+				case .Down:
+				default:
+				}
+
+				return 0;
+			}
+		}
+
+		public int Y
+		{
+			get
+			{
+				switch (this)
+				{
+				case .Up:
+					return -1;
+				case .Down:
+					return 1;
+				case .Left:
+				case .Right:
+				default:
+				}
+
+				return 0;
+			}
+		}
+
 		public Cardinals Opposite()
 		{
 			switch (this)
@@ -52,6 +90,14 @@ namespace Strawberry
 			case .Down:
 				return .Right;
 			}
+		}
+
+		static public implicit operator Cardinals(Facings f)
+		{
+			if (f == Facings.Right)
+				return Cardinals.Right;
+			else
+				return Cardinals.Left;
 		}
 
 		static public implicit operator Point(Cardinals c)
