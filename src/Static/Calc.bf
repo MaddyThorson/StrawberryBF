@@ -5,6 +5,12 @@ namespace Strawberry
 {
 	static public class Calc
 	{
+		[Inline]
+		static public bool BitCheck(int bits, int pos)
+		{
+		    return (bits & (1 << pos)) != 0;
+		}
+
 		//Move toward a target value without crossing it
 		[Inline]
 		static public float Approach(float value, float target, float maxDelta)

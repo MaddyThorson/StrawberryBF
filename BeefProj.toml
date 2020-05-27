@@ -1,8 +1,7 @@
 FileVersion = 1
-Dependencies = {corlib = "*", SDL2 = "*"}
+Dependencies = {corlib = "*", SDL2 = "*", MiniZ = "*"}
 
 [Project]
 Name = "Strawberry"
 TargetType = "BeefLib"
 StartupObject = "Program"
-DefaultNamespace = "Strawberry"

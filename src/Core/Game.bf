@@ -15,6 +15,7 @@ namespace Strawberry
 
 	public class Game
 	{
+		public readonly Dictionary<String, Sprite> Sprites;
 		public readonly List<VirtualInput> VirtualInputs;
 		public readonly String Title;
 		public readonly int Width;
@@ -42,7 +43,6 @@ namespace Strawberry
 			: base()
 		{
 			Game = this;
-			VirtualInputs = new List<VirtualInput>();
 
 			Title = windowTitle;
 			Width = width;
@@ -81,8 +81,13 @@ namespace Strawberry
 			SDLMixer.OpenAudio(44100, SDLMixer.MIX_DEFAULT_FORMAT, 2, 4096);
 			SDLTTF.Init();
 
-			BuildTypeLists();
+			VirtualInputs = new List<VirtualInput>();
 			Input.[Friend]Init(gamepadLimit);
+
+			Sprites = new Dictionary<String, Sprite>();
+			//LoadSprites();
+
+			BuildTypeLists();
 		}
 
 		public ~this()
@@ -104,6 +109,8 @@ namespace Strawberry
 
 			DisposeTypeLists();
 			Input.[Friend]Dispose();
+			DisposeSprites();
+			Sprite.[Friend]Dispose();
 			Game = null;
 		}
 
@@ -184,7 +191,7 @@ namespace Strawberry
 			}
 		}
 
-		public void Render()
+		private void Render()
 		{
 			SDL.SetRenderDrawColor(Renderer, ClearColor.R, ClearColor.G, ClearColor.B, ClearColor.A);
 			SDL.RenderClear(Renderer);
@@ -212,6 +219,51 @@ namespace Strawberry
 					delete switchToScene;
 				switchToScene = value;
 			}
+		}
+
+		// Load Images
+
+		private void LoadSprites()
+		{
+			let root = scope String(ContentRoot);
+			root.Append(Path.DirectorySeparatorChar);
+			root.Append("Sprites");
+			if (Directory.Exists(root))
+				LoadSpritesDir(root);
+			else
+				Console.WriteLine("Content/Sprites folder does not exist!");
+		}
+
+		private void LoadSpritesDir(String directory)
+		{
+			for (let dir in Directory.EnumerateDirectories(directory))
+			{
+				let path = scope String();
+				dir.GetFilePath(path);
+				LoadSpritesDir(path);
+			}
+
+			for (let file in Directory.EnumerateFiles(directory, "*.ase"))
+			{
+				let path = scope String();
+				file.GetFilePath(path);
+
+				let sprite = new [Friend]Sprite(path);
+
+				path.Remove(0, ContentRoot.Length + 8);
+				Sprites.Add(new String(path), sprite);
+			}
+		}
+
+		private void DisposeSprites()
+		{
+			for (let kv in Sprites)
+			{
+				delete kv.key;
+				delete kv.value;
+			}
+
+			delete Sprites;
 		}
 
 		// Type assignable caching
