@@ -15,30 +15,19 @@ namespace Strawberry
 			Visible = visible;
 		}
 
-		public void	Added(Entity entity)
+		private void Added(Entity entity)
 		{
 			Entity = entity;
 		}
 
-		public void Removed()
+		private void Removed()
 		{
 			Entity = null;
 		}
 
-		public virtual void Started()
-		{
-
-		}
-
-		public virtual void Update()
-		{
-
-		}
-
-		public virtual void Draw()
-		{
-
-		}
+		public abstract void Started();
+		public abstract void Update();
+		public abstract void Draw();
 
 		[Inline]
 		public void RemoveSelf()

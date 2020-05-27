@@ -24,6 +24,33 @@ namespace Strawberry
 			RemoveOnComplete = destroyOnComplete;
 		}
 
+		public override void Started()
+		{
+
+		}
+
+		public override void Update()
+		{
+			if (value > 0)
+			{
+				value -= Time.Delta;
+				if (value <= 0)
+				{
+					value = 0;
+					Active = false;
+
+					OnComplete?.Invoke();
+					if (RemoveOnComplete)
+						RemoveSelf();
+				}
+			}
+		}
+
+		public override void Draw()
+		{
+
+		}
+
 		public float Value
 		{
 			[Inline]
@@ -45,23 +72,6 @@ namespace Strawberry
 		{
 			value = 0;
 			Active = false;
-		}
-
-		public override void Update()
-		{
-			if (value > 0)
-			{
-				value -= Time.Delta;
-				if (value <= 0)
-				{
-					value = 0;
-					Active = false;
-
-					OnComplete?.Invoke();
-					if (RemoveOnComplete)
-						RemoveSelf();
-				}
-			}
 		}
 
 		static public implicit operator bool(Timer timer)

@@ -39,7 +39,6 @@ namespace Strawberry
 		public override void Update()
 		{
 			base.Update();
-
 			MovedByGeometry = Point.Zero;
 		}
 
