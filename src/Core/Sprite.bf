@@ -203,7 +203,7 @@ namespace Strawberry
 					            layers.Add(layer);
 					        }
 					        // CEL CHUNK
-					        else if (chunkType == Chunks.Cel) Cel:
+					        else if (chunkType == Chunks.Cel)
 					        {
 					            var layer = layers[WORD()];
 					            var x = SHORT();
@@ -250,7 +250,7 @@ namespace Strawberry
 					                }
 
 					                // get pixel data
-					                pixels = scope:Cel Color[width * height];
+					                pixels = new Color[width * height];
 					                BytesToPixels(temp, pixels, mode, palette);
 					            }
 					            // REFERENCE
@@ -437,7 +437,7 @@ namespace Strawberry
 		{
 			public SDL.Texture* Texture;
 			public float Duration;
-			public List<Cel> Cels = new List<Cel>() ~ delete _;
+			public List<Cel> Cels;
 			public uint8* Pixels;
 			public int32 PixelsLength;
 
@@ -448,10 +448,16 @@ namespace Strawberry
 				void* ptr;
 				SDL.LockTexture(Texture, null, out ptr, out PixelsLength);
 				Pixels = (uint8*)ptr;
+
+				Cels = new List<Cel>();
 			}
 
 			public ~this()
 			{
+				for (let c in Cels)
+					delete c;
+				delete Cels;
+
 				SDL.DestroyTexture(Texture);
 			}
 
@@ -499,7 +505,7 @@ namespace Strawberry
 		private class Cel : HasUserData
 		{
 		    public Layer Layer;
-		    public Color[] Pixels;
+		    public Color[] Pixels ~ delete _;
 		    public Cel Link;
 
 		    public int X;
