@@ -85,7 +85,7 @@ namespace Strawberry
 			Input.[Friend]Init(gamepadLimit);
 
 			Sprites = new Dictionary<String, Sprite>();
-			//LoadSprites();
+			LoadSprites();
 
 			BuildTypeLists();
 		}

@@ -223,6 +223,7 @@ namespace Strawberry
 					                width = WORD();
 					                height = WORD();
 
+									// TODO: allocating the entire RGBA data may cause a stack overflow if the image is big enough?
 					                var count = width * height * (int)mode;
 					                if (count > temp.Count)
 					                    temp = scope:: uint8[count];
@@ -235,17 +236,17 @@ namespace Strawberry
 					                // DEFLATE
 					                else
 					                {
-										//TODO: Figure this out to enable aseprite loading
+										// TODO: allocating the entire deflated image might cause stack overflow if the image is big enough?
+										// get the source buffer
+										var source = scope::uint8[chunkEnd - stream.Position];
 
-										Runtime.FatalError("Decompression not yet implemented.");
+										// TODO: Is there some way to read more than one byte at a time from stream?
+										for (int n = 0; n < source.Count; n ++)
+											source[n] = stream.Read<uint8>();
 
-										/*
-										Noel's C#:
-					                    SEEK(2);
-										
-					                    using var deflate = new DeflateStream(reader.BaseStream, CompressionMode.Decompress, true);
-					                    deflate.Read(temp, 0, count);
-										*/
+										// decompress into the temp buffer
+										var length = temp.Count;
+										MiniZ.Uncompress(&temp[0], ref length, &source[0], source.Count);
 					                }
 
 					                // get pixel data
