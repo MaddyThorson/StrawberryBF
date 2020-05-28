@@ -247,10 +247,10 @@ namespace Strawberry
 			{
 				let path = scope String();
 				file.GetFilePath(path);
-
 				let sprite = new [Friend]Sprite(path);
 
-				path.Remove(0, ContentRoot.Length + 8);
+				path.Remove(0, ContentRoot.Length + 9);
+				path.RemoveFromEnd(4);
 				Sprites.Add(new String(path), sprite);
 			}
 		}

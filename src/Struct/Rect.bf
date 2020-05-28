@@ -166,5 +166,10 @@ namespace Strawberry
 		{
 			return Rect(a.X * b.X, a.Y * b.Y, a.Width * b.X, a.Height * b.Y);
 		}
+
+		static public implicit operator SDL2.SDL.Rect(Rect r)
+		{
+			return SDL2.SDL.Rect((int32)r.X, (int32)r.Y, (int32)r.Width, (int32)r.Height);
+		}
 	}
 }

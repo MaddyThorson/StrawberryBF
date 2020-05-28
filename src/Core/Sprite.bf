@@ -33,12 +33,13 @@ namespace Strawberry
 
 		public readonly String Path;
 
+		public int Width { get; private set; }
+		public int Height { get; private set; }
+
 		private Frame[] frames;
 		private List<Layer> layers;
 		private List<Tag> tags;
 		private List<Slice> slices;
-		private int width;
-		private int height;
 		private Modes mode;
 
 		private this(String path)
@@ -51,6 +52,11 @@ namespace Strawberry
 		{
 			delete Path;
 			Unload();
+		}
+
+		public Frame this[int index]
+		{
+			get => frames[index];
 		}
 
 		private void Unload()
@@ -125,8 +131,8 @@ namespace Strawberry
 
 					// Frame Count / Width / Height / Color Mode
 					frames = new Frame[WORD()];
-					width = WORD();
-					height = WORD();
+					Width = WORD();
+					Height = WORD();
 					mode = (Modes)(WORD() / 8);
 
 					// Other Info, Ignored
@@ -148,13 +154,13 @@ namespace Strawberry
 
 				// Body
 				{
-					var temp = scope:: uint8[width * height * (int)mode];
+					var temp = scope:: uint8[Width * Height * (int)mode];
 					let palette = scope:: Color[256];
 					HasUserData last = null;
 
 					for (int i = 0; i < frames.Count; i++)
 					{
-					    let frame = new Frame(width, height);
+					    let frame = new Frame(Width, Height);
 					    frames[i] = frame;
 
 					    int64 frameStart, frameEnd;
@@ -257,7 +263,7 @@ namespace Strawberry
 					            else if (celType == 1)
 					            {
 					                var linkFrame = frames[WORD()];
-					                var linkCel = linkFrame.Cels[frame.Cels.Count];
+					                var linkCel = linkFrame.[Friend]cels[frame.[Friend]cels.Count];
 
 					                width = linkCel.Width;
 					                height = linkCel.Height;
@@ -279,7 +285,7 @@ namespace Strawberry
 					            if (cel.Layer.Visible)
 					                CelToFrame(frame, cel);
 
-					            frame.Cels.Add(cel);
+					            frame.[Friend]cels.Add(cel);
 					        }
 					        // PALETTE CHUNK
 					        else if (chunkType == Chunks.Palette)
@@ -418,12 +424,12 @@ namespace Strawberry
 		    if (cel.Layer.BlendMode < BlendModes.Count)
 		        blend = BlendModes[cel.Layer.BlendMode];
 
-		    for (int sx = Math.Max(0, -cel.X), int right = Math.Min(cel.Width, width - cel.X); sx < right; sx++)
+		    for (int sx = Math.Max(0, -cel.X), int right = Math.Min(cel.Width, Width - cel.X); sx < right; sx++)
 		    {
 		        int dx = cel.X + sx;
-		        int dy = cel.Y * width;
+		        int dy = cel.Y * Width;
 
-		        for (int sy = Math.Max(0, -cel.Y), int bottom = Math.Min(cel.Height, height - cel.Y); sy < bottom; sy++, dy += width)
+		        for (int sy = Math.Max(0, -cel.Y), int bottom = Math.Min(cel.Height, Height - cel.Y); sy < bottom; sy++, dy += Width)
 		        {
 		            if (dx + dy >= 0 && dx + dy < pxLen)
 		                blend(frame.Pixels, (dx + dy) * 4, cel.Pixels[sx + sy * cel.Width], opacity);
@@ -433,13 +439,14 @@ namespace Strawberry
 
 		// Data
 
-		private class Frame
+		public class Frame
 		{
 			public SDL.Texture* Texture;
 			public float Duration;
-			public List<Cel> Cels;
 			public uint8* Pixels;
 			public int32 PixelsLength;
+
+			private List<Cel> cels;
 
 			public this(int w, int h)
 			{
@@ -449,14 +456,14 @@ namespace Strawberry
 				SDL.LockTexture(Texture, null, out ptr, out PixelsLength);
 				Pixels = (uint8*)ptr;
 
-				Cels = new List<Cel>();
+				cels = new List<Cel>();
 			}
 
 			public ~this()
 			{
-				for (let c in Cels)
+				for (let c in cels)
 					delete c;
-				delete Cels;
+				delete cels;
 
 				SDL.DestroyTexture(Texture);
 			}

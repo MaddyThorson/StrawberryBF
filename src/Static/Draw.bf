@@ -36,5 +36,13 @@ namespace Strawberry
 			SDL.SetRenderDrawColor(Game.Renderer, color.R, color.G, color.B, color.A);
 			SDL.RenderDrawLine(Game.Renderer, (int32)fromn.X, (int32)fromn.Y, (int32)ton.X, (int32)ton.Y);
 		}
+
+		static public void Sprite(Sprite sprite, int frame, Point position)
+		{
+			SDL.Rect src = Strawberry.Rect(0, 0, sprite.Width, sprite.Height);
+			SDL.Rect dst = Strawberry.Rect(position.X, position.Y, sprite.Width, sprite.Height);
+
+			SDL.RenderCopy(Game.Renderer, sprite[frame].Texture, &src, &dst);
+		}
 	}
 }
