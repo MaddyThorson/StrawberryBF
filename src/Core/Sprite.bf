@@ -388,9 +388,9 @@ namespace Strawberry
 		    {
 		        for (int p = 0, int b = 0; p < len; p++, b += 4)
 		        {
-		            pixels[p].R = (uint8)(bytes[b + 0] * bytes[b + 3] / 255);
-		            pixels[p].G = (uint8)(bytes[b + 1] * bytes[b + 3] / 255);
-		            pixels[p].B = (uint8)(bytes[b + 2] * bytes[b + 3] / 255);
+		            pixels[p].R = (uint8)((int)bytes[b + 0] * (int)bytes[b + 3] / 255);
+		            pixels[p].G = (uint8)((int)bytes[b + 1] * (int)bytes[b + 3] / 255);
+		            pixels[p].B = (uint8)((int)bytes[b + 2] * (int)bytes[b + 3] / 255);
 		            pixels[p].A = bytes[b + 3];
 		        }
 		    }
@@ -398,7 +398,7 @@ namespace Strawberry
 		    {
 		        for (int p = 0, int b = 0; p < len; p++, b += 2)
 		        {
-		            pixels[p].R = pixels[p].G = pixels[p].B = (uint8)(bytes[b + 0] * bytes[b + 1] / 255);
+		            pixels[p].R = pixels[p].G = pixels[p].B = (uint8)((int)bytes[b + 0] * (int)bytes[b + 1] / 255);
 		            pixels[p].A = bytes[b + 1];
 		        }
 		    }
@@ -564,10 +564,10 @@ namespace Strawberry
 		    {
 		        if (src.A != 0)
 		        {
-					uint8 a = dest[index];
-					uint8 r = dest[index + 1];
-					uint8 g = dest[index + 2];
-					uint8 b = dest[index + 3];
+					int a = dest[index];
+					int r = dest[index + 1];
+					int g = dest[index + 2];
+					int b = dest[index + 3];
 
 		            if (dest[index] == 0)
 		            {
@@ -578,19 +578,19 @@ namespace Strawberry
 		            }
 		            else
 		            {
-		                var sa = MUL_UN8(src.A, opacity);
-		                var ra = a + sa - MUL_UN8(a, sa);
+		                int sa = MUL_UN8(src.A, opacity);
+		                int ra = a + sa - MUL_UN8(a, sa);
 
-						a = (uint8)ra;
-		                r = (uint8)(r + (src.R - r) * sa / ra);
-		                g = (uint8)(g + (src.G - g) * sa / ra);
-		                b = (uint8)(b + (src.B - b) * sa / ra);
+						a = ra;
+		                r = (r + (src.R - r) * sa / ra);
+		                g = (g + (src.G - g) * sa / ra);
+		                b = (b + (src.B - b) * sa / ra);
 		            }
 
-					dest[index] = a;
-					dest[index + 1] = r;
-					dest[index + 2] = g;
-					dest[index + 3] = b;
+					dest[index] = (uint8)a;
+					dest[index + 1] = (uint8)r;
+					dest[index + 2] = (uint8)g;
+					dest[index + 3] = (uint8)b;
 		        }
 		    }
 		};
