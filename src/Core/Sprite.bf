@@ -418,7 +418,6 @@ namespace Strawberry
 		private void CelToFrame(Frame frame, Cel cel)
 		{
 		    let opacity = (uint8)((cel.Alpha * cel.Layer.Alpha) * 255);
-		    var pxLen = frame.PixelsLength;
 
 		    var blend = BlendModes[0];
 		    if (cel.Layer.BlendMode < BlendModes.Count)
@@ -431,7 +430,7 @@ namespace Strawberry
 
 		        for (int sy = Math.Max(0, -cel.Y), int bottom = Math.Min(cel.Height, Height - cel.Y); sy < bottom; sy++, dy += Width)
 		        {
-		            if (dx + dy >= 0 && dx + dy < pxLen)
+		            if (dx + dy >= 0 && dx + dy < frame.Bytes)
 		                blend(frame.Pixels, (dx + dy) * 4, cel.Pixels[sx + sy * cel.Width], opacity);
 		        }
 		    }
@@ -442,19 +441,25 @@ namespace Strawberry
 		public class Frame
 		{
 			public SDL.Texture* Texture;
+			public int Width;
+			public int Height;
 			public float Duration;
 			public uint8* Pixels;
-			public int32 PixelsLength;
+			public int32 BytesPerRow;
+			public int32 Bytes;
 
 			private List<Cel> cels;
 
 			public this(int w, int h)
 			{
-				Texture = SDL.CreateTexture(Game.Renderer, (uint32)SDL.PIXELFORMAT_RGBA8888, (int32)SDL.TextureAccess.Static, (int32)w, (int32)h);
+				Texture = SDL.CreateTexture(Game.Renderer, (uint32)SDL.PIXELFORMAT_RGBA8888, (int32)SDL.TextureAccess.Streaming, (int32)w, (int32)h);
+				Width = w;
+				Height = h;
 
 				void* ptr;
-				SDL.LockTexture(Texture, null, out ptr, out PixelsLength);
+				SDL.LockTexture(Texture, null, out ptr, out BytesPerRow);
 				Pixels = (uint8*)ptr;
+				Bytes = (int32)(BytesPerRow * Height);
 
 				cels = new List<Cel>();
 			}
@@ -577,17 +582,17 @@ namespace Strawberry
 		    {
 		        if (src.A != 0)
 		        {
-					int r = dest[index];
+					int r = dest[index + 0];
 					int g = dest[index + 1];
 					int b = dest[index + 2];
 					int a = dest[index + 3];
 
 		            if (a == 0)
 		            {
-		                a = src.A;
 						r = src.R;
 						g = src.G;
 						b = src.B;
+		                a = src.A;
 		            }
 		            else
 		            {
@@ -600,7 +605,7 @@ namespace Strawberry
 						a = ra;
 		            }
 
-					dest[index] = (uint8)r;
+					dest[index + 0] = (uint8)r;
 					dest[index + 1] = (uint8)g;
 					dest[index + 2] = (uint8)b;
 					dest[index + 3] = (uint8)a;
