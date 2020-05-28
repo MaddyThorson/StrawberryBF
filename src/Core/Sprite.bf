@@ -450,7 +450,7 @@ namespace Strawberry
 
 			public this(int w, int h)
 			{
-				Texture = SDL.CreateTexture(Game.Renderer, (uint32)SDL.PIXELFORMAT_ARGB8888, (int32)SDL.TextureAccess.Static, (int32)w, (int32)h);
+				Texture = SDL.CreateTexture(Game.Renderer, (uint32)SDL.PIXELFORMAT_RGBA8888, (int32)SDL.TextureAccess.Static, (int32)w, (int32)h);
 
 				void* ptr;
 				SDL.LockTexture(Texture, null, out ptr, out PixelsLength);
@@ -577,12 +577,12 @@ namespace Strawberry
 		    {
 		        if (src.A != 0)
 		        {
-					int a = dest[index];
-					int r = dest[index + 1];
-					int g = dest[index + 2];
-					int b = dest[index + 3];
+					int r = dest[index];
+					int g = dest[index + 1];
+					int b = dest[index + 2];
+					int a = dest[index + 3];
 
-		            if (dest[index] == 0)
+		            if (a == 0)
 		            {
 		                a = src.A;
 						r = src.R;
@@ -594,16 +594,16 @@ namespace Strawberry
 		                int sa = MUL_UN8(src.A, opacity);
 		                int ra = a + sa - MUL_UN8(a, sa);
 
-						a = ra;
 		                r = (r + (src.R - r) * sa / ra);
 		                g = (g + (src.G - g) * sa / ra);
 		                b = (b + (src.B - b) * sa / ra);
+						a = ra;
 		            }
 
-					dest[index] = (uint8)a;
-					dest[index + 1] = (uint8)r;
-					dest[index + 2] = (uint8)g;
-					dest[index + 3] = (uint8)b;
+					dest[index] = (uint8)r;
+					dest[index + 1] = (uint8)g;
+					dest[index + 2] = (uint8)b;
+					dest[index + 3] = (uint8)a;
 		        }
 		    }
 		};

@@ -40,8 +40,7 @@ namespace Strawberry
 		static public void Sprite(Sprite sprite, int frame, Point position)
 		{
 			SDL.Rect src = Strawberry.Rect(0, 0, sprite.Width, sprite.Height);
-			SDL.Rect dst = Strawberry.Rect(position.X, position.Y, sprite.Width, sprite.Height);
-
+			SDL.Rect dst = Strawberry.Rect(position.X - Camera.X, position.Y - Camera.Y, sprite.Width, sprite.Height);
 			SDL.RenderCopy(Game.Renderer, sprite[frame].Texture, &src, &dst);
 		}
 	}
