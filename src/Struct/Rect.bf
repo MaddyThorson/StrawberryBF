@@ -93,14 +93,14 @@ namespace Strawberry
 		public Rect MirrorX(int axis = 0)
 		{
 			var rect = this;
-			rect.X = axis - X - Width;
+			rect.X = axis - (X - axis) - Width;
 			return rect;
 		}
 
 		public Rect MirrorY(int axis = 0)
 		{
 			var rect = this;
-			rect.Y = axis - Y - Height;
+			rect.Y = axis - (Y - axis) - Height;
 			return rect;
 		}
 
