@@ -65,14 +65,14 @@ namespace Strawberry
 		public virtual void Update()
 		{
 			UpdateLists();
-			for (var e in entities)
+			for (let e in entities)
 				if (e.Active)
 					e.Update();
 		}
 
 		public virtual void Draw()
 		{
-			for (var e in entities)
+			for (let e in entities)
 				if (e.Visible)
 					e.Draw();
 		}
@@ -95,11 +95,13 @@ namespace Strawberry
 		{
 			if (toRemove.Count > 0)
 			{
-				for (var e in toRemove)
+				for (let e in toRemove)
 				{
+					Calc.Log(scope => e.GetType().GetName);
+
 					entities.Remove(e);
 					UntrackEntity(e);
-					e.Removed();
+					e.[Friend]Removed();
 					if (e.DeleteOnRemove)
 						delete e;
 				}
@@ -109,22 +111,21 @@ namespace Strawberry
 
 			if (toAdd.Count > 0)
 			{
-				for (var e in toAdd)
+				for (let e in toAdd)
 				{
 					entities.Add(e);
 					TrackEntity(e);
-					e.Added(this);
+					e.[Friend]Added(this);
 				}
 			}
 
-			for (var e in entities)
-				e.UpdateLists();
+			for (let e in entities)
+				e.[Friend]UpdateLists();
 
 			if (toAdd.Count > 0)
 			{
-				for (var e in toAdd)
+				for (let e in toAdd)
 					e.Started();
-
 				toAdd.Clear();
 			}
 		}

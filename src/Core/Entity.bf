@@ -29,12 +29,12 @@ namespace Strawberry
 				delete c;
 		}
 
-		public void Added(Scene scene)
+		private void Added(Scene scene)
 		{
 			Scene = scene;
 		}
 
-		public void Removed()
+		private void Removed()
 		{
 			Scene = null;
 		}
@@ -81,7 +81,7 @@ namespace Strawberry
 			return component;
 		}
 
-		public void UpdateLists()
+		private void UpdateLists()
 		{
 			if (toRemove.Count > 0)
 			{
@@ -424,11 +424,6 @@ namespace Strawberry
 		public void DrawHitbox(Color color)
 		{
 			Draw.Rect(SceneHitbox, color);
-		}
-
-		static public int operator<=>(Entity a, Entity b)
-		{
-			return a.Depth <=> b.Depth;
 		}
 	}
 }

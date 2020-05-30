@@ -1,5 +1,6 @@
 using System;
 using System.Collections;
+using System.Diagnostics;
 
 namespace Strawberry
 {
@@ -56,10 +57,8 @@ namespace Strawberry
 
 		private Result<bool> Set(TIndex to)
 		{
-			if (!states.ContainsKey(to))
-				Runtime.FatalError("State does not exist in this State Machine. Call Add() first!");
-			if (inStateCall)
-				Runtime.FatalError("Cannot set State directly from inside a State Enter/Exit/Update call. Return the desired State change instead.");
+			Debug.Assert(states.ContainsKey(to), "State does not exist in this State Machine. Call Add() first!");
+			Runtime.Assert(!inStateCall, "Cannot set State directly from inside a State Enter/Exit/Update call. Return the desired State change instead.");
 
 			if (to != state)
 			{
