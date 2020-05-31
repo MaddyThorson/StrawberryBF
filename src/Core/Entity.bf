@@ -425,5 +425,10 @@ namespace Strawberry
 		{
 			Draw.Rect(SceneHitbox, color);
 		}
+
+		static public int Compare(Entity a, Entity b)
+		{
+			return a.Depth <=> b.Depth; 
+		}
 	}
 }

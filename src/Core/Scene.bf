@@ -97,8 +97,6 @@ namespace Strawberry
 			{
 				for (let e in toRemove)
 				{
-					Calc.Log(scope => e.GetType().GetName);
-
 					entities.Remove(e);
 					UntrackEntity(e);
 					e.[Friend]Removed();
@@ -117,6 +115,8 @@ namespace Strawberry
 					TrackEntity(e);
 					e.[Friend]Added(this);
 				}
+
+				entities.Sort(scope => Entity.Compare);
 			}
 
 			for (let e in entities)
