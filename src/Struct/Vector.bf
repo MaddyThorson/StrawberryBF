@@ -32,23 +32,8 @@ namespace Strawberry
 			return .(-Y, X);
 		}
 
-		public float Length
-		{
-			[Inline]
-			get
-			{
-				return Math.Sqrt(LengthSquared);
-			}
-		}
-
-		public float LengthSquared
-		{
-			[Inline]
-			get
-			{
-				return X * X + Y * Y;
-			}
-		}
+		public float Length => Math.Sqrt(LengthSquared);
+		public float LengthSquared => X * X + Y * Y;
 
 		[Inline]
 		public Point Round()

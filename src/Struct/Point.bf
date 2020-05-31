@@ -38,6 +38,9 @@ namespace Strawberry
 			return .(-Y, X);
 		}
 
+		public float Length => Math.Sqrt(LengthSquared);
+		public int LengthSquared => X * X + Y * Y;
+
 		public override void ToString(String strBuffer)
 		{
 			strBuffer.Set("Point [ ");
