@@ -12,6 +12,11 @@ namespace Strawberry
 			Action = action;
 		}
 
+		public ~this()
+		{
+			delete Action;
+		}
+
 		public override void Started()
 		{
 

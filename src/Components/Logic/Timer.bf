@@ -16,6 +16,13 @@ namespace Strawberry
 			
 		}
 
+		public this(Action onComplete, bool destroyOnComplete = false)
+			: base(false, false)
+		{
+			OnComplete = onComplete;
+			RemoveOnComplete = destroyOnComplete;
+		}
+
 		public this(float value, Action onComplete, bool destroyOnComplete = false)
 			: base(false, false)
 		{

@@ -5,6 +5,14 @@ namespace Strawberry
 {
 	static public class Calc
 	{
+		public const float Circle 	= Math.PI_f * 2;
+		public const float Right 	= 0;
+		public const float Left 	= Math.PI_f;
+		public const float Up 		= Math.PI_f * -0.5f;
+		public const float Down 	= Math.PI_f * 0.5f;
+		public const float DegToRad = Math.PI_f / 180f;
+		public const float RadToDeg = 180f / Math.PI_f;
+
 		[Inline]
 		static public bool BitCheck(int bits, int pos)
 		{

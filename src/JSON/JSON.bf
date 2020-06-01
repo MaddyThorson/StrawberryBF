@@ -20,6 +20,11 @@ namespace Strawberry
 
 		public int Int => (int)Number;
 		public char8 Char => String[0];
+		public T Enum<T>() where T : Enum
+		{
+			Runtime.Assert(Type == .String);
+			return T.Parse<T>(String, true);
+		}
 
 		private List<JSON> array;
 		private Dictionary<String, JSON> children;

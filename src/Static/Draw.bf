@@ -1,4 +1,5 @@
 using SDL2;
+using System;
 
 namespace Strawberry
 {
@@ -35,6 +36,27 @@ namespace Strawberry
 
 			SDL.SetRenderDrawColor(Game.Renderer, color.R, color.G, color.B, color.A);
 			SDL.RenderDrawLine(Game.Renderer, (int32)fromn.X, (int32)fromn.Y, (int32)ton.X, (int32)ton.Y);
+		}
+
+		static public void Circle(Point at, float radius, Color color, int steps = 16)
+		{
+			let add = at - Camera;
+
+			SDL.Point[] points = scope SDL.Point[steps + 1];
+			points[0] = SDL.Point((int32)(radius + add.X), (int32)add.Y);
+			points[steps] = points[0];
+			float slice = Calc.Circle / steps;
+
+			for (int i = 1; i < steps; i++)
+			{
+				points[i] = SDL.Point(
+					(int32)(Math.Round(Math.Cos(slice * i) * radius) + add.X),
+					(int32)(Math.Round(Math.Sin(slice * i) * radius) + add.Y)
+				);
+			}
+
+			SDL.SetRenderDrawColor(Game.Renderer, color.R, color.G, color.B, color.A);
+			SDL.RenderDrawLines(Game.Renderer, &points[0], (int32)steps + 1);
 		}
 
 		static public void Sprite(Sprite sprite, int frame, Point position)
