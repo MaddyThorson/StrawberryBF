@@ -186,14 +186,14 @@ namespace Strawberry
 
 		public T First<T>() where T : Entity
 		{
-			for (var e in entityTracker[typeof(T)])
+			for (let e in entityTracker[typeof(T)])
 				return e as T;
 			return null;
 		}
 
 		public T First<T>(Point point) where T : Entity
 		{
-			for (var e in entityTracker[typeof(T)])
+			for (let e in entityTracker[typeof(T)])
 				if (e.Check(point))
 					return e as T;
 			return null;
@@ -201,7 +201,7 @@ namespace Strawberry
 
 		public T First<T>(Rect rect) where T : Entity
 		{
-			for (var e in entityTracker[typeof(T)])
+			for (let e in entityTracker[typeof(T)])
 				if (e.Check(rect))
 					return e as T;
 			return null;
@@ -209,14 +209,14 @@ namespace Strawberry
 
 		public List<T> All<T>(List<T> into) where T : Entity
 		{
-			for (var e in entityTracker[typeof(T)])
+			for (let e in entityTracker[typeof(T)])
 				into.Add(e as T);
 			return into;
 		}
 
 		public List<T> All<T>(Point point, List<T> into) where T : Entity
 		{
-			for (var e in entityTracker[typeof(T)])
+			for (let e in entityTracker[typeof(T)])
 				if (e.Check(point))
 					into.Add(e as T);
 			return into;
@@ -224,7 +224,7 @@ namespace Strawberry
 
 		public List<T> All<T>(Rect rect, List<T> into) where T : Entity
 		{
-			for (var e in entityTracker[typeof(T)])
+			for (let e in entityTracker[typeof(T)])
 				if (e.Check(rect))
 					into.Add(e as T);
 			return into;

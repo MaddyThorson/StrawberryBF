@@ -6,7 +6,7 @@ namespace Strawberry
 	public abstract class Entity
 	{
 		public Scene Scene { get; private set; }
-		public int Depth;
+		public int Priority;
 		public bool Active = true;
 		public bool Visible = true;
 		public bool Collidable = true;
@@ -428,7 +428,7 @@ namespace Strawberry
 
 		static public int Compare(Entity a, Entity b)
 		{
-			return a.Depth <=> b.Depth; 
+			return a.Priority <=> b.Priority; 
 		}
 	}
 }
