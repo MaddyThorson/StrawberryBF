@@ -70,7 +70,7 @@ namespace Strawberry
 		{
 			SDL.Point cnt = origin;
 			SDL.Rect src = Strawberry.Rect(0, 0, sprite.Width, sprite.Height);
-			SDL.Rect dst = Strawberry.Rect(position.X - Camera.X, position.Y - Camera.Y, sprite.Width, sprite.Height);
+			SDL.Rect dst = Strawberry.Rect(position.X - origin.X - Camera.X, position.Y - origin.Y - Camera.Y, sprite.Width, sprite.Height);
 			SDL.RenderCopyEx(Game.Renderer, sprite[frame].Texture, &src, &dst, rotation, &cnt, .None);
 		}
 	}
