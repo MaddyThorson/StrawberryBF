@@ -243,15 +243,18 @@ namespace Strawberry
 				LoadSpritesDir(path);
 			}
 
-			for (let file in Directory.EnumerateFiles(directory, "*.ase"))
+			for (let file in Directory.EnumerateFiles(directory, "*.ase*"))
 			{
 				let path = scope String();
 				file.GetFilePath(path);
-				let sprite = new [Friend]Sprite(path);
-
-				path.Remove(0, ContentRoot.Length + 9);
-				path.RemoveFromEnd(4);
-				Sprites.Add(new String(path), sprite);
+				if (path.EndsWith(".ase") || path.EndsWith(".aseprite"))
+				{
+					let sprite = new [Friend]Sprite(path);
+	
+					path.Remove(0, ContentRoot.Length + 9);
+					path.RemoveFromEnd(path.Length - path.IndexOf('.'));
+					Sprites.Add(new String(path), sprite);
+				}
 			}
 		}
 

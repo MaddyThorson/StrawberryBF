@@ -55,6 +55,11 @@ namespace Strawberry
 			return Point((int)a.X, (int)a.Y);
 		}
 
+		static public implicit operator SDL2.SDL.Point(Point a)
+		{
+			return .((int32)a.X, (int32)a.Y);
+		}
+
 		static public bool operator==(Point a, Point b)
 		{
 			return a.X == b.X && a.Y == b.Y;
