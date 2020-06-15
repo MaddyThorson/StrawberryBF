@@ -7,32 +7,8 @@ using MiniZ;
 
 namespace Strawberry
 {
-	public class Sprite
+	public class Sprite : Asset
 	{
-		private enum Modes
-		{
-		    Indexed = 1,
-		    Grayscale = 2,
-		    RGBA = 4,
-		}
-
-		private enum Chunks
-		{
-		    OldPaletteA = 0x0004,
-		    OldPaletteB = 0x0011,
-		    Layer = 0x2004,
-		    Cel = 0x2005,
-		    CelExtra = 0x2006,
-		    Mask = 0x2016,
-		    Path = 0x2017,
-		    FrameTags = 0x2018,
-		    Palette = 0x2019,
-		    UserData = 0x2020,
-		    Slice = 0x2022
-		}
-
-		public readonly String Path;
-
 		public int Width { get; private set; }
 		public int Height { get; private set; }
 
@@ -43,14 +19,13 @@ namespace Strawberry
 		private Modes mode;
 
 		private this(String path)
+			: base(path)
 		{
-			Path = new String(path);
 			Load();
 		}
 
 		public ~this()
 		{
-			delete Path;
 			Unload();
 		}
 
@@ -437,6 +412,28 @@ namespace Strawberry
 		}
 
 		// Data
+
+		private enum Modes
+		{
+		    Indexed = 1,
+		    Grayscale = 2,
+		    RGBA = 4,
+		}
+
+		private enum Chunks
+		{
+		    OldPaletteA = 0x0004,
+		    OldPaletteB = 0x0011,
+		    Layer = 0x2004,
+		    Cel = 0x2005,
+		    CelExtra = 0x2006,
+		    Mask = 0x2016,
+		    Path = 0x2017,
+		    FrameTags = 0x2018,
+		    Palette = 0x2019,
+		    UserData = 0x2020,
+		    Slice = 0x2022
+		}
 
 		public class Frame
 		{

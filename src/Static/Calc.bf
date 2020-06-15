@@ -75,5 +75,24 @@ namespace Strawberry
 			del(string);
 			Debug.WriteLine(string);
 		}
+
+		static public void Log(StringView str, params Object[] args)
+		{
+			String string = scope String(str);
+
+			for (let i < args.Count)
+			{
+				String arg = scope String();
+				String num = scope String("{x}");
+				i.ToString(arg);
+				num.Replace("x", arg);
+
+				arg.Clear();
+				args[i].ToString(arg);
+				string.Replace(num, arg);
+			}
+
+			Debug.WriteLine(string);
+		}
 	}
 }

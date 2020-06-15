@@ -15,7 +15,6 @@ namespace Strawberry
 
 	public class Game
 	{
-		public readonly Dictionary<String, Sprite> Sprites;
 		public readonly List<VirtualInput> VirtualInputs;
 		public readonly String Title;
 		public readonly int Width;
@@ -84,10 +83,8 @@ namespace Strawberry
 			VirtualInputs = new List<VirtualInput>();
 			Input.[Friend]Init(gamepadLimit);
 
-			Sprites = new Dictionary<String, Sprite>();
-			LoadSprites();
-
 			BuildTypeLists();
+			Assets.LoadAll();
 		}
 
 		public ~this()
@@ -107,10 +104,9 @@ namespace Strawberry
 				delete VirtualInputs;
 			}
 
+			Assets.DisposeAll();
 			DisposeTypeLists();
 			Input.[Friend]Dispose();
-			DisposeSprites();
-			Sprite.[Friend]Dispose();
 			Game = null;
 		}
 
@@ -228,54 +224,6 @@ namespace Strawberry
 					delete switchToScene;
 				switchToScene = value;
 			}
-		}
-
-		// Load Images
-
-		private void LoadSprites()
-		{
-			let root = scope String(ContentRoot);
-			root.Append(Path.DirectorySeparatorChar);
-			root.Append("Sprites");
-			if (Directory.Exists(root))
-				LoadSpritesDir(root);
-			else
-				Calc.Log("Content/Sprites folder does not exist!");
-		}
-
-		private void LoadSpritesDir(String directory)
-		{
-			for (let dir in Directory.EnumerateDirectories(directory))
-			{
-				let path = scope String();
-				dir.GetFilePath(path);
-				LoadSpritesDir(path);
-			}
-
-			for (let file in Directory.EnumerateFiles(directory, "*.ase*"))
-			{
-				let path = scope String();
-				file.GetFilePath(path);
-				if (path.EndsWith(".ase") || path.EndsWith(".aseprite"))
-				{
-					let sprite = new [Friend]Sprite(path);
-	
-					path.Remove(0, ContentRoot.Length + 9);
-					path.RemoveFromEnd(path.Length - path.IndexOf('.'));
-					Sprites.Add(new String(path), sprite);
-				}
-			}
-		}
-
-		private void DisposeSprites()
-		{
-			for (let kv in Sprites)
-			{
-				delete kv.key;
-				delete kv.value;
-			}
-
-			delete Sprites;
 		}
 
 		// Type assignable caching
