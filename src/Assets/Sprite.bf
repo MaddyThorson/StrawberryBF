@@ -24,17 +24,12 @@ namespace Strawberry
 			Load();
 		}
 
-		public ~this()
-		{
-			Unload();
-		}
-
 		public Frame this[int index]
 		{
 			get => frames[index];
 		}
 
-		private void Unload()
+		override protected void Unload()
 		{
 			for (let f in frames)
 				delete f;
@@ -53,21 +48,14 @@ namespace Strawberry
 			delete slices;
 		}
 
-		public void Reload()
-		{
-			Unload();
-			Load();
-		}
-
-		private void Load()
+		override protected void Load()
 		{
 			/*
 				Aseprite file loading based on code from Noel Berry's Foster Framework here:
 				https://github.com/NoelFB/Foster/blob/master/Framework/Graphics/Images/Aseprite.cs
 			*/
 
-			let stream = scope FileStream();
-			stream.Open(Path, .Read, .Read);
+			let stream = OpenFileStream!();
 
 			//Helpers to match ASE file format spec
 			uint8 BYTE() => stream.Read<uint8>();
