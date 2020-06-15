@@ -394,9 +394,9 @@ namespace Strawberry
 		    {
 		        for (int p = 0, int b = 0; p < len; p++, b += 4)
 		        {
-		            pixels[p].R = (uint8)((int)bytes[b + 0] * bytes[b + 3] / 255);
-		            pixels[p].G = (uint8)((int)bytes[b + 1] * bytes[b + 3] / 255);
-		            pixels[p].B = (uint8)((int)bytes[b + 2] * bytes[b + 3] / 255);
+		            pixels[p].R = (uint8)((int)bytes[b + 0] * (int)bytes[b + 3] / 255);
+		            pixels[p].G = (uint8)((int)bytes[b + 1] * (int)bytes[b + 3] / 255);
+		            pixels[p].B = (uint8)((int)bytes[b + 2] * (int)bytes[b + 3] / 255);
 		            pixels[p].A = bytes[b + 3];
 		        }
 		    }

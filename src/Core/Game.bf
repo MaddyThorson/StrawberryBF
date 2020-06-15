@@ -189,6 +189,8 @@ namespace Strawberry
 				Time.PreviousElapsed = Time.Elapsed;
 				Time.Elapsed += Time.Delta;
 			}
+
+			Strawberry.Console.Update();
 		}
 
 		private void Render()
@@ -204,6 +206,9 @@ namespace Strawberry
 		{
 			if (Scene != null)
 				Scene.Draw();
+
+			if (Console.Enabled)
+				Strawberry.Console.Draw();
 		}
 
 		public Scene Scene
@@ -231,7 +236,7 @@ namespace Strawberry
 			if (Directory.Exists(root))
 				LoadSpritesDir(root);
 			else
-				Console.WriteLine("Content/Sprites folder does not exist!");
+				Calc.Log("Content/Sprites folder does not exist!");
 		}
 
 		private void LoadSpritesDir(String directory)

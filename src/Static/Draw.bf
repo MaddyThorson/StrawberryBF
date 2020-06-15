@@ -9,6 +9,7 @@ namespace Strawberry
 
 		static public void Rect(int x, int y, int w, int h, Color color)
 		{
+			SDL.SetRenderDrawBlendMode(Game.Renderer, .Blend);
 			SDL.SetRenderDrawColor(Game.Renderer, color.R, color.G, color.B, color.A);
 			SDL.RenderFillRect(Game.Renderer, &SDL.Rect((int32)(x - Camera.X), (int32)(y - Camera.Y), (int32)w, (int32)h));
 		}
@@ -20,6 +21,7 @@ namespace Strawberry
 
 		static public void HollowRect(int x, int y, int w, int h, Color color)
 		{
+			SDL.SetRenderDrawBlendMode(Game.Renderer, .Blend);
 			SDL.SetRenderDrawColor(Game.Renderer, color.R, color.G, color.B, color.A);
 			SDL.RenderDrawRect(Game.Renderer, &SDL.Rect((int32)(x - Camera.X), (int32)(y - Camera.Y), (int32)w, (int32)h));
 		}
@@ -34,6 +36,7 @@ namespace Strawberry
 			let fromn = (Point)(from - Camera);
 			let ton = (Point)(to - Camera);
 
+			SDL.SetRenderDrawBlendMode(Game.Renderer, .Blend);
 			SDL.SetRenderDrawColor(Game.Renderer, color.R, color.G, color.B, color.A);
 			SDL.RenderDrawLine(Game.Renderer, (int32)fromn.X, (int32)fromn.Y, (int32)ton.X, (int32)ton.Y);
 		}
@@ -55,6 +58,7 @@ namespace Strawberry
 				);
 			}
 
+			SDL.SetRenderDrawBlendMode(Game.Renderer, .Blend);
 			SDL.SetRenderDrawColor(Game.Renderer, color.R, color.G, color.B, color.A);
 			SDL.RenderDrawLines(Game.Renderer, &points[0], (int32)steps + 1);
 		}
@@ -63,6 +67,8 @@ namespace Strawberry
 		{
 			SDL.Rect src = Strawberry.Rect(0, 0, sprite.Width, sprite.Height);
 			SDL.Rect dst = Strawberry.Rect(position.X - Camera.X, position.Y - Camera.Y, sprite.Width, sprite.Height);
+
+			SDL.SetTextureBlendMode(sprite[frame].Texture, .Blend);
 			SDL.RenderCopy(Game.Renderer, sprite[frame].Texture, &src, &dst);
 		}
 
@@ -71,6 +77,8 @@ namespace Strawberry
 			SDL.Point cnt = origin;
 			SDL.Rect src = Strawberry.Rect(0, 0, sprite.Width, sprite.Height);
 			SDL.Rect dst = Strawberry.Rect(position.X - origin.X - Camera.X, position.Y - origin.Y - Camera.Y, sprite.Width, sprite.Height);
+
+			SDL.SetTextureBlendMode(sprite[frame].Texture, .Blend);
 			SDL.RenderCopyEx(Game.Renderer, sprite[frame].Texture, &src, &dst, rotation, &cnt, .None);
 		}
 	}
