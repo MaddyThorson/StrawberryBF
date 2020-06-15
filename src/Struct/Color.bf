@@ -38,6 +38,11 @@ namespace Strawberry
 			A = (uint8)(alpha * 255);
 		}
 
+		public this()
+		{
+			R = G = B = A = 0;
+		}
+
 		public float Rf
 		{
 			[Inline]
