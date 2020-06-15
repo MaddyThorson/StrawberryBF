@@ -205,7 +205,11 @@ namespace Strawberry
 		public virtual void Draw()
 		{
 			if (Scene != null)
+			{
+				Draw.PushCamera(Scene.Camera.Round());
 				Scene.Draw();
+				Draw.PopCamera();
+			}
 
 			if (Console.Enabled)
 				Strawberry.Console.Draw();

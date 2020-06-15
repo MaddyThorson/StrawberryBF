@@ -1,11 +1,29 @@
 using SDL2;
 using System;
+using System.Collections;
 
 namespace Strawberry
 {
 	static public class Draw
 	{
-		static public Point Camera => Game.Scene != null ? Game.Scene.Camera.Round() : Point.Zero;
+		static public Point Camera => cameraStack.Count > 0 ? cameraStack.Back : Point.Zero;
+
+		static private List<Point> cameraStack = new List<Point>() ~ delete _;
+
+		static public void PushCamera(Point camera, bool relative = true)
+		{
+			if (relative)
+				cameraStack.Add(Camera + camera);
+			else
+				cameraStack.Add(camera);
+		}
+
+		static public void PopCamera()
+		{
+			if (cameraStack.Count == 0)
+				Runtime.FatalError("Cannot Pop empty Camera Stack!");
+			cameraStack.PopBack();
+		}
 
 		static public void Rect(int x, int y, int w, int h, Color color)
 		{
