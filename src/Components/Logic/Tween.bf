@@ -3,9 +3,9 @@ namespace Strawberry
 {
 	public class Tween : Component
 	{
-		public Ease.Easer Easer;
-		public delegate void(float) OnUpdate;
-		public delegate void() OnComplete;
+		public Ease.Easer Easer ~ delete _;
+		public delegate void(float) OnUpdate ~ delete _;
+		public delegate void() OnComplete ~ delete _;
 		public bool RemoveOnComplete;
 
 		public float T { get; private set; }
