@@ -57,13 +57,14 @@ namespace Strawberry
 			//Load files
 			for (let file in Directory.EnumerateFiles(directory, wildcard))
 			{
-				let path = scope String();
+				let path = new String();
 				file.GetFilePath(path);
 				let asset = new [Friend]T(path);
 
-				path.Remove(0, rootDir.Length + 1);
-				path.RemoveFromEnd(path.Length - path.IndexOf('.'));
-				putInto.Add(new String(path), asset);
+				let key = new String(path);
+				key.Remove(0, rootDir.Length + 1);
+				key.RemoveFromEnd(key.Length - key.IndexOf('.'));
+				putInto.Add(key, asset);
 			}
 		}
 	}

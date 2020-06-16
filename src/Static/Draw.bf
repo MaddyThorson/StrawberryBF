@@ -100,10 +100,10 @@ namespace Strawberry
 			SDL.RenderCopyEx(Game.Renderer, sprite[frame].Texture, &src, &dst, rotation, &cnt, .None);
 		}
 
-		static public void Text(Strawberry.Font font, String text, Point position, Color color)
+		static public void Text(SDL2.SDLTTF.Font* font, String text, Point position, Color color)
 		{
 			SDL.SetRenderDrawColor(Game.Renderer, color.R, color.G, color.B, color.A);
-			let surface = SDLTTF.RenderUTF8_Blended(font.Font, text, color);
+			let surface = SDLTTF.RenderUTF8_Blended(font, text, color);
 			let texture = SDL.CreateTextureFromSurface(Game.Renderer, surface);
 
 			SDL.Rect srcRect = .(0, 0, surface.w, surface.h);
