@@ -10,14 +10,14 @@ namespace Strawberry
 		static public float RawDelta => (1 / 60f);
 		static public float Delta => RawDelta * Rate;
 
-		static public bool OnInterval(float interval, float offset = 0)
+		static public bool OnInterval(float interval, float startDelay = 0)
 		{
-			return (int)((Elapsed - offset) / interval) != (int)((PreviousElapsed - offset) / interval);
+			return Calc.OnInterval(Elapsed, PreviousElapsed, interval, startDelay);
 		}
 
-		static public bool BetweenInterval(float interval, float offset = 0)
+		static public bool BetweenInterval(float interval, float startDelay = 0)
 		{
-			return (Elapsed - offset) % (interval * 2) >= interval;
+			return Calc.BetweenInterval(Time.Elapsed, interval, startDelay);
 		}
 	}
 }

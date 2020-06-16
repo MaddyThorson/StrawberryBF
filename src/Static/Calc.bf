@@ -55,6 +55,18 @@ namespace Strawberry
 		}
 
 		[Inline]
+		static public bool OnInterval(float current, float previous, float interval, float startDelay = 0)
+		{
+			return current >= startDelay && (int)((current - startDelay) / interval) != (int)((previous - startDelay) / interval);
+		}
+
+		[Inline]
+		static public bool BetweenInterval(float current, float interval, float startDelay = 0)
+		{
+			return current >= startDelay && (current - startDelay) % (interval * 2) >= interval;
+		}
+
+		[Inline]
 		static public void Log()
 		{
 			Debug.WriteLine("***");
