@@ -25,7 +25,6 @@ namespace Strawberry
 					return fonts[size];
 				else
 				{
-					Calc.Log(Path);
 					let f = SDLTTF.OpenFont(Path, size);
 					fonts[size] = f;
 					return f;

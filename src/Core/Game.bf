@@ -20,7 +20,6 @@ namespace Strawberry
 		public readonly int Width;
 		public readonly int Height;
 		public readonly int WindowScale;
-		public readonly String ContentRoot;
 		
 		private Scene scene;
 		private Scene switchToScene;
@@ -48,12 +47,6 @@ namespace Strawberry
 			Height = height;
 			WindowScale = windowScale;
 			screenRect = SDL.Rect(0, 0, width * windowScale, height * windowScale);
-
-#if DEBUG
-			ContentRoot = "../../../src/Content/";
-#else
-			ContentRoot = "Content/";
-#endif
 
 			String exePath = scope .();
 			Environment.GetExecutableFilePath(exePath);
@@ -85,6 +78,7 @@ namespace Strawberry
 
 			BuildTypeLists();
 			Assets.LoadAll();
+			Strawberry.Console.Init();
 		}
 
 		public ~this()
@@ -107,6 +101,7 @@ namespace Strawberry
 			Assets.DisposeAll();
 			DisposeTypeLists();
 			Input.[Friend]Dispose();
+			Strawberry.Console.Dispose();
 			Game = null;
 		}
 

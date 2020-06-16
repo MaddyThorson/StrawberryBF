@@ -5,7 +5,7 @@ namespace Strawberry
 {
 	public abstract class Asset
 	{
-		public readonly String Path;
+		public readonly String Path ~ delete _;
 
 		protected this(String path)
 		{
