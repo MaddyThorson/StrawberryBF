@@ -45,9 +45,11 @@ namespace Strawberry
 			}
 		}
 
-		static public bool Ctrl => KeyCheck(.LCtrl) || KeyCheck(.RCtrl);
-		static public bool Alt => KeyCheck(.LAlt) || KeyCheck(.RAlt);
-		static public bool Shift => KeyCheck(.LShift) || KeyCheck(.RShift);
+		static public bool Ctrl => SDL.GetModState() & .CTRL > 0;
+		static public bool Alt => SDL.GetModState() & .ALT > 0;
+		static public bool Shift => SDL.GetModState() & .SHIFT > 0;
+		static public bool CapsLock => SDL.GetModState() & .Caps > 0;
+		static public bool NumLock => SDL.GetModState() & .Num > 0;
 
 		static public bool KeyCheck(SDL.Scancode key)
 		{
