@@ -181,7 +181,7 @@ namespace Strawberry
 				Time.Elapsed += Time.Delta;
 			}
 
-			Strawberry.Console.Update();
+			Strawberry.Console.[Friend]Update();
 		}
 
 		private void Render()
@@ -203,7 +203,7 @@ namespace Strawberry
 			}
 
 			if (Console.Enabled)
-				Strawberry.Console.Draw();
+				Strawberry.Console.[Friend]Draw();
 		}
 
 		public Scene Scene

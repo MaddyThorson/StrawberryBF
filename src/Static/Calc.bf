@@ -88,10 +88,8 @@ namespace Strawberry
 			Debug.WriteLine(string);
 		}
 
-		static public void Log(StringView str, params Object[] args)
+		static private String StringArgs(String str, Object[] args)
 		{
-			String string = scope String(str);
-
 			for (let i < args.Count)
 			{
 				String arg = scope String();
@@ -101,9 +99,15 @@ namespace Strawberry
 
 				arg.Clear();
 				args[i].ToString(arg);
-				string.Replace(num, arg);
+				str.Replace(num, arg);
 			}
 
+			return str;
+		}
+
+		static public void Log(StringView str, params Object[] args)
+		{
+			let string = StringArgs(scope String(str), args);
 			Debug.WriteLine(string);
 		}
 	}

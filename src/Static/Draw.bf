@@ -103,7 +103,7 @@ namespace Strawberry
 		static public void Text(SDL2.SDLTTF.Font* font, String text, Point position, Color color)
 		{
 			SDL.SetRenderDrawColor(Game.Renderer, color.R, color.G, color.B, color.A);
-			let surface = SDLTTF.RenderUTF8_Blended(font, text, color);
+			let surface = SDLTTF.RenderUTF8_Solid(font, text, color);
 			let texture = SDL.CreateTextureFromSurface(Game.Renderer, surface);
 
 			SDL.Rect srcRect = .(0, 0, surface.w, surface.h);
