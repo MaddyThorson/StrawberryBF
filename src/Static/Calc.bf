@@ -66,6 +66,34 @@ namespace Strawberry
 			return current >= startDelay && (current - startDelay) % (interval * 2) >= interval;
 		}
 
+		static public String StringArgs(String str, Object[] args)
+		{
+			for (let i < args.Count)
+			{
+				if (args[i] is delegate void(String))
+				{
+					let del = args[i] as delegate void(String);
+					let argStr = scope:: String();
+					del(argStr);
+					args[i] = argStr;
+				}
+			}
+
+			for (let i < args.Count)
+			{
+				String arg = scope String();
+				String num = scope String("{x}");
+				i.ToString(arg);
+				num.Replace("x", arg);
+
+				arg.Clear();
+				args[i].ToString(arg);
+				str.Replace(num, arg);
+			}
+
+			return str;
+		}
+
 		[Inline]
 		static public void Log()
 		{
@@ -88,23 +116,7 @@ namespace Strawberry
 			Debug.WriteLine(string);
 		}
 
-		static private String StringArgs(String str, Object[] args)
-		{
-			for (let i < args.Count)
-			{
-				String arg = scope String();
-				String num = scope String("{x}");
-				i.ToString(arg);
-				num.Replace("x", arg);
-
-				arg.Clear();
-				args[i].ToString(arg);
-				str.Replace(num, arg);
-			}
-
-			return str;
-		}
-
+		[Inline]
 		static public void Log(StringView str, params Object[] args)
 		{
 			let string = StringArgs(scope String(str), args);

@@ -5,6 +5,7 @@ using Strawberry;
 
 namespace Strawberry
 {
+	[AttributeUsage(.Method, .AlwaysIncludeTarget | .ReflectAttribute)]
 	public struct CommandAttribute : Attribute
 	{
 		public String Name;
@@ -48,7 +49,6 @@ namespace Strawberry
 						commands.Add(attr.Value.Name, new CommandInfo(method, attr.Value));
 				}
 			}
-			Calc.Log(commands.Count);
 		}
 
 		static public void Dispose()
@@ -57,7 +57,9 @@ namespace Strawberry
 			delete entry;
 			DeleteContainerAndItems!(commandHistory);
 			DeleteContainerAndItems!(messages);
-			DeleteDictionaryAndKeysAndItems!(commands);
+			for (let c in commands.Values)
+				delete c;
+			delete commands;
 		}
 
 		static public bool Enabled
@@ -87,7 +89,6 @@ namespace Strawberry
 			Log(string);
 		}
 
-		[AlwaysInclude]
 		[Reflect]
 		[Command("clear", "Clears the console window")]
 		static public void Clear()
@@ -123,12 +124,14 @@ namespace Strawberry
 			{
 				let list = String.StackSplit!(line, ' ');
 				list.RemoveAll(scope => String.IsNullOrWhiteSpace);
-				Calc.Log("hey {0}");
 
 				if (commands.ContainsKey(list[0]))
 				{
 					Log(line);
-					//Do it
+					let args = scope String[list.Count - 1];
+					for (let i < args.Count)
+						args[i] = list[i + 1];
+					commands[list[0]].Call(args);
 				}
 				else
 					Log("Command '{0}' not recognized.", list[0]);
@@ -170,13 +173,58 @@ namespace Strawberry
 
 		private class CommandInfo
 		{
-			public delegate void(String[]) Action ~ delete _;
 			public String Help;
 			public String Usage ~ delete _;
+			public MethodInfo Method;
 
 			public this(MethodInfo method, CommandAttribute attr)
 			{
 				Help = attr.Help;
+				Method = method;
+			}
+
+			public void Call(String[] args)
+			{
+				let objs = scope Object[Method.ParamCount];
+				for (let i < objs.Count)
+				{
+					if (i < args.Count)
+						objs[i] = Convert(args[i], Method.GetParamType(i));
+					else
+						objs[i] = Method.GetParamType(i).CreateValueDefault();
+				}
+
+				Method.Invoke(null, objs);
+			}
+		}
+
+		static private Object Convert(String str, Type type)
+		{
+			switch (type)
+			{
+			case typeof(StringView):
+				return str;
+
+			case typeof(int):
+				return int.Parse(str).Value;
+
+			case typeof(float):
+				return float.Parse(str).Value;
+
+			case typeof(bool):
+				return bool.Parse(str).Value;
+
+			case typeof(String):
+				Runtime.FatalError("String arguments not supported in commands. Use StringView instead.");
+
+			default:
+				{
+					let name = scope String();
+					type.GetName(name);
+					let error = Calc.StringArgs("{0} type arguments not supported in commands.", scope Object[] { name });
+					Runtime.FatalError(error);
+				}
+				
 			}
 		}
 	}
