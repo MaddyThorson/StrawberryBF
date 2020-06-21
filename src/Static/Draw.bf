@@ -90,8 +90,53 @@ namespace Strawberry
 			SDL.RenderCopy(Game.Renderer, sprite[frame].Texture, &src, &dst);
 		}
 
+		static public void Sprite(Sprite sprite, int frame, Point position, Point origin)
+		{
+			SDL.Point cnt = origin;
+			SDL.Rect src = Strawberry.Rect(0, 0, sprite.Width, sprite.Height);
+			SDL.Rect dst = Strawberry.Rect(position.X - origin.X - Camera.X, position.Y - origin.Y - Camera.Y, sprite.Width, sprite.Height);
+
+			SDL.SetTextureBlendMode(sprite[frame].Texture, .Blend);
+			SDL.RenderCopyEx(Game.Renderer, sprite[frame].Texture, &src, &dst, 0, &cnt, .None);
+		}
+
 		static public void Sprite(Sprite sprite, int frame, Point position, Point origin, float rotation)
 		{
+			SDL.Point cnt = origin;
+			SDL.Rect src = Strawberry.Rect(0, 0, sprite.Width, sprite.Height);
+			SDL.Rect dst = Strawberry.Rect(position.X - origin.X - Camera.X, position.Y - origin.Y - Camera.Y, sprite.Width, sprite.Height);
+
+			SDL.SetTextureBlendMode(sprite[frame].Texture, .Blend);
+			SDL.RenderCopyEx(Game.Renderer, sprite[frame].Texture, &src, &dst, rotation, &cnt, .None);
+		}
+
+		static public void SpriteCentered(Sprite sprite, int frame, Point position)
+		{
+			Point origin = .(sprite.Width/2, sprite.Height/2);
+			SDL.Point cnt = origin;
+			SDL.Rect src = Strawberry.Rect(0, 0, sprite.Width, sprite.Height);
+			SDL.Rect dst = Strawberry.Rect(position.X - origin.X - Camera.X, position.Y - origin.Y - Camera.Y, sprite.Width, sprite.Height);
+
+			SDL.SetTextureBlendMode(sprite[frame].Texture, .Blend);
+			SDL.RenderCopyEx(Game.Renderer, sprite[frame].Texture, &src, &dst, 0, &cnt, .None);
+		}
+
+		static public void SpriteCentered(Sprite sprite, int frame, Point position, Color color)
+		{
+			Point origin = .(sprite.Width/2, sprite.Height/2);
+			SDL.Point cnt = origin;
+			SDL.Rect src = Strawberry.Rect(0, 0, sprite.Width, sprite.Height);
+			SDL.Rect dst = Strawberry.Rect(position.X - origin.X - Camera.X, position.Y - origin.Y - Camera.Y, sprite.Width, sprite.Height);
+
+			SDL.SetTextureBlendMode(sprite[frame].Texture, .Blend);
+			SDL.SetTextureColorMod(sprite[frame].Texture, color.R, color.G, color.B);
+			SDL.SetTextureAlphaMod(sprite[frame].Texture, color.A);
+			SDL.RenderCopyEx(Game.Renderer, sprite[frame].Texture, &src, &dst, 0, &cnt, .None);
+		}
+
+		static public void SpriteCentered(Sprite sprite, int frame, Point position, float rotation)
+		{
+			Point origin = .(sprite.Width/2, sprite.Height/2);
 			SDL.Point cnt = origin;
 			SDL.Rect src = Strawberry.Rect(0, 0, sprite.Width, sprite.Height);
 			SDL.Rect dst = Strawberry.Rect(position.X - origin.X - Camera.X, position.Y - origin.Y - Camera.Y, sprite.Width, sprite.Height);

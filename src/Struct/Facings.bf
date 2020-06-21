@@ -28,5 +28,10 @@ namespace Strawberry
 			else
 				return .Right;
 		}
+
+		static public implicit operator Point(Facings f)
+		{
+			return .((int)f, 0);
+		}
 	}
 }
