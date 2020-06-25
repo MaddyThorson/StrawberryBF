@@ -85,7 +85,7 @@ namespace Strawberry
 
 		static public void Log(StringView str, params Object[] args)
 		{
-			let string = Calc.[Friend]StringArgs(scope String(str), args);
+			let string = Calc.[Friend]StringArgs(scope String(str), params args);
 			Log(string);
 		}
 
@@ -185,16 +185,21 @@ namespace Strawberry
 
 			public void Call(String[] args)
 			{
-				let objs = scope Object[Method.ParamCount];
-				for (let i < objs.Count)
+				if (Method.ParamCount == 0)
+					Method.Invoke(null);
+				else
 				{
-					if (i < args.Count)
-						objs[i] = Convert(args[i], Method.GetParamType(i));
-					else
-						objs[i] = Method.GetParamType(i).CreateValueDefault();
+					let objs = scope Object[Method.ParamCount];
+					for (let i < objs.Count)
+					{
+						if (i < args.Count)
+							objs[i] = Convert(args[i], Method.GetParamType(i));
+						else
+							objs[i] = Method.GetParamType(i).CreateValueDefault();
+					}
+	
+					Method.Invoke(null, params objs);
 				}
-
-				Method.Invoke(null, objs);
 			}
 		}
 

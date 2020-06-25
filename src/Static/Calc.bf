@@ -66,7 +66,7 @@ namespace Strawberry
 			return current >= startDelay && (current - startDelay) % (interval * 2) >= interval;
 		}
 
-		static public String StringArgs(String str, Object[] args)
+		static public String StringArgs(String str, params Object[] args)
 		{
 			for (let i < args.Count)
 			{
@@ -119,7 +119,7 @@ namespace Strawberry
 		[Inline]
 		static public void Log(StringView str, params Object[] args)
 		{
-			let string = StringArgs(scope String(str), args);
+			let string = StringArgs(scope String(str), params args);
 			Debug.WriteLine(string);
 		}
 	}
