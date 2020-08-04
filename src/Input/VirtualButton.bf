@@ -1,7 +1,6 @@
 using System.Collections;
 using System;
 using System.Diagnostics;
-using SDL2;
 
 namespace Strawberry
 {
@@ -85,19 +84,19 @@ namespace Strawberry
 
 		// Setup Calls
 
-		public VirtualButton AddKey(SDL.Scancode keycode)
+		public VirtualButton AddKey(Keys key)
 		{
-			nodes.Add(new KeyboardKey(keycode));
+			nodes.Add(new KeyboardKey(key));
 			return this;
 		}
 
-		public VirtualButton AddButton(int gamepadID, SDL.SDL_GameControllerButton button)
+		public VirtualButton AddButton(int gamepadID, Buttons button)
 		{
 			nodes.Add(new GamepadButton(gamepadID, button));
 			return this;
 		}
 
-		public VirtualButton AddAxis(int gamepadID, SDL.SDL_GameControllerAxis axis, float threshold, ThresholdConditions condition = .GreaterThan)
+		public VirtualButton AddAxis(int gamepadID, Axes axis, float threshold, ThresholdConditions condition = .GreaterThan)
 		{
 			nodes.Add(new GamepadAxis(gamepadID, axis, threshold, condition));
 			return this;
@@ -131,18 +130,18 @@ namespace Strawberry
 
 		private class KeyboardKey : Node
  		{
-			public SDL.Scancode Keycode;
+			public Keys Key;
 
-			public this(SDL.Scancode keycode)
+			public this(Keys key)
 			{
-				Keycode = keycode;
+				Key = key;
 			}
 
 			override public bool Check
 			{
 				get
 				{
-					 return Input.KeyCheck(Keycode);
+					 return Input.KeyCheck(Key);
 				}
 			}
 		}
@@ -150,9 +149,9 @@ namespace Strawberry
 		private class GamepadButton : Node
 		{
 			public int GamepadID;
-			public SDL.SDL_GameControllerButton Button;
+			public Buttons Button;
 
-			public this(int gamepadID, SDL.SDL_GameControllerButton button)
+			public this(int gamepadID, Buttons button)
 			{
 				GamepadID = gamepadID;
 				Button = button;
@@ -170,11 +169,11 @@ namespace Strawberry
 		private class GamepadAxis : Node
 		{
 			public int GamepadID;
-			public SDL.SDL_GameControllerAxis Axis;
+			public Axes Axis;
 			public float Threshold;
 			public ThresholdConditions Condition;
 
-			public this(int gamepadID, SDL.SDL_GameControllerAxis axis, float threshold, ThresholdConditions condition = .GreaterThan)
+			public this(int gamepadID, Axes axis, float threshold, ThresholdConditions condition = .GreaterThan)
 			{
 				GamepadID = gamepadID;
 				Axis = axis;

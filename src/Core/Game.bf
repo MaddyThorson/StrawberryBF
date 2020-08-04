@@ -20,6 +20,7 @@ namespace Strawberry
 		public readonly int Width;
 		public readonly int Height;
 		public readonly int WindowScale;
+		public readonly int GamepadLimit;
 		
 		private Scene scene;
 		private Scene switchToScene;
@@ -27,17 +28,13 @@ namespace Strawberry
 		private Dictionary<Type, List<Type>> entityAssignableLists;
 		private Dictionary<Type, List<Type>> componentAssignableLists;
 
-		//SDL Vars
-		public SDL.Renderer* Renderer { get; private set; }
+		public PlatformLayer PlatformLayer { get; private set; }
 		public Color ClearColor = .Black;
 
-		private SDL.Rect screenRect;
-		private SDL.Window* window;
-		private SDL.Surface* screen;
 		private bool* keyboardState;
 		private int32 updateCounter;
 
-		public this(String windowTitle, int32 width, int32 height, int32 windowScale, int gamepadLimit = 1)
+		public this(PlatformLayer platformLayer, String windowTitle, int32 width, int32 height, int32 windowScale, int gamepadLimit = 1)
 			: base()
 		{
 			Game = this;
@@ -46,7 +43,7 @@ namespace Strawberry
 			Width = width;
 			Height = height;
 			WindowScale = windowScale;
-			screenRect = SDL.Rect(0, 0, width * windowScale, height * windowScale);
+			GamepadLimit = gamepadLimit;
 
 			String exePath = scope .();
 			Environment.GetExecutableFilePath(exePath);
@@ -54,27 +51,10 @@ namespace Strawberry
 			Path.GetDirectoryPath(exePath, exeDir);
 			Directory.SetCurrentDirectory(exeDir);
 
-			SDL.InitFlag init = .Video | .Events | .Audio;
-			if (gamepadLimit > 0)
-				init |= .GameController;
-			SDL.Init(init);
-			SDL.EventState(.JoyAxisMotion, .Disable);
-			SDL.EventState(.JoyBallMotion, .Disable);
-			SDL.EventState(.JoyHatMotion, .Disable);
-			SDL.EventState(.JoyButtonDown, .Disable);
-			SDL.EventState(.JoyButtonUp, .Disable);
-			SDL.EventState(.JoyDeviceAdded, .Disable);
-			SDL.EventState(.JoyDeviceRemoved, .Disable);
-
-			window = SDL.CreateWindow(Title, .Centered, .Centered, screenRect.w, screenRect.h, .Shown);
-			Renderer = SDL.CreateRenderer(window, -1, .Accelerated);
-			screen = SDL.GetWindowSurface(window);
-			SDLImage.Init(.PNG | .JPG);
-			SDLMixer.OpenAudio(44100, SDLMixer.MIX_DEFAULT_FORMAT, 2, 4096);
-			SDLTTF.Init();
+			platformLayer.Init();
 
 			VirtualInputs = new List<VirtualInput>();
-			Input.[Friend]Init(gamepadLimit);
+			Input.[Friend]Init();
 
 			BuildTypeLists();
 			Assets.LoadAll();
@@ -107,51 +87,35 @@ namespace Strawberry
 
 		public void Run()
 		{
-			Stopwatch sw = scope .();
-			sw.Start();
-			int curPhysTickCount = 0;
-
-			/*
-				Game loop adapted from Brian Fiete's SDLApp.bf in the Beef SDL2 Library
-			*/
-
+			float msCounter = 0;
 			while (true)
 			{
-				SDL.Event event;
-				if (SDL.PollEvent(out event) != 0 && event.type == .Quit)
-				{
+				if (PlatformLayer.Closed())
 					return;
-				}
 
-				// Fixed 60 Hz update
-				double msPerTick = 1000 / 60.0;
-				int newPhysTickCount = (int)(sw.ElapsedMilliseconds / msPerTick);
+				msCounter += PlatformLayer.Tick();
 
-				int addTicks = newPhysTickCount - curPhysTickCount;
-				if (curPhysTickCount == 0)
+				if (Time.FixedTimestep)
 				{
-					// Initial render
-					Render();
+					Time.RawDelta = Time.TargetDeltaTime;
+					while (msCounter >= Time.TargetMilliseconds)
+					{
+						PlatformLayer.UpdateInput();
+						Update();
+						Input.AfterUpdate();
+
+						msCounter -= Time.TargetMilliseconds;
+					}
 				}
 				else
 				{
-					addTicks = Math.Min(addTicks, 20); // Limit catchup
-					if (addTicks > 0)
-					{
-						for (int i < addTicks)
-						{
-							Input.BeforeUpdate();
-							updateCounter++;
-							Update();
-							Input.AfterUpdate();
-						}
-						Render();
-					}
-					else
-						Thread.Sleep(1);
+					Time.RawDelta = msCounter / 1000;
+					PlatformLayer.UpdateInput();
+					Update();
+					Input.AfterUpdate();
 				}
 
-				curPhysTickCount = newPhysTickCount;
+				Render();
 			}
 		}
 
@@ -177,6 +141,9 @@ namespace Strawberry
 				if (scene != null)
 					scene.Update();
 
+				Time.RawPreviousElapsed = Time.RawElapsed;
+				Time.RawElapsed += Time.RawDelta;
+
 				Time.PreviousElapsed = Time.Elapsed;
 				Time.Elapsed += Time.Delta;
 			}
@@ -186,11 +153,9 @@ namespace Strawberry
 
 		private void Render()
 		{
-			SDL.SetRenderDrawColor(Renderer, ClearColor.R, ClearColor.G, ClearColor.B, ClearColor.A);
-			SDL.RenderClear(Renderer);
-			SDL.RenderSetScale(Renderer, WindowScale, WindowScale);
+			PlatformLayer.RenderBegin();
 			Draw();
-			SDL.RenderPresent(Renderer);
+			PlatformLayer.RenderEnd();
 		}
 
 		public virtual void Draw()

@@ -1,6 +1,5 @@
 using System.Collections;
 using System;
-using SDL2;
 
 namespace Strawberry
 {
@@ -89,19 +88,19 @@ namespace Strawberry
 
 		// Setup Calls
 
-		public VirtualAxis AddKeys(SDL.Scancode negativeKey, SDL.Scancode positiveKey, OverlapBehaviors overlapBehavior = .TakeNewer)
+		public VirtualAxis AddKeys(Keys negativeKey, Keys positiveKey, OverlapBehaviors overlapBehavior = .TakeNewer)
 		{
 			nodes.Add(new KeyboardKeys(negativeKey, positiveKey, overlapBehavior));
 			return this;
 		}
 
-		public VirtualAxis AddButtons(int gamepadID, SDL.SDL_GameControllerButton negativeButton, SDL.SDL_GameControllerButton positiveButton, OverlapBehaviors overlapBehavior = .TakeNewer)
+		public VirtualAxis AddButtons(int gamepadID, Buttons negativeButton, Buttons positiveButton, OverlapBehaviors overlapBehavior = .TakeNewer)
 		{
 			nodes.Add(new GamepadButtons(gamepadID, negativeButton, positiveButton, overlapBehavior));
 			return this;
 		}
 
-		public VirtualAxis AddAxis(int gamepadID, SDL.SDL_GameControllerAxis axis, float deadzone)
+		public VirtualAxis AddAxis(int gamepadID, Axes axis, float deadzone)
 		{
 			nodes.Add(new GamepadAxis(gamepadID, axis, deadzone));
 			return this;
@@ -137,24 +136,24 @@ namespace Strawberry
 		private class KeyboardKeys : Node
 		{
 			public OverlapBehaviors OverlapBehavior;
-			public SDL.Scancode NegativeKeycode;
-			public SDL.Scancode PositiveKeycode;
+			public Keys NegativeKey;
+			public Keys PositiveKey;
 
 			private float value;
 			private bool turned;
 
-			public this(SDL.Scancode negativeKey, SDL.Scancode positiveKey, OverlapBehaviors overlapBehavior = .TakeNewer)
+			public this(Keys negativeKey, Keys positiveKey, OverlapBehaviors overlapBehavior = .TakeNewer)
 			{
-				NegativeKeycode = negativeKey;
-				PositiveKeycode = positiveKey;
+				NegativeKey = negativeKey;
+				PositiveKey = positiveKey;
 				OverlapBehavior = overlapBehavior;
 			}
 
 			public override void Update()
 			{
-				if (Input.KeyCheck(PositiveKeycode))
+				if (Input.KeyCheck(PositiveKey))
 				{
-				    if (Input.KeyCheck(NegativeKeycode))
+				    if (Input.KeyCheck(NegativeKey))
 				    {
 				        switch (OverlapBehavior)
 				        {
@@ -181,7 +180,7 @@ namespace Strawberry
 				        value = 1;
 				    }
 				}
-				else if (Input.KeyCheck(NegativeKeycode))
+				else if (Input.KeyCheck(NegativeKey))
 				{
 				    turned = false;
 				    value = -1;
@@ -206,13 +205,13 @@ namespace Strawberry
 		{
 			public int GamepadID;
 			public OverlapBehaviors OverlapBehavior;
-			public SDL.SDL_GameControllerButton NegativeButton;
-			public SDL.SDL_GameControllerButton PositiveButton;
+			public Buttons NegativeButton;
+			public Buttons PositiveButton;
 
 			private float value;
 			private bool turned;
 
-			public this(int gamepadID, SDL.SDL_GameControllerButton negativeButton, SDL.SDL_GameControllerButton positiveButton, OverlapBehaviors overlapBehavior = .TakeNewer)
+			public this(int gamepadID, Buttons negativeButton, Buttons positiveButton, OverlapBehaviors overlapBehavior = .TakeNewer)
 			{
 				GamepadID = gamepadID;
 				NegativeButton = negativeButton;
@@ -275,10 +274,10 @@ namespace Strawberry
 		private class GamepadAxis : Node
 		{
 			public int GamepadID;
-			public SDL.SDL_GameControllerAxis Axis;
+			public Axes Axis;
 			public float Deadzone;
 
-			public this(int gamepadID, SDL.SDL_GameControllerAxis axis, float deadzone)
+			public this(int gamepadID, Axes axis, float deadzone)
 			{
 				GamepadID = gamepadID;
 				Axis = axis;

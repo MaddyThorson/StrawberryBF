@@ -6,7 +6,8 @@ namespace Strawberry.Sample
 	{
 		static public int Main(String[] args)
 		{
-			let game = scope SampleGame();
+			SDL2PlatformLayer sdl = scope SDL2PlatformLayer();
+			let game = scope SampleGame(sdl);
 			game.Run();
 			return 0;
 		}

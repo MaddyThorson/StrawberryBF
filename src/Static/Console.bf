@@ -32,6 +32,9 @@ namespace Strawberry
 
 		static public void Init()
 		{
+			bool* b = &enabled;
+			*b = false;
+
 			enabled = true;
 			font = SDL2.SDLTTF.OpenFont("../../../../Strawberry/src/Content/strawberry-seeds.ttf", 8);
 			entry = new String();

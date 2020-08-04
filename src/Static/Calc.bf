@@ -26,6 +26,13 @@ namespace Strawberry
 			return value > target ? Math.Max(value - maxDelta, target) : Math.Min(value + maxDelta, target);
 		}
 
+		//Move toward a target value without crossing it
+		[Inline]
+		static public void Approach(float* value, float target, float maxDelta)
+		{
+			*value = *value > target ? Math.Max(*value - maxDelta, target) : Math.Min(*value + maxDelta, target);
+		}
+
 		//Convert from a value between arbitrary min and max to between 0 and 1
 		[Inline]
 		static public float Map(float value, float oldMin, float oldMax)
