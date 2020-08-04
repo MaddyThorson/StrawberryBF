@@ -38,6 +38,7 @@ namespace Strawberry
 			: base()
 		{
 			Game = this;
+			PlatformLayer = platformLayer;
 
 			Title = windowTitle;
 			Width = width;

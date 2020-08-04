@@ -6,10 +6,11 @@ namespace Strawberry
 {
 	public class SDL2PlatformLayer : PlatformLayer
 	{
-		private SDL.Rect screenRect;
 		private SDL.Window* window;
 		private SDL.Surface* screen;
+		private SDL.Rect screenRect;
 		private SDL.Renderer* renderer;
+		private SDL.SDL_GLContext glContext;
 		private SDL.SDL_GameController*[] gamepads;
 		private bool* keyboard;
 
@@ -35,19 +36,32 @@ namespace Strawberry
 			SDL.EventState(.JoyButtonUp, .Disable);
 			SDL.EventState(.JoyDeviceAdded, .Disable);
 			SDL.EventState(.JoyDeviceRemoved, .Disable);
-			
-			window = SDL.CreateWindow(Game.Title, .Centered, .Centered, screenRect.w, screenRect.h, .Shown);
-			screenRect = SDL.Rect(0, 0, (int32)(Game.Width * Game.WindowScale), (int32)(Game.Height * Game.WindowScale));
-			renderer = SDL.CreateRenderer(window, -1, .Accelerated);
-			screen = SDL.GetWindowSurface(window);
-			SDLImage.Init(.PNG | .JPG);
-			SDLMixer.OpenAudio(44100, SDLMixer.MIX_DEFAULT_FORMAT, 2, 4096);
-			SDLTTF.Init();
 
-			keyboard = SDL.GetKeyboardState(null);
-			gamepads = new SDL.SDL_GameController*[Game.GamepadLimit];
-			for (let i < gamepads.Count)
-				gamepads[i] = SDL.GameControllerOpen((int32)i);
+			//Graphics
+			{
+				window = SDL.CreateWindow(Game.Title, .Centered, .Centered, screenRect.w, screenRect.h, .Shown);
+				screenRect = SDL.Rect(0, 0, (int32)(Game.Width * Game.WindowScale), (int32)(Game.Height * Game.WindowScale));
+				renderer = SDL.CreateRenderer(window, -1, .Accelerated);
+				screen = SDL.GetWindowSurface(window);
+				SDLImage.Init(.PNG | .JPG);
+				SDLTTF.Init();
+
+				glContext = SDL.GL_CreateContext(window);
+				SDL.GL_SetSwapInterval(1);
+			}
+
+			//Audio
+			{
+				SDLMixer.OpenAudio(44100, SDLMixer.MIX_DEFAULT_FORMAT, 2, 4096);
+			}
+			
+			//Input
+			{
+				keyboard = SDL.GetKeyboardState(null);
+				gamepads = new SDL.SDL_GameController*[Game.GamepadLimit];
+				for (let i < gamepads.Count)
+					gamepads[i] = SDL.GameControllerOpen((int32)i);
+			}
 		}
 
 		public ~this()

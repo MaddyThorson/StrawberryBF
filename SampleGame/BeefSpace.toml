@@ -3,3 +3,9 @@ Projects = {SampleGame = {Path = "."}, Strawberry = {Path = ".."}, SDL2 = "*"}
 
 [Workspace]
 StartupProject = "SampleGame"
+
+[[Workspace.DistinctOptions]]
+Filter = ""
+
+[Configs.Debug.Win64]
+Toolset = "LLVM"

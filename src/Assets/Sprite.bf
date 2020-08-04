@@ -437,7 +437,7 @@ namespace Strawberry
 
 			public this(int w, int h)
 			{
-				Texture = SDL.CreateTexture(Game.Renderer, (uint32)SDL.PIXELFORMAT_RGBA8888, (int32)SDL.TextureAccess.Streaming, (int32)w, (int32)h);
+				//Texture = SDL.CreateTexture(Game.Renderer, (uint32)SDL.PIXELFORMAT_RGBA8888, (int32)SDL.TextureAccess.Streaming, (int32)w, (int32)h);
 				Width = w;
 				Height = h;
 

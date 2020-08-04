@@ -6,3 +6,7 @@ Name = "SampleGame"
 TargetType = "BeefGUIApplication"
 StartupObject = "Strawberry.Sample.Program"
 DefaultNamespace = "Strawberry.Sample"
+
+[[Project.DistinctOptions]]
+Filter = ""
+ReflectAlwaysInclude = "IncludeAll"

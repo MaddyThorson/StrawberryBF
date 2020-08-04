@@ -27,9 +27,9 @@ namespace Strawberry
 
 		static public void Rect(int x, int y, int w, int h, Color color)
 		{
-			SDL.SetRenderDrawBlendMode(Game.Renderer, .Blend);
-			SDL.SetRenderDrawColor(Game.Renderer, color.R, color.G, color.B, color.A);
-			SDL.RenderFillRect(Game.Renderer, &SDL.Rect((int32)(x - Camera.X), (int32)(y - Camera.Y), (int32)w, (int32)h));
+			//SDL.SetRenderDrawBlendMode(Game.Renderer, .Blend);
+			//SDL.SetRenderDrawColor(Game.Renderer, color.R, color.G, color.B, color.A);
+			//SDL.RenderFillRect(Game.Renderer, &SDL.Rect((int32)(x - Camera.X), (int32)(y - Camera.Y), (int32)w, (int32)h));
 		}
 
 		static public void Rect(Rect rect, Color color)
@@ -39,9 +39,9 @@ namespace Strawberry
 
 		static public void HollowRect(int x, int y, int w, int h, Color color)
 		{
-			SDL.SetRenderDrawBlendMode(Game.Renderer, .Blend);
-			SDL.SetRenderDrawColor(Game.Renderer, color.R, color.G, color.B, color.A);
-			SDL.RenderDrawRect(Game.Renderer, &SDL.Rect((int32)(x - Camera.X), (int32)(y - Camera.Y), (int32)w, (int32)h));
+			//SDL.SetRenderDrawBlendMode(Game.Renderer, .Blend);
+			//SDL.SetRenderDrawColor(Game.Renderer, color.R, color.G, color.B, color.A);
+			//SDL.RenderDrawRect(Game.Renderer, &SDL.Rect((int32)(x - Camera.X), (int32)(y - Camera.Y), (int32)w, (int32)h));
 		}
 
 		static public void HollowRect(Rect rect, Color color)
@@ -54,9 +54,9 @@ namespace Strawberry
 			let fromn = (Point)(from - Camera);
 			let ton = (Point)(to - Camera);
 
-			SDL.SetRenderDrawBlendMode(Game.Renderer, .Blend);
-			SDL.SetRenderDrawColor(Game.Renderer, color.R, color.G, color.B, color.A);
-			SDL.RenderDrawLine(Game.Renderer, (int32)fromn.X, (int32)fromn.Y, (int32)ton.X, (int32)ton.Y);
+			//SDL.SetRenderDrawBlendMode(Game.Renderer, .Blend);
+			//SDL.SetRenderDrawColor(Game.Renderer, color.R, color.G, color.B, color.A);
+			//SDL.RenderDrawLine(Game.Renderer, (int32)fromn.X, (int32)fromn.Y, (int32)ton.X, (int32)ton.Y);
 		}
 
 		static public void Circle(Point at, float radius, Color color, int steps = 16)
@@ -76,9 +76,9 @@ namespace Strawberry
 				);
 			}
 
-			SDL.SetRenderDrawBlendMode(Game.Renderer, .Blend);
-			SDL.SetRenderDrawColor(Game.Renderer, color.R, color.G, color.B, color.A);
-			SDL.RenderDrawLines(Game.Renderer, &points[0], (int32)steps + 1);
+			//SDL.SetRenderDrawBlendMode(Game.Renderer, .Blend);
+			//SDL.SetRenderDrawColor(Game.Renderer, color.R, color.G, color.B, color.A);
+			//SDL.RenderDrawLines(Game.Renderer, &points[0], (int32)steps + 1);
 		}
 
 		static public void Sprite(Sprite sprite, int frame, Point position)
@@ -86,8 +86,8 @@ namespace Strawberry
 			SDL.Rect src = Strawberry.Rect(0, 0, sprite.Width, sprite.Height);
 			SDL.Rect dst = Strawberry.Rect(position.X - Camera.X, position.Y - Camera.Y, sprite.Width, sprite.Height);
 
-			SDL.SetTextureBlendMode(sprite[frame].Texture, .Blend);
-			SDL.RenderCopy(Game.Renderer, sprite[frame].Texture, &src, &dst);
+			//SDL.SetTextureBlendMode(sprite[frame].Texture, .Blend);
+			//SDL.RenderCopy(Game.Renderer, sprite[frame].Texture, &src, &dst);
 		}
 
 		static public void Sprite(Sprite sprite, int frame, Point position, Point origin)
@@ -96,8 +96,8 @@ namespace Strawberry
 			SDL.Rect src = Strawberry.Rect(0, 0, sprite.Width, sprite.Height);
 			SDL.Rect dst = Strawberry.Rect(position.X - origin.X - Camera.X, position.Y - origin.Y - Camera.Y, sprite.Width, sprite.Height);
 
-			SDL.SetTextureBlendMode(sprite[frame].Texture, .Blend);
-			SDL.RenderCopyEx(Game.Renderer, sprite[frame].Texture, &src, &dst, 0, &cnt, .None);
+			//SDL.SetTextureBlendMode(sprite[frame].Texture, .Blend);
+			//SDL.RenderCopyEx(Game.Renderer, sprite[frame].Texture, &src, &dst, 0, &cnt, .None);
 		}
 
 		static public void Sprite(Sprite sprite, int frame, Point position, Point origin, float rotation)
@@ -106,8 +106,8 @@ namespace Strawberry
 			SDL.Rect src = Strawberry.Rect(0, 0, sprite.Width, sprite.Height);
 			SDL.Rect dst = Strawberry.Rect(position.X - origin.X - Camera.X, position.Y - origin.Y - Camera.Y, sprite.Width, sprite.Height);
 
-			SDL.SetTextureBlendMode(sprite[frame].Texture, .Blend);
-			SDL.RenderCopyEx(Game.Renderer, sprite[frame].Texture, &src, &dst, rotation, &cnt, .None);
+			//SDL.SetTextureBlendMode(sprite[frame].Texture, .Blend);
+			//SDL.RenderCopyEx(Game.Renderer, sprite[frame].Texture, &src, &dst, rotation, &cnt, .None);
 		}
 
 		static public void SpriteCentered(Sprite sprite, int frame, Point position)
@@ -117,8 +117,8 @@ namespace Strawberry
 			SDL.Rect src = Strawberry.Rect(0, 0, sprite.Width, sprite.Height);
 			SDL.Rect dst = Strawberry.Rect(position.X - origin.X - Camera.X, position.Y - origin.Y - Camera.Y, sprite.Width, sprite.Height);
 
-			SDL.SetTextureBlendMode(sprite[frame].Texture, .Blend);
-			SDL.RenderCopyEx(Game.Renderer, sprite[frame].Texture, &src, &dst, 0, &cnt, .None);
+			//SDL.SetTextureBlendMode(sprite[frame].Texture, .Blend);
+			//SDL.RenderCopyEx(Game.Renderer, sprite[frame].Texture, &src, &dst, 0, &cnt, .None);
 		}
 
 		static public void SpriteCentered(Sprite sprite, int frame, Point position, Color color)
@@ -131,7 +131,7 @@ namespace Strawberry
 			SDL.SetTextureBlendMode(sprite[frame].Texture, .Blend);
 			SDL.SetTextureColorMod(sprite[frame].Texture, color.R, color.G, color.B);
 			SDL.SetTextureAlphaMod(sprite[frame].Texture, color.A);
-			SDL.RenderCopyEx(Game.Renderer, sprite[frame].Texture, &src, &dst, 0, &cnt, .None);
+			//SDL.RenderCopyEx(Game.Renderer, sprite[frame].Texture, &src, &dst, 0, &cnt, .None);
 		}
 
 		static public void SpriteCentered(Sprite sprite, int frame, Point position, float rotation)
@@ -142,20 +142,20 @@ namespace Strawberry
 			SDL.Rect dst = Strawberry.Rect(position.X - origin.X - Camera.X, position.Y - origin.Y - Camera.Y, sprite.Width, sprite.Height);
 
 			SDL.SetTextureBlendMode(sprite[frame].Texture, .Blend);
-			SDL.RenderCopyEx(Game.Renderer, sprite[frame].Texture, &src, &dst, rotation, &cnt, .None);
+			//SDL.RenderCopyEx(Game.Renderer, sprite[frame].Texture, &src, &dst, rotation, &cnt, .None);
 		}
 
 		static public void Text(SDL2.SDLTTF.Font* font, String text, Point position, Color color)
 		{
-			SDL.SetRenderDrawColor(Game.Renderer, color.R, color.G, color.B, color.A);
+			//SDL.SetRenderDrawColor(Game.Renderer, color.R, color.G, color.B, color.A);
 			let surface = SDLTTF.RenderUTF8_Solid(font, text, color);
-			let texture = SDL.CreateTextureFromSurface(Game.Renderer, surface);
+			//let texture = SDL.CreateTextureFromSurface(Game.Renderer, surface);
 
 			SDL.Rect srcRect = .(0, 0, surface.w, surface.h);
 			SDL.Rect destRect = .((int32)position.X, (int32)position.Y, surface.w, surface.h);
-			SDL.RenderCopy(Game.Renderer, texture, &srcRect, &destRect);
+			//SDL.RenderCopy(Game.Renderer, texture, &srcRect, &destRect);
 			SDL.FreeSurface(surface);
-			SDL.DestroyTexture(texture);
+			//SDL.DestroyTexture(texture);
 		}
 	}
 }
