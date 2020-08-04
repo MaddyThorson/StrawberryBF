@@ -11,6 +11,7 @@ namespace Strawberry
 		private SDL.Rect screenRect;
 		private SDL.Renderer* renderer;
 		private SDL.SDL_GLContext glContext;
+		private uint glProgram;
 		private SDL.SDL_GameController*[] gamepads;
 		private bool* keyboard;
 
@@ -39,8 +40,8 @@ namespace Strawberry
 
 			//Graphics
 			{
-				window = SDL.CreateWindow(Game.Title, .Centered, .Centered, screenRect.w, screenRect.h, .Shown);
 				screenRect = SDL.Rect(0, 0, (int32)(Game.Width * Game.WindowScale), (int32)(Game.Height * Game.WindowScale));
+				window = SDL.CreateWindow(Game.Title, .Centered, .Centered, screenRect.w, screenRect.h, .Shown | .OpenGL);
 				renderer = SDL.CreateRenderer(window, -1, .Accelerated);
 				screen = SDL.GetWindowSurface(window);
 				SDLImage.Init(.PNG | .JPG);
@@ -48,6 +49,9 @@ namespace Strawberry
 
 				glContext = SDL.GL_CreateContext(window);
 				SDL.GL_SetSwapInterval(1);
+				GL.Init(=> SdlGetProcAddress);
+
+				glProgram = GL.glCreateProgram();
 			}
 
 			//Audio
@@ -64,27 +68,39 @@ namespace Strawberry
 			}
 		}
 
+		static void* SdlGetProcAddress(StringView string)
+		{
+			return SDL.SDL_GL_GetProcAddress(string.ToScopeCStr!());
+		}
+
 		public ~this()
 		{
 			delete gamepads;
-		}
 
-		public override void RenderBegin()
-		{
-			SDL.SetRenderDrawColor(renderer, Game.ClearColor.R, Game.ClearColor.G, Game.ClearColor.B, Game.ClearColor.A);
-			SDL.RenderClear(renderer);
-			SDL.RenderSetScale(renderer, Game.WindowScale, Game.WindowScale);
-		}
-
-		public override void RenderEnd()
-		{
-			SDL.RenderPresent(renderer);
+			GL.glDeleteProgram(glProgram);
+			SDL.GL_DeleteContext(glContext);
+			SDL.DestroyWindow(window);
+			SDL.Quit();
 		}
 
 		public override bool Closed()
 		{
 			SDL.Event event;
 			return (SDL.PollEvent(out event) != 0 && event.type == .Quit);
+		}
+
+		public override uint32 Tick => SDL.GetTicks();
+
+		public override void RenderBegin()
+		{
+			GL.glClearColor(Game.ClearColor.Rf, Game.ClearColor.Gf, Game.ClearColor.Bf, Game.ClearColor.Af);
+			GL.glClear(GL.GL_COLOR_BUFFER_BIT);
+			GL.glCreateProgram();
+		}
+
+		public override void RenderEnd()
+		{
+			SDL.GL_SwapWindow(window);
 		}
 
 		public override void UpdateInput()
@@ -123,11 +139,6 @@ namespace Strawberry
 				return val / 32767f;
 			else
 				return val / 32768f;
-		}
-
-		public override uint32 Tick()
-		{
-			return SDL.GetTicks();
 		}
 	}
 }

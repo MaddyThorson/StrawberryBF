@@ -34,7 +34,7 @@ namespace Strawberry
 		private bool* keyboardState;
 		private int32 updateCounter;
 
-		public this(PlatformLayer platformLayer, String windowTitle, int32 width, int32 height, int32 windowScale, int gamepadLimit = 1)
+		public this(PlatformLayer platformLayer, String windowTitle, int32 width, int32 height, int32 windowScale, int gamepadLimit)
 			: base()
 		{
 			Game = this;
@@ -89,23 +89,25 @@ namespace Strawberry
 		public void Run()
 		{
 			float msCounter = 0;
+			uint32 prevTick = 0;
 			while (true)
 			{
 				if (PlatformLayer.Closed())
 					return;
 
-				msCounter += PlatformLayer.Tick();
+				uint32 tick = PlatformLayer.Tick;
+				msCounter += (tick - prevTick);
+				prevTick = tick;
 
 				if (Time.FixedTimestep)
 				{
 					Time.RawDelta = Time.TargetDeltaTime;
 					while (msCounter >= Time.TargetMilliseconds)
 					{
+						msCounter -= Time.TargetMilliseconds;
 						PlatformLayer.UpdateInput();
 						Update();
 						Input.AfterUpdate();
-
-						msCounter -= Time.TargetMilliseconds;
 					}
 				}
 				else

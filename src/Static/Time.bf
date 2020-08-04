@@ -2,7 +2,7 @@ namespace Strawberry
 {
 	static public class Time
 	{
-		static public bool FixedTimestep = true;
+		static public bool FixedTimestep = false;
 		static public float TargetDeltaTime = 1 / 60f;
 		static public float Elapsed;
 		static public float PreviousElapsed;
