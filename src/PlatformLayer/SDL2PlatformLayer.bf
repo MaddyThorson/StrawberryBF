@@ -89,7 +89,7 @@ namespace Strawberry
 			return (SDL.PollEvent(out event) != 0 && event.type == .Quit);
 		}
 
-		public override uint32 Tick => SDL.GetTicks();
+		public override uint32 Ticks => SDL.GetTicks();
 
 		public override void RenderBegin()
 		{

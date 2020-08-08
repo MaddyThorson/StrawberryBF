@@ -11,7 +11,7 @@ namespace Strawberry
 		public abstract void RenderEnd();
 
 		//Update
-		public abstract uint32 Tick { get; } 	// Milliseconds since game launched
+		public abstract uint32 Ticks { get; } 	// Milliseconds since game launched
 
 		//Input
 		public abstract void UpdateInput();
@@ -20,5 +20,11 @@ namespace Strawberry
 		public abstract bool PollKey(Keys key);
 		public abstract bool PollGamepadButton(int gamepadID, Buttons button);
 		public abstract float PollGamepadAxis(int gamepadID, Axes axis);
+	}
+
+	public abstract class Texture
+	{
+		public int Width { get; protected set; }
+		public int Height { get; protected set; }
 	}
 }

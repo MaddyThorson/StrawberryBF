@@ -95,7 +95,7 @@ namespace Strawberry
 				if (PlatformLayer.Closed())
 					return;
 
-				uint32 tick = PlatformLayer.Tick;
+				uint32 tick = PlatformLayer.Ticks;
 				msCounter += (tick - prevTick);
 				prevTick = tick;
 

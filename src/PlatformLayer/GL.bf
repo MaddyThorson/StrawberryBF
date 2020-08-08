@@ -1,7 +1,29 @@
 using System;
 
-namespace Strawberry {
-    class GL {
+namespace Strawberry
+{
+	class GLTexture : Texture
+	{
+		private uint32 handle;
+
+		public this(int width, int height, void* pixels)
+		{
+			Width = width;
+			Height = height;
+
+			GL.glGenTextures(1, &handle);
+			GL.glBindTexture(GL.GL_TEXTURE_2D, handle);
+			GL.glTexImage2D(GL.GL_TEXTURE_2D, 0, GL.GL_RGBA, width, height, 0, GL.GL_RGBA, GL.GL_UNSIGNED_BYTE, pixels);
+		}
+
+		public ~this()
+		{
+			GL.glDeleteTextures(1, &handle);
+		}
+	}
+
+    class GL
+	{
         public function void* GetProcAddressFunc(StringView procname);
 
         public const uint GL_DEPTH_BUFFER_BIT = 0x00000100;
