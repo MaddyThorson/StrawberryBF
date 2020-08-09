@@ -10,8 +10,10 @@ namespace Strawberry
 		private SDL.Surface* screen;
 		private SDL.Rect screenRect;
 		private SDL.Renderer* renderer;
+		private SDL2Shader shader;
 		private SDL.SDL_GLContext glContext;
 		private uint glProgram;
+		private uint glVertexShader;
 		private SDL.SDL_GameController*[] gamepads;
 		private bool* keyboard;
 
@@ -51,7 +53,55 @@ namespace Strawberry
 				SDL.GL_SetSwapInterval(1);
 				GL.Init(=> SdlGetProcAddress);
 
+				shader = new SDL2Shader(String[2] (
+					// vertex shader
+					"""
+					#version 330
+					uniform mat4 u_matrix;
+					layout(location=0) in vec2 a_position;
+					layout(location=1) in vec2 a_tex;
+					layout(location=2) in vec4 a_color;
+					layout(location=3) in vec3 a_type;
+					out vec2 v_tex;
+					out vec4 v_col;
+					out vec3 v_type;
+					void main(void)
+					{
+						gl_Position = u_matrix * vec4(a_position.xy, 0, 1);
+						v_tex = a_tex;
+						v_col = a_color;
+						v_type = a_type;
+					}
+					""",
+
+					// fragment shader
+					"""
+					#version 330
+					uniform sampler2D u_texture;
+					in vec2 v_tex;
+					in vec4 v_col;
+					in vec3 v_type;
+					out vec4 o_color;
+					void main(void)
+					{
+						vec4 color = texture(u_texture, v_tex);
+						o_color = 
+							v_type.x * color * v_col + 
+							v_type.y * color.a * v_col + 
+							v_type.z * v_col;
+					}
+					"""));
+
 				glProgram = GL.glCreateProgram();
+				GL.glAttachShader(glProgram, shader.vertexHandle);
+				GL.glAttachShader(glProgram, shader.fragmentHandle);
+				GL.glLinkProgram(glProgram);
+
+				int32 logLen = 0;
+				char8[1024] log;
+				GL.glGetProgramInfoLog(glProgram, 1024, &logLen, &log);
+				if (logLen > 0)
+					Calc.Log(&log, logLen);
 			}
 
 			//Audio
@@ -76,6 +126,7 @@ namespace Strawberry
 		public ~this()
 		{
 			delete gamepads;
+			delete shader;
 
 			GL.glDeleteProgram(glProgram);
 			SDL.GL_DeleteContext(glContext);
@@ -101,6 +152,15 @@ namespace Strawberry
 		public override void RenderEnd()
 		{
 			SDL.GL_SwapWindow(window);
+		}
+
+		public override Texture LoadTexture(String path)
+		{
+			var surface = SDLImage.Load(path);
+			var tex = new SDL2Texture(surface.w, surface.h, (uint8*)surface.pixels);
+			SDL.FreeSurface(surface);
+
+			return tex;
 		}
 
 		public override void UpdateInput()
@@ -139,6 +199,74 @@ namespace Strawberry
 				return val / 32767f;
 			else
 				return val / 32768f;
+		}
+	}
+
+	class SDL2Texture : Texture
+	{
+		private uint32 handle;
+
+		public this(int width, int height, uint8* pixels)
+			: base(width, height, pixels)
+		{
+			GL.glGenTextures(1, &handle);
+			GL.glBindTexture(GL.GL_TEXTURE_2D, handle);
+			GL.glTexImage2D(GL.GL_TEXTURE_2D, 0, GL.GL_RGBA, width, height, 0, GL.GL_RGBA, GL.GL_UNSIGNED_BYTE, pixels);
+		}
+
+		public ~this()
+		{
+			GL.glDeleteTextures(1, &handle);
+		}
+	}
+
+	class SDL2Shader : Shader
+	{
+		public uint vertexHandle;
+		public uint fragmentHandle;
+
+		public this(ShaderDef def)
+			: base(def)
+		{
+			IsValid = true;
+			int32 logLen = 0;
+			char8[1024] log;
+
+			vertexHandle = GL.glCreateShader(GL.GL_VERTEX_SHADER);
+			{
+				int32 len = (int32)def.Vertex.Length;
+				char8* data = def.Vertex.CStr();
+				GL.glShaderSource(vertexHandle, 1, &data, &len);
+				GL.glCompileShader(vertexHandle);
+				GL.glGetShaderInfoLog(vertexHandle, 1024, &logLen, &log);
+
+				if (logLen > 0)
+				{
+					Calc.Log(&log, logLen);
+					IsValid = false;
+				}
+			}
+
+			fragmentHandle = GL.glCreateShader(GL.GL_FRAGMENT_SHADER);
+			{
+				int32 len = (int32)def.Fragment.Length;
+				char8* data = def.Fragment.CStr();
+				GL.glShaderSource(fragmentHandle, 1, &data, &len);
+				GL.glCompileShader(fragmentHandle);
+				GL.glGetShaderInfoLog(fragmentHandle, 1024, &logLen, &log);
+
+				if (logLen > 0)
+				{
+					Calc.Log(&log, logLen);
+					IsValid = false;
+				}
+			}
+		}
+
+		public ~this()
+		{
+			GL.glDeleteShader(vertexHandle);
+			GL.glDeleteShader(fragmentHandle);
 		}
 	}
 }

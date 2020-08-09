@@ -129,5 +129,12 @@ namespace Strawberry
 			let string = StringArgs(scope String(str), params args);
 			Debug.WriteLine(string);
 		}
+
+		[Inline]
+		static public void Log(char8* str, int len)
+		{
+			String s = scope String(str, len);
+			Debug.WriteLine(s);
+		}
 	}
 }
