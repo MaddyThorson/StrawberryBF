@@ -157,7 +157,7 @@ namespace Strawberry
 		private void Render()
 		{
 			PlatformLayer.RenderBegin();
-			Draw();
+			//Draw();
 			PlatformLayer.RenderEnd();
 		}
 

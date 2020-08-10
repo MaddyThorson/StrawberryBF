@@ -11,11 +11,13 @@ namespace Strawberry
 		private SDL.Rect screenRect;
 		private SDL.Renderer* renderer;
 		private SDL2Shader shader;
-		private SDL.SDL_GLContext glContext;
-		private uint glProgram;
-		private uint glVertexShader;
 		private SDL.SDL_GameController*[] gamepads;
 		private bool* keyboard;
+		private uint32 vertexArray;
+		private uint32 vertexbuffer;
+
+		private SDL.SDL_GLContext glContext;
+		private uint glProgram;
 
 		public override void Init()
 		{
@@ -57,7 +59,7 @@ namespace Strawberry
 					// vertex shader
 					"""
 					#version 330
-					uniform mat4 u_matrix;
+					uniform mat3x2 u_matrix;
 					layout(location=0) in vec2 a_position;
 					layout(location=1) in vec2 a_tex;
 					layout(location=2) in vec4 a_color;
@@ -102,6 +104,19 @@ namespace Strawberry
 				GL.glGetProgramInfoLog(glProgram, 1024, &logLen, &log);
 				if (logLen > 0)
 					Calc.Log(&log, logLen);
+
+				GL.glGenVertexArrays(1, &vertexArray);
+				GL.glBindVertexArray(vertexArray);
+
+				float[?] g_vertex_buffer_data = .(
+				   -1.0f, -1.0f,
+				   1.0f, -1.0f,
+				   0.0f,  1.0f,
+				);
+
+				GL.glGenBuffers(1, &vertexbuffer);
+				GL.glBindBuffer(GL.GL_ARRAY_BUFFER, vertexbuffer);
+				GL.glBufferData(GL.GL_ARRAY_BUFFER, sizeof(float[6]), &g_vertex_buffer_data, GL.GL_STATIC_DRAW);
 			}
 
 			//Audio
@@ -146,11 +161,24 @@ namespace Strawberry
 		{
 			GL.glClearColor(Game.ClearColor.Rf, Game.ClearColor.Gf, Game.ClearColor.Bf, Game.ClearColor.Af);
 			GL.glClear(GL.GL_COLOR_BUFFER_BIT);
-			GL.glCreateProgram();
+			GL.glUseProgram(glProgram);
+
+			int loc = GL.glGetUniformLocation(glProgram, "u_matrix");
+			Matrix mat = Matrix.Identity;
+			GL.glUniformMatrix3x2fv(loc, 1, GL.GL_FALSE, &mat.Values);
+
+			GL.glEnableVertexAttribArray(0);
+			GL.glBindBuffer(GL.GL_ARRAY_BUFFER, vertexbuffer);
+			GL.glVertexAttribPointer(0, 2, GL.GL_FLOAT, GL.GL_FALSE, 0, (void*)0 );
+			// Draw the triangle !
+			GL.glDrawArrays(GL.GL_TRIANGLES, 0, 3); // Starting from vertex 0; 3 vertices total -> 1 triangle
+			GL.glDisableVertexAttribArray(0);
 		}
 
 		public override void RenderEnd()
 		{
+			GL.glUseProgram(0);
+			GL.glFlush();
 			SDL.GL_SwapWindow(window);
 		}
 

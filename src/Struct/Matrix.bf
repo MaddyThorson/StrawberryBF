@@ -13,22 +13,48 @@ namespace Strawberry
 	{
 		static public readonly Matrix Identity = Matrix(1, 0, 0, 1, 0, 0);
 
-		//       Row--vv--Column
-		public float M11;
-		public float M12;
-		public float M21;
-		public float M22;
-		public float M31;
-		public float M32;
+		public float[6] Values = .(0, 0, 0, 0, 0, 0);
 
 		public this(float m11, float m12, float m21, float m22, float m31, float m32)
 		{
-			M11 = m11;
-			M12 = m12;
-			M21 = m21;
-			M22 = m22;
-			M31 = m31;
-			M32 = m32;
+			Values = .(m11, m12, m21, m22, m31, m32);
+		}
+
+		//       Row--vv--Column
+		public float M11
+		{
+			get => Values[0];
+			set mut => Values[0] = value;
+		}
+
+		public float M12
+		{
+			get => Values[1];
+			set mut => Values[1] = value;
+		}
+
+		public float M21
+		{
+			get => Values[2];
+			set mut => Values[2] = value;
+		}
+
+		public float M22
+		{
+			get => Values[3];
+			set mut => Values[3] = value;
+		}
+
+		public float M31
+		{
+			get => Values[4];
+			set mut => Values[4] = value;
+		}
+
+		public float M32
+		{
+			get => Values[5];
+			set mut => Values[5] = value;
 		}
 
 		public bool IsIdentity
