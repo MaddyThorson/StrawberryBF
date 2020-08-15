@@ -942,7 +942,7 @@ namespace Strawberry
         public function void GlGetIntegerv(uint pname, int32* data);
         public static GlGetIntegerv glGetIntegerv;
 
-        public function uint8 GlGetString(uint name);
+        public function uint8* GlGetString(uint name);
         public static GlGetString glGetString;
 
         public function void GlGetTexImage(uint target, int level, uint format, uint type, void* pixels);

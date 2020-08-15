@@ -1,36 +1,98 @@
-using System.Collections.Generic;
+using System.Collections;
+using System;
 
 namespace Strawberry
 {
 	public class Batcher
 	{
-		List<Batch> batchStack = new System.Collections.List<Batch>() ~ DeleteContainerAndItems!(_); 
+		static public int VertexSize => sizeof(Vertex);
 
-		Batch top => batchStack.Count > 0 ? batchStack[batchStack.Count - 1] : null;
+		private List<Batch> batchStack = new List<Batch>() ~ DeleteContainerAndItems!(_); 
+		private Batch top => batchStack.Count > 0 ? batchStack[batchStack.Count - 1] : null;
 
-		public void PushQuad(Vertex a, Vertex b, Vertex c, Vertex d)
+		private List<Vertex> vertices = new .() ~ delete _;
+		private List<uint32> indices = new .() ~ delete _;
+
+		private uint32 vaoID;
+		private uint32 vertexBufferID;
+		private uint32 indexBufferID;
+
+		public this()
 		{
-			
+			GL.glGenVertexArrays(1, &vaoID);
+			GL.glBindVertexArray(vaoID);
+			GL.glGenBuffers(1, &vertexBufferID);
+			GL.glGenBuffers(1, &indexBufferID);
+			GL.glBindVertexArray(0);
+		}
+
+		public ~this()
+		{
+			GL.glDeleteBuffers(1, &vertexBufferID);
+			GL.glDeleteBuffers(1, &indexBufferID);
+			GL.glDeleteVertexArrays(1, &vaoID);
+		}
+
+		public void Draw()
+		{
+			GL.glBindVertexArray(vaoID);
+			GL.glBindBuffer(GL.GL_ARRAY_BUFFER, vertexBufferID);
+			GL.glBufferData(GL.GL_ARRAY_BUFFER, vertices.Count * sizeof(Vertex), vertices.Ptr, GL.GL_DYNAMIC_DRAW);
+			GL.glBindBuffer(GL.GL_ELEMENT_ARRAY_BUFFER, indexBufferID);
+			GL.glBufferData(GL.GL_ELEMENT_ARRAY_BUFFER, indices.Count * sizeof(uint32), indices.Ptr, GL.GL_DYNAMIC_DRAW);
+
+			GL.glDrawElements(GL.GL_TRIANGLES, indices.Count, GL.GL_UNSIGNED_INT, (void*)0);
+			GL.glBindVertexArray(0);
+
+			vertices.Clear();
+			indices.Clear();
+		}
+
+		public void PushQuad(Vector a, Vector b, Vector c, Vector d, Color color)
+		{
+			uint32 count = (uint32)vertices.Count;
+
+			vertices.Add(Vertex.Shape(a, color));
+			vertices.Add(Vertex.Shape(b, color));
+			vertices.Add(Vertex.Shape(c, color));
+			vertices.Add(Vertex.Shape(d, color));
+
+			indices.Add(count + 0);
+			indices.Add(count + 1);
+			indices.Add(count + 2);
+			indices.Add(count + 0);
+			indices.Add(count + 2);
+			indices.Add(count + 3);
 		}
 
 		private class Batch
 		{
 			uint32 bufferHandle;
 
-			List<Vertex> Vertices;
-
 			public this()
 			{
-				GL.glGenBuffers(1, &bufferHandle);
-				GL.glBindBuffer(GL.GL_ARRAY_BUFFER, bufferHandle);
-				GL.glDeleteBuffers(1, &bufferHandle);
+				//GL.glGenBuffers(1, &bufferHandle);
+				//GL.glBindBuffer(GL.GL_ARRAY_BUFFER, bufferHandle);
+				//GL.glDeleteBuffers(1, &bufferHandle);
 			}
 		}
 
+		[Ordered, Packed, CRepr]
 		private struct Vertex
 		{
 			public Vector Position;
 			public Color Color;
+			public Vector TexCoord;
+			public (uint8, uint8, uint8) Mode;
+
+			static public Vertex Shape(Vector pos, Color color)
+			{
+				Vertex v = Vertex();
+				v.Position = pos;
+				v.Color = color;
+				v.Mode = (0, 0, 255);
+				return v;
+			}
 		}
 	}
 }

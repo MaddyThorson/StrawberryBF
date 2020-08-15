@@ -13,8 +13,6 @@ namespace Strawberry
 		private SDL2Shader shader;
 		private SDL.SDL_GameController*[] gamepads;
 		private bool* keyboard;
-		private uint32 vertexArray;
-		private uint32 vertexbuffer;
 
 		private SDL.SDL_GLContext glContext;
 		private uint glProgram;
@@ -59,7 +57,7 @@ namespace Strawberry
 					// vertex shader
 					"""
 					#version 330
-					uniform mat3x2 u_matrix;
+					uniform mat4 u_matrix;
 					layout(location=0) in vec2 a_position;
 					layout(location=1) in vec2 a_tex;
 					layout(location=2) in vec4 a_color;
@@ -87,7 +85,7 @@ namespace Strawberry
 					void main(void)
 					{
 						vec4 color = texture(u_texture, v_tex);
-						o_color = 
+						o_color =
 							v_type.x * color * v_col + 
 							v_type.y * color.a * v_col + 
 							v_type.z * v_col;
@@ -105,18 +103,14 @@ namespace Strawberry
 				if (logLen > 0)
 					Calc.Log(&log, logLen);
 
-				GL.glGenVertexArrays(1, &vertexArray);
-				GL.glBindVertexArray(vertexArray);
-
-				float[?] g_vertex_buffer_data = .(
-				   -1.0f, -1.0f,
-				   1.0f, -1.0f,
-				   0.0f,  1.0f,
-				);
-
-				GL.glGenBuffers(1, &vertexbuffer);
-				GL.glBindBuffer(GL.GL_ARRAY_BUFFER, vertexbuffer);
-				GL.glBufferData(GL.GL_ARRAY_BUFFER, sizeof(float[6]), &g_vertex_buffer_data, GL.GL_STATIC_DRAW);
+				GL.glEnableVertexAttribArray(0);
+				GL.glVertexAttribPointer(0, 2, GL.GL_FLOAT, GL.GL_FALSE, Batcher.VertexSize, (void*)0);
+				GL.glEnableVertexAttribArray(1);
+				GL.glVertexAttribPointer(1, 4, GL.GL_UNSIGNED_BYTE, GL.GL_TRUE, Batcher.VertexSize, (void*)8);
+				GL.glEnableVertexAttribArray(2);
+				GL.glVertexAttribPointer(2, 2, GL.GL_FLOAT, GL.GL_FALSE, Batcher.VertexSize, (void*)12);
+				GL.glEnableVertexAttribArray(3);
+				GL.glVertexAttribPointer(3, 3, GL.GL_UNSIGNED_BYTE, GL.GL_TRUE, Batcher.VertexSize, (void*)20);
 			}
 
 			//Audio
@@ -163,16 +157,18 @@ namespace Strawberry
 			GL.glClear(GL.GL_COLOR_BUFFER_BIT);
 			GL.glUseProgram(glProgram);
 
-			int loc = GL.glGetUniformLocation(glProgram, "u_matrix");
-			Matrix mat = Matrix.Identity;
-			GL.glUniformMatrix3x2fv(loc, 1, GL.GL_FALSE, &mat.Values);
+			float[16] mat =
+				.(1, 0, 0, 0,
+				0, 1, 0, 0,
+				0, 0, 1, 0,
+				0, 0, 0, 1);
 
-			GL.glEnableVertexAttribArray(0);
-			GL.glBindBuffer(GL.GL_ARRAY_BUFFER, vertexbuffer);
-			GL.glVertexAttribPointer(0, 2, GL.GL_FLOAT, GL.GL_FALSE, 0, (void*)0 );
-			// Draw the triangle !
-			GL.glDrawArrays(GL.GL_TRIANGLES, 0, 3); // Starting from vertex 0; 3 vertices total -> 1 triangle
-			GL.glDisableVertexAttribArray(0);
+			let loc = GL.glGetUniformLocation(glProgram, "u_matrix");
+			GL.glUniformMatrix4fv(loc, 1, GL.GL_FALSE, &mat);
+
+			Batcher b = scope Batcher();
+			b.PushQuad(.(-1, -1), .(1, -1), .(1, 1), .(-1, 1), .Magenta);
+			b.Draw();
 		}
 
 		public override void RenderEnd()
