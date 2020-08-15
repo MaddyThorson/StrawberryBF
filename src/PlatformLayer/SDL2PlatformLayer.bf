@@ -102,15 +102,6 @@ namespace Strawberry
 				GL.glGetProgramInfoLog(glProgram, 1024, &logLen, &log);
 				if (logLen > 0)
 					Calc.Log(&log, logLen);
-
-				GL.glEnableVertexAttribArray(0);
-				GL.glVertexAttribPointer(0, 2, GL.GL_FLOAT, GL.GL_FALSE, Batcher.VertexSize, (void*)0);
-				GL.glEnableVertexAttribArray(1);
-				GL.glVertexAttribPointer(1, 4, GL.GL_UNSIGNED_BYTE, GL.GL_TRUE, Batcher.VertexSize, (void*)8);
-				GL.glEnableVertexAttribArray(2);
-				GL.glVertexAttribPointer(2, 2, GL.GL_FLOAT, GL.GL_FALSE, Batcher.VertexSize, (void*)12);
-				GL.glEnableVertexAttribArray(3);
-				GL.glVertexAttribPointer(3, 3, GL.GL_UNSIGNED_BYTE, GL.GL_TRUE, Batcher.VertexSize, (void*)20);
 			}
 
 			//Audio
@@ -153,21 +144,25 @@ namespace Strawberry
 
 		public override void RenderBegin()
 		{
+			GL.glBindFramebuffer(GL.GL_FRAMEBUFFER, 0);
 			GL.glClearColor(Game.ClearColor.Rf, Game.ClearColor.Gf, Game.ClearColor.Bf, Game.ClearColor.Af);
-			GL.glClear(GL.GL_COLOR_BUFFER_BIT);
+			GL.glClear(GL.GL_COLOR_BUFFER_BIT | GL.GL_DEPTH_BUFFER_BIT);
 			GL.glUseProgram(glProgram);
 
+			float zNearPlane = 0;
+			float zFarPlane = 1000;
+
 			float[16] mat =
-				.(1, 0, 0, 0,
-				0, 1, 0, 0,
-				0, 0, 1, 0,
+				.(2.0f / Game.Width, 0, 0, 0,
+				0, 2.0f / Game.Height, 0, 0,
+				0, 0, 1.0f / (zNearPlane - zFarPlane), zNearPlane / (zNearPlane - zFarPlane),
 				0, 0, 0, 1);
 
 			let loc = GL.glGetUniformLocation(glProgram, "u_matrix");
 			GL.glUniformMatrix4fv(loc, 1, GL.GL_FALSE, &mat);
 
 			Batcher b = scope Batcher();
-			b.PushQuad(.(-1, -1), .(1, -1), .(1, 1), .(-1, 1), .Magenta);
+			b.PushQuad(.(-40, -40), .(40, -40), .(40, 40), .(-40, 40), .Yellow);
 			b.Draw();
 		}
 

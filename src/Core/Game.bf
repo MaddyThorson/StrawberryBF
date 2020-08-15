@@ -29,7 +29,7 @@ namespace Strawberry
 		private Dictionary<Type, List<Type>> componentAssignableLists;
 
 		public PlatformLayer PlatformLayer { get; private set; }
-		public Color ClearColor = .Black;
+		public Color ClearColor = .Red;
 
 		private bool* keyboardState;
 		private int32 updateCounter;

@@ -2,6 +2,7 @@ using System;
 
 namespace Strawberry
 {
+	[Ordered, Packed, CRepr]
 	public struct Color
 	{
 		static public readonly Color White 			= 0xFFFFFFFF;

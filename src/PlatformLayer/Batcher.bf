@@ -35,9 +35,21 @@ namespace Strawberry
 
 		public void Draw()
 		{
+			GL.glDisable(GL.GL_CULL_FACE);
+
 			GL.glBindVertexArray(vaoID);
+
 			GL.glBindBuffer(GL.GL_ARRAY_BUFFER, vertexBufferID);
+			GL.glEnableVertexAttribArray(0);
+			GL.glVertexAttribPointer(0, 2, GL.GL_FLOAT, GL.GL_FALSE, Batcher.VertexSize, (void*)0);
+			GL.glEnableVertexAttribArray(1);
+			GL.glVertexAttribPointer(1, 2, GL.GL_FLOAT, GL.GL_FALSE, Batcher.VertexSize, (void*)8);
+			GL.glEnableVertexAttribArray(2);
+			GL.glVertexAttribPointer(2, 4, GL.GL_UNSIGNED_BYTE, GL.GL_TRUE, Batcher.VertexSize, (void*)16);
+			GL.glEnableVertexAttribArray(3);
+			GL.glVertexAttribPointer(3, 3, GL.GL_UNSIGNED_BYTE, GL.GL_TRUE, Batcher.VertexSize, (void*)20);
 			GL.glBufferData(GL.GL_ARRAY_BUFFER, vertices.Count * sizeof(Vertex), vertices.Ptr, GL.GL_DYNAMIC_DRAW);
+
 			GL.glBindBuffer(GL.GL_ELEMENT_ARRAY_BUFFER, indexBufferID);
 			GL.glBufferData(GL.GL_ELEMENT_ARRAY_BUFFER, indices.Count * sizeof(uint32), indices.Ptr, GL.GL_DYNAMIC_DRAW);
 
@@ -81,8 +93,8 @@ namespace Strawberry
 		private struct Vertex
 		{
 			public Vector Position;
-			public Color Color;
 			public Vector TexCoord;
+			public Color Color;
 			public (uint8, uint8, uint8) Mode;
 
 			static public Vertex Shape(Vector pos, Color color)

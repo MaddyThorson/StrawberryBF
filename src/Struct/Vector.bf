@@ -2,6 +2,7 @@ using System;
 
 namespace Strawberry
 {
+	[Ordered, Packed, CRepr]
 	public struct Vector
 	{
 		static public readonly Vector Right = .(1, 0);

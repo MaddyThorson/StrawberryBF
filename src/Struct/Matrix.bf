@@ -9,6 +9,7 @@ namespace Strawberry
 		Licensed under the MIT license.
 	*/
 
+	[Ordered, Packed, CRepr]
 	public struct Matrix
 	{
 		static public readonly Matrix Identity = Matrix(1, 0, 0, 1, 0, 0);
