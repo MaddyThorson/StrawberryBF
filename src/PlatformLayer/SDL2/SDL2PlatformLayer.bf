@@ -2,7 +2,7 @@ using SDL2;
 using System;
 using System.Diagnostics;
 
-namespace Strawberry
+namespace Strawberry.SDL2
 {
 	public class SDL2PlatformLayer : PlatformLayer
 	{
@@ -118,11 +118,6 @@ namespace Strawberry
 			}
 		}
 
-		static void* SdlGetProcAddress(StringView string)
-		{
-			return SDL.SDL_GL_GetProcAddress(string.ToScopeCStr!());
-		}
-
 		public ~this()
 		{
 			delete gamepads;
@@ -132,6 +127,11 @@ namespace Strawberry
 			SDL.GL_DeleteContext(glContext);
 			SDL.DestroyWindow(window);
 			SDL.Quit();
+		}
+
+		static void* SdlGetProcAddress(StringView string)
+		{
+			return SDL.SDL_GL_GetProcAddress(string.ToScopeCStr!());
 		}
 
 		public override bool Closed()
@@ -149,21 +149,12 @@ namespace Strawberry
 			GL.glClear(GL.GL_COLOR_BUFFER_BIT | GL.GL_DEPTH_BUFFER_BIT);
 			GL.glUseProgram(glProgram);
 
-			float zNearPlane = 0;
-			float zFarPlane = 1000;
-
-			float[16] mat =
-				.(2.0f / Game.Width, 0, 0, 0,
-				0, 2.0f / Game.Height, 0, 0,
-				0, 0, 1.0f / (zNearPlane - zFarPlane), zNearPlane / (zNearPlane - zFarPlane),
-				0, 0, 0, 1);
+			Mat4x4 mat = Mat4x4.CreateOrthographic(Game.Width, Game.Height * 0.5f, 0, 1);
+			mat *= Mat4x4.CreateScale(.(1, -1, 1));
+			mat *= Mat4x4.CreateTranslation(.(-1, 1, 0));
 
 			let loc = GL.glGetUniformLocation(glProgram, "u_matrix");
-			GL.glUniformMatrix4fv(loc, 1, GL.GL_FALSE, &mat);
-
-			Batcher b = scope Batcher();
-			b.PushQuad(.(-40, -40), .(40, -40), .(40, 40), .(-40, 40), .Yellow);
-			b.Draw();
+			GL.glUniformMatrix4fv(loc, 1, GL.GL_FALSE, &mat.Values);
 		}
 
 		public override void RenderEnd()
@@ -219,73 +210,15 @@ namespace Strawberry
 			else
 				return val / 32768f;
 		}
-	}
 
-	class SDL2Texture : Texture
-	{
-		private uint32 handle;
-
-		public this(int width, int height, uint8* pixels)
-			: base(width, height, pixels)
+		public override Batcher CreateBatcher()
 		{
-			GL.glGenTextures(1, &handle);
-			GL.glBindTexture(GL.GL_TEXTURE_2D, handle);
-			GL.glTexImage2D(GL.GL_TEXTURE_2D, 0, GL.GL_RGBA, width, height, 0, GL.GL_RGBA, GL.GL_UNSIGNED_BYTE, pixels);
+			return new SDL2Batcher();
 		}
 
-		public ~this()
+		public override Shader CreateShader(ShaderDef def)
 		{
-			GL.glDeleteTextures(1, &handle);
-		}
-	}
-
-	class SDL2Shader : Shader
-	{
-		public uint vertexHandle;
-		public uint fragmentHandle;
-
-		public this(ShaderDef def)
-			: base(def)
-		{
-			IsValid = true;
-			int32 logLen = 0;
-			char8[1024] log;
-
-			vertexHandle = GL.glCreateShader(GL.GL_VERTEX_SHADER);
-			{
-				int32 len = (int32)def.Vertex.Length;
-				char8* data = def.Vertex.CStr();
-				GL.glShaderSource(vertexHandle, 1, &data, &len);
-				GL.glCompileShader(vertexHandle);
-				GL.glGetShaderInfoLog(vertexHandle, 1024, &logLen, &log);
-
-				if (logLen > 0)
-				{
-					Calc.Log(&log, logLen);
-					IsValid = false;
-				}
-			}
-
-			fragmentHandle = GL.glCreateShader(GL.GL_FRAGMENT_SHADER);
-			{
-				int32 len = (int32)def.Fragment.Length;
-				char8* data = def.Fragment.CStr();
-				GL.glShaderSource(fragmentHandle, 1, &data, &len);
-				GL.glCompileShader(fragmentHandle);
-				GL.glGetShaderInfoLog(fragmentHandle, 1024, &logLen, &log);
-
-				if (logLen > 0)
-				{
-					Calc.Log(&log, logLen);
-					IsValid = false;
-				}
-			}
-		}
-
-		public ~this()
-		{
-			GL.glDeleteShader(vertexHandle);
-			GL.glDeleteShader(fragmentHandle);
+			return new SDL2Shader(def);
 		}
 	}
 }

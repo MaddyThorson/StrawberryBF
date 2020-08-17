@@ -10,9 +10,9 @@ namespace Strawberry
 	*/
 
 	[Ordered, Packed, CRepr]
-	public struct Matrix
+	public struct Mat3x2
 	{
-		static public readonly Matrix Identity = Matrix(1, 0, 0, 1, 0, 0);
+		static public readonly Mat3x2 Identity = Mat3x2(1, 0, 0, 1, 0, 0);
 
 		public float[6] Values = .(0, 0, 0, 0, 0, 0);
 
@@ -153,7 +153,7 @@ namespace Strawberry
 			}
 		}
 
-		public Result<Matrix> Inverse
+		public Result<Mat3x2> Inverse
 		{
 			get => Invert(this);
 
@@ -165,70 +165,70 @@ namespace Strawberry
 
 		//Static Helpers
 
-		public static Matrix CreateTranslation(Vector position)
+		public static Mat3x2 CreateTranslation(Vector position)
 		{
-		    return Matrix(
+		    return Mat3x2(
 				1, 0,
 				0, 1,
 				position.X, position.Y
 			);
 		}
 
-		public static Matrix CreateScale(Vector scale)
+		public static Mat3x2 CreateScale(Vector scale)
 		{
-			return Matrix(
+			return Mat3x2(
 				scale.X, 0,
 				0, scale.Y,
 				0, 0
 			);
 		}
 
-		public static Matrix CreateScale(Vector scale, Vector origin)
+		public static Mat3x2 CreateScale(Vector scale, Vector origin)
 		{
 			float tx = origin.X * (1 - scale.X);
 			float ty = origin.Y * (1 - scale.Y);
 
-			return Matrix(
+			return Mat3x2(
 				scale.X, 0,
 				0, scale.Y,
 				tx, ty
 			);
 		}
 
-		public static Matrix CreateScale(float scale)
+		public static Mat3x2 CreateScale(float scale)
 		{
-			return Matrix(
+			return Mat3x2(
 				scale, 0,
 				0, scale,
 				0, 0
 			);
 		}
 
-		public static Matrix CreateScale(float scale, Vector origin)
+		public static Mat3x2 CreateScale(float scale, Vector origin)
 		{
 			float tx = origin.X * (1 - scale);
 			float ty = origin.Y * (1 - scale);
 
-			return Matrix(
+			return Mat3x2(
 				scale, 0,
 				0, scale,
 				tx, ty
 			);
 		}
 
-		public static Matrix CreateSkew(float radiansX, float radiansY)
+		public static Mat3x2 CreateSkew(float radiansX, float radiansY)
 		{
 			float xTan = (float)Math.Tan(radiansX);
 			float yTan = (float)Math.Tan(radiansY);
 
-			return Matrix(
+			return Mat3x2(
 				1, yTan,
 				xTan, 1,
 				0, 0
 			);
 		}
 
-		public static Matrix CreateSkew(float radiansX, float radiansY, Vector origin)
+		public static Mat3x2 CreateSkew(float radiansX, float radiansY, Vector origin)
 		{
 		    float xTan = (float)Math.Tan(radiansX);
 		    float yTan = (float)Math.Tan(radiansY);
@@ -236,14 +236,14 @@ namespace Strawberry
 		    float tx = -origin.Y * xTan;
 		    float ty = -origin.X * yTan;
 
-			return Matrix(
+			return Mat3x2(
 				1, yTan,
 				xTan, 1,
 				tx, ty
 			);
 		}
 
-		public static Matrix CreateRotation(float radians)
+		public static Mat3x2 CreateRotation(float radians)
 		{
 			let rad = (float)Math.IEEERemainder(radians, Math.PI_f * 2);
 
@@ -282,14 +282,14 @@ namespace Strawberry
 		        s = (float)Math.Sin(rad);
 		    }
 
-			return Matrix(
+			return Mat3x2(
 				c, s,
 				-s, c,
 				0, 0
 			);
 		}
 
-		public static Matrix CreateRotation(float radians, Vector origin)
+		public static Mat3x2 CreateRotation(float radians, Vector origin)
 		{
 		    let rad = (float)Math.IEEERemainder(radians, Math.PI_f * 2);
 
@@ -331,7 +331,7 @@ namespace Strawberry
 		    float x = origin.X * (1 - c) + origin.Y * s;
 		    float y = origin.Y * (1 - c) - origin.X * s;
 
-			return Matrix(
+			return Mat3x2(
 				c, s,
 				-s, c,
 				x, y
@@ -361,7 +361,7 @@ namespace Strawberry
 		    return (M11 * M22) - (M21 * M12);
 		}
 
-		public static Result<Matrix> Invert(Matrix matrix)
+		public static Result<Mat3x2> Invert(Mat3x2 matrix)
 		{
 		    let det = (matrix.M11 * matrix.M22) - (matrix.M21 * matrix.M12);
 
@@ -370,7 +370,7 @@ namespace Strawberry
 
 		    let invDet = 1.0f / det;
 
-		    return Matrix(
+		    return Mat3x2(
 				matrix.M22 * invDet,
 				-matrix.M12 * invDet,
 
@@ -382,9 +382,9 @@ namespace Strawberry
 			);
 		}
 
-		public static Matrix Lerp(Matrix a, Matrix b, float t)
+		public static Mat3x2 Lerp(Mat3x2 a, Mat3x2 b, float t)
 		{
-			return Matrix(
+			return Mat3x2(
 				a.M11 + (b.M11 - a.M11) * t,
 				a.M12 + (b.M12 - a.M12) * t,
 
@@ -396,36 +396,36 @@ namespace Strawberry
 			);
 		}
 
-		public static Matrix Negate(Matrix mat)
+		public static Mat3x2 Negate(Mat3x2 mat)
 		{
-			return Matrix(
+			return Mat3x2(
 				-mat.M11, -mat.M12,
 				-mat.M21, -mat.M22,
 				-mat.M31, -mat.M32
 			);
 		}
 
-		public static Matrix Add(Matrix a, Matrix b)
+		public static Mat3x2 Add(Mat3x2 a, Mat3x2 b)
 		{
-			return Matrix(
+			return Mat3x2(
 				a.M11 + b.M11, a.M12 + b.M12,
 				a.M21 + b.M21, a.M22 + b.M22,
 				a.M31 + b.M31, a.M32 + b.M32
 			);
 		}
 
-		public static Matrix Subtract(Matrix a, Matrix b)
+		public static Mat3x2 Subtract(Mat3x2 a, Mat3x2 b)
 		{
-		    return Matrix(
+		    return Mat3x2(
 				a.M11 - b.M11, a.M12 - b.M12,
 				a.M21 - b.M21, a.M22 - b.M22,
 				a.M31 - b.M31, a.M32 - b.M32
 			);
 		}
 
-		public static Matrix Multiply(Matrix a, Matrix b)
+		public static Mat3x2 Multiply(Mat3x2 a, Mat3x2 b)
 		{
-		    return Matrix(
+		    return Mat3x2(
 				a.M11 * b.M11 + a.M12 * b.M21,
 				a.M11 * b.M12 + a.M12 * b.M22,
 
@@ -437,9 +437,9 @@ namespace Strawberry
 			);
 		}
 
-		public static Matrix Multiply(Matrix a, float scale)
+		public static Mat3x2 Multiply(Mat3x2 a, float scale)
 		{
-		    return Matrix(
+		    return Mat3x2(
 				a.M11 * scale, a.M12 * scale,
 				a.M21 * scale, a.M22 * scale,
 				a.M31 * scale, a.M32 * scale
@@ -448,36 +448,36 @@ namespace Strawberry
 
 		// Operators
 
-		public static Matrix operator -(Matrix mat)
+		public static Mat3x2 operator -(Mat3x2 mat)
 		{
-			return Matrix(
+			return Mat3x2(
 				-mat.M11, -mat.M12,
 				-mat.M21, -mat.M22,
 				-mat.M31, -mat.M32
 			);
 		}
 
-		public static Matrix operator +(Matrix a, Matrix b)
+		public static Mat3x2 operator +(Mat3x2 a, Mat3x2 b)
 		{
-			return Matrix(
+			return Mat3x2(
 				a.M11 + b.M11, a.M12 + b.M12,
 				a.M21 + b.M21, a.M22 + b.M22,
 				a.M31 + b.M31, a.M32 + b.M32
 			);
 		}
 
-		public static Matrix operator -(Matrix a, Matrix b)
+		public static Mat3x2 operator -(Mat3x2 a, Mat3x2 b)
 		{
-		    return Matrix(
+		    return Mat3x2(
 				a.M11 - b.M11, a.M12 - b.M12,
 				a.M21 - b.M21, a.M22 - b.M22,
 				a.M31 - b.M31, a.M32 - b.M32
 			);
 		}
 
-		public static Matrix operator *(Matrix a, Matrix b)
+		public static Mat3x2 operator *(Mat3x2 a, Mat3x2 b)
 		{
-		    return Matrix(
+		    return Mat3x2(
 				a.M11 * b.M11 + a.M12 * b.M21,
 				a.M11 * b.M12 + a.M12 * b.M22,
 
@@ -489,16 +489,16 @@ namespace Strawberry
 			);
 		}
 
-		public static Matrix operator *(Matrix mat, float scale)
+		public static Mat3x2 operator *(Mat3x2 mat, float scale)
 		{
-			return Matrix(
+			return Mat3x2(
 				mat.M11 * scale, mat.M12 * scale,
 				mat.M21 * scale, mat.M22 * scale,
 				mat.M31 * scale, mat.M32 * scale
 			);
 		}
 
-		public static bool operator ==(Matrix a, Matrix b)
+		public static bool operator ==(Mat3x2 a, Mat3x2 b)
 		{
 		    return (a.M11 == b.M11 && a.M22 == b.M22 && // Check diagonal element first for early out.
 		                                        a.M12 == b.M12 &&
@@ -506,7 +506,7 @@ namespace Strawberry
 		            a.M31 == b.M31 && a.M32 == b.M32);
 		}
 
-		public static bool operator !=(Matrix a, Matrix b)
+		public static bool operator !=(Mat3x2 a, Mat3x2 b)
 		{
 		    return (a.M11 != b.M11 || a.M12 != b.M12 ||
 		            a.M21 != b.M21 || a.M22 != b.M22 ||

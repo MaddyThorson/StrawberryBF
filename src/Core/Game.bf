@@ -29,7 +29,8 @@ namespace Strawberry
 		private Dictionary<Type, List<Type>> componentAssignableLists;
 
 		public PlatformLayer PlatformLayer { get; private set; }
-		public Color ClearColor = .Red;
+		public Batcher Batcher { get; private set; }
+		public Color ClearColor = .Black;
 
 		private bool* keyboardState;
 		private int32 updateCounter;
@@ -53,6 +54,7 @@ namespace Strawberry
 			Directory.SetCurrentDirectory(exeDir);
 
 			platformLayer.Init();
+			Batcher = platformLayer.CreateBatcher();
 
 			VirtualInputs = new List<VirtualInput>();
 			Input.[Friend]Init();
@@ -83,6 +85,9 @@ namespace Strawberry
 			DisposeTypeLists();
 			Input.[Friend]Dispose();
 			Strawberry.Console.Dispose();
+
+			delete Batcher;
+
 			Game = null;
 		}
 
@@ -97,7 +102,6 @@ namespace Strawberry
 
 				uint32 tick = PlatformLayer.Ticks;
 				msCounter += (tick - prevTick);
-				prevTick = tick;
 
 				if (Time.FixedTimestep)
 				{
@@ -112,13 +116,14 @@ namespace Strawberry
 				}
 				else
 				{
-					Time.RawDelta = msCounter / 1000;
+					Time.RawDelta = (tick - prevTick) / 1000f;
 					PlatformLayer.UpdateInput();
 					Update();
 					Input.AfterUpdate();
 				}
 
 				Render();
+				prevTick = tick;
 			}
 		}
 
@@ -157,21 +162,18 @@ namespace Strawberry
 		private void Render()
 		{
 			PlatformLayer.RenderBegin();
-			//Draw();
+			Draw();
 			PlatformLayer.RenderEnd();
 		}
 
 		public virtual void Draw()
 		{
-			if (Scene != null)
-			{
-				Draw.PushCamera(Scene.Camera.Round());
-				Scene.Draw();
-				Draw.PopCamera();
-			}
+			Scene?.Draw();
 
 			if (Console.Enabled)
 				Strawberry.Console.[Friend]Draw();
+
+			Batcher.Draw();
 		}
 
 		public Scene Scene

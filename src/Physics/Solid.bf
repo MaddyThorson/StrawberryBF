@@ -88,7 +88,7 @@ namespace Strawberry
 
 		public override void Draw()
 		{
-			DrawHitbox(.(255, 255, 255, 255));
+			DrawHitbox(.White);
 		}
 	}
 }

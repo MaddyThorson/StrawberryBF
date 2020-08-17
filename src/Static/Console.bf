@@ -147,8 +147,8 @@ namespace Strawberry
 		{
 			if (enabled && Open)
 			{
-				Draw.Rect(0, 0, Game.Width, Game.Height, .Black * 0.6f);
-				Draw.Rect(0, Game.Height - 14, Game.Width, 14, .Black * 0.6f);
+				Game.Batcher.Rect(0, 0, Game.Width, Game.Height, .Black * 0.6f);
+				Game.Batcher.Rect(0, Game.Height - 14, Game.Width, 14, .Black * 0.6f);
 
 				//Entry
 				if (entry.Length > 0)
@@ -168,8 +168,8 @@ namespace Strawberry
 			if (row > 0)
 				pos.Y -= 4;
 
-			Draw.Text(font, str, pos + .Down, .Black);
-			Draw.Text(font, str, pos, color);
+			//Draw.Text(font, str, pos + .Down, .Black);
+			//Draw.Text(font, str, pos, color);
 		}
 
 		static private int MessageRows => (int)Math.Ceiling((Game.Height - 14) / 10f);

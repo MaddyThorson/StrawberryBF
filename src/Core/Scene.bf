@@ -8,7 +8,6 @@ namespace Strawberry
 		public float TimeStarted { get; private set; }
 		public Grid SolidGrid;
 		public Rect Bounds;
-		public Vector Camera;
 
 		private List<Entity> entities;
 		private HashSet<Entity> toRemove;

@@ -423,7 +423,7 @@ namespace Strawberry
 
 		public void DrawHitbox(Color color)
 		{
-			Draw.Rect(SceneHitbox, color);
+			Game.Batcher.Rect(SceneHitbox, color);
 		}
 
 		static public int Compare(Entity a, Entity b)

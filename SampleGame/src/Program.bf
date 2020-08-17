@@ -1,4 +1,5 @@
 using System;
+using Strawberry.SDL2;
 
 namespace Strawberry.Sample
 {

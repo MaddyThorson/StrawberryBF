@@ -173,7 +173,7 @@ namespace Strawberry
 			for (let x < CellsX)
 				for (let y < CellsY)
 					if (this[x, y] != '0')
-						Draw.Rect(Rect(x, y, 1, 1) * CellSize + Offset, color);
+						Game.Batcher.Rect(Rect(x, y, 1, 1) * CellSize + Offset, color);
 		}
 	}
 }
