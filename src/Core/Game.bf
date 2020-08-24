@@ -54,7 +54,7 @@ namespace Strawberry
 			Directory.SetCurrentDirectory(exeDir);
 
 			platformLayer.Init();
-			Batcher = platformLayer.CreateBatcher();
+			Batcher = new Batcher();
 
 			VirtualInputs = new List<VirtualInput>();
 			Input.[Friend]Init();

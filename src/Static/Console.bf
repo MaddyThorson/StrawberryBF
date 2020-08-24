@@ -88,7 +88,7 @@ namespace Strawberry
 
 		static public void Log(StringView str, params Object[] args)
 		{
-			let string = Calc.[Friend]StringArgs(scope String(str), params args);
+			let string = Calc.StringArgs(scope String(str), params args);
 			Log(string);
 		}
 

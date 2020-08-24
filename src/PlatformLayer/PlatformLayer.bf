@@ -23,7 +23,5 @@ namespace Strawberry
 
 		//Graphics
 		public abstract Texture LoadTexture(String path);
-		public abstract Batcher CreateBatcher();
-		public abstract Shader CreateShader(ShaderDef def);
 	}
 }

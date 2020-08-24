@@ -10,7 +10,7 @@ namespace Strawberry.SDL2
 		private SDL.Surface* screen;
 		private SDL.Rect screenRect;
 		private SDL.Renderer* renderer;
-		private SDL2Shader shader;
+		private Shader shader;
 		private SDL.SDL_GameController*[] gamepads;
 		private bool* keyboard;
 
@@ -53,7 +53,7 @@ namespace Strawberry.SDL2
 				SDL.GL_SetSwapInterval(1);
 				GL.Init(=> SdlGetProcAddress);
 
-				shader = new SDL2Shader(String[2] (
+				shader = new Shader(String[2] (
 					// vertex shader
 					"""
 					#version 330
@@ -167,7 +167,7 @@ namespace Strawberry.SDL2
 		public override Texture LoadTexture(String path)
 		{
 			var surface = SDLImage.Load(path);
-			var tex = new SDL2Texture(surface.w, surface.h, (uint8*)surface.pixels);
+			var tex = new Texture(surface.w, surface.h, (uint8*)surface.pixels);
 			SDL.FreeSurface(surface);
 
 			return tex;
@@ -209,16 +209,6 @@ namespace Strawberry.SDL2
 				return val / 32767f;
 			else
 				return val / 32768f;
-		}
-
-		public override Batcher CreateBatcher()
-		{
-			return new SDL2Batcher();
-		}
-
-		public override Shader CreateShader(ShaderDef def)
-		{
-			return new SDL2Shader(def);
 		}
 	}
 }
