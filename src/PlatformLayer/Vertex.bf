@@ -18,5 +18,15 @@ namespace Strawberry
 			v.Mode = (0, 0, 255);
 			return v;
 		}
+
+		static public Vertex Tex(Vector pos, Vector texCoord, Color color)
+		{
+			Vertex v = Vertex();
+			v.Position = pos;
+			v.TexCoord = texCoord;
+			v.Color = color;
+			v.Mode = (255, 0, 0);
+			return v;
+		}
 	}
 }

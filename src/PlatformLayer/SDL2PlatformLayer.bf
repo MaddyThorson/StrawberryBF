@@ -166,7 +166,10 @@ namespace Strawberry.SDL2
 
 		public override Texture LoadTexture(String path)
 		{
-			var surface = SDLImage.Load(path);
+			let surface = SDLImage.Load(path);
+			Debug.Assert(surface != null, "Could not load from path.");
+			Debug.Assert(surface.format.bytesPerPixel == 4, "Surface format incorrect.");
+
 			var tex = new Texture(surface.w, surface.h, (uint8*)surface.pixels);
 			SDL.FreeSurface(surface);
 
