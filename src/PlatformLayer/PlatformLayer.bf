@@ -23,5 +23,6 @@ namespace Strawberry
 
 		//Graphics
 		public abstract Texture LoadTexture(String path);
+		public abstract Batcher CreateBatcher();
 	}
 }

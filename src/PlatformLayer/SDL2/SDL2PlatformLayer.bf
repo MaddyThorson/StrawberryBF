@@ -6,6 +6,9 @@ namespace Strawberry.SDL2
 {
 	public class SDL2PlatformLayer : PlatformLayer
 	{
+		public int TransformMatrixLocation { get; private set; }
+		public int TextureMatrixLocation { get; private set; }
+
 		private SDL.Window* window;
 		private SDL.Surface* screen;
 		private SDL.Rect screenRect;
@@ -97,6 +100,9 @@ namespace Strawberry.SDL2
 				GL.glAttachShader(glProgram, shader.fragmentHandle);
 				GL.glLinkProgram(glProgram);
 
+				TransformMatrixLocation = GL.glGetUniformLocation(glProgram, "u_matrix");
+				TextureMatrixLocation = GL.glGetUniformLocation(glProgram, "u_texture");
+
 				int32 logLen = 0;
 				char8[1024] log;
 				GL.glGetProgramInfoLog(glProgram, 1024, &logLen, &log);
@@ -153,8 +159,7 @@ namespace Strawberry.SDL2
 			mat *= Mat4x4.CreateScale(.(1, -1, 1));
 			mat *= Mat4x4.CreateTranslation(.(-1, 1, 0));
 
-			let loc = GL.glGetUniformLocation(glProgram, "u_matrix");
-			GL.glUniformMatrix4fv(loc, 1, GL.GL_FALSE, &mat.Values);
+			GL.glUniformMatrix4fv(TransformMatrixLocation, 1, GL.GL_FALSE, &mat.Values);
 		}
 
 		public override void RenderEnd()
@@ -162,6 +167,11 @@ namespace Strawberry.SDL2
 			GL.glUseProgram(0);
 			GL.glFlush();
 			SDL.GL_SwapWindow(window);
+		}
+
+		public override Batcher CreateBatcher()
+		{
+			return new SDL2Batcher(this);
 		}
 
 		public override Texture LoadTexture(String path)
