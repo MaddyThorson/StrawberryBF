@@ -303,16 +303,6 @@ namespace Strawberry
 			return SceneHitbox.Intersects(rect);
 		}
 
-		public bool Check(Scene scene)
-		{
-			return scene.SolidGrid != null && Check(scene.SolidGrid);
-		}
-
-		public bool Check(Scene scene, Point offset)
-		{
-			return scene.SolidGrid != null && Check(scene.SolidGrid, offset);
-		}
-
 		public bool Check(Grid grid)
 		{
 			return grid != null && grid.Check(SceneHitbox);
@@ -424,6 +414,12 @@ namespace Strawberry
 		public void DrawHitbox(Color color)
 		{
 			Game.Batcher.Rect(SceneHitbox, color);
+		}
+
+		public T SceneAs<T>() where T : Scene
+		{
+			Runtime.Assert(Scene is T, "Scene type mismatch!");
+			return Scene as T;
 		}
 
 		static public int Compare(Entity a, Entity b)

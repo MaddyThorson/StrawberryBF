@@ -1,6 +1,7 @@
 using System.Collections;
 using System;
-namespace Strawberry
+
+namespace Strawberry.Sample
 {
 	public class JumpThru : Geometry
 	{

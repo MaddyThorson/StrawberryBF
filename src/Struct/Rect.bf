@@ -139,32 +139,32 @@ namespace Strawberry
 
 		static public Rect operator+(Rect a, Point b)
 		{
-			return Rect(a.X + b.X, a.Y + b.Y, a.Width, a.Height);
+			return .(a.X + b.X, a.Y + b.Y, a.Width, a.Height);
 		}
 
 		static public Rect operator-(Rect a, Point b)
 		{
-			return Rect(a.X - b.X, a.Y - b.Y, a.Width, a.Height);
+			return .(a.X - b.X, a.Y - b.Y, a.Width, a.Height);
 		}
 
 		static public Rect operator/(Rect a, int b)
 		{
-			return Rect(a.X / b, a.Y / b, a.Width / b, a.Height / b);
+			return .(a.X / b, a.Y / b, a.Width / b, a.Height / b);
 		}
 
 		static public Rect operator/(Rect a, Point b)
 		{
-			return Rect(a.X / b.X, a.Y / b.Y, a.Width / b.X, a.Height / b.Y);
+			return .(a.X / b.X, a.Y / b.Y, a.Width / b.X, a.Height / b.Y);
 		}
 
 		static public Rect operator*(Rect a, int b)
 		{
-			return Rect(a.X * b, a.Y * b, a.Width * b, a.Height * b);
+			return .(a.X * b, a.Y * b, a.Width * b, a.Height * b);
 		}
 
 		static public Rect operator*(Rect a, Point b)
 		{
-			return Rect(a.X * b.X, a.Y * b.Y, a.Width * b.X, a.Height * b.Y);
+			return .(a.X * b.X, a.Y * b.Y, a.Width * b.X, a.Height * b.Y);
 		}
 
 		static public implicit operator SDL2.SDL.Rect(Rect r)

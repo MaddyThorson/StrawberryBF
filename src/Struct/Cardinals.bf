@@ -115,6 +115,21 @@ namespace Strawberry
 			}
 		}
 
+		static public implicit operator Vector(Cardinals c)
+		{
+			switch (c)
+			{
+			case .Right:
+				return Vector.Right;
+			case .Left:
+				return Vector.Left;
+			case .Up:
+				return Vector.Up;
+			case .Down:
+				return Vector.Down;
+			}
+		}
+
 		static public Result<Cardinals> FromPoint(Point p)
 		{
 			if (p.X > 0 && p.Y == 0)

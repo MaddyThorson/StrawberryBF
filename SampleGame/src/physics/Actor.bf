@@ -1,6 +1,6 @@
 using System;
 
-namespace Strawberry
+namespace Strawberry.Sample
 {
 	[Reflect]
 	public class Actor : Entity
@@ -16,9 +16,21 @@ namespace Strawberry
 
 		}
 
+		public Level Level => SceneAs<Level>();
+
+		public bool Check(Level level)
+		{
+			return level.SolidGrid != null && Check(level.SolidGrid);
+		}
+
+		public bool Check(Level level, Point offset)
+		{
+			return level.SolidGrid != null && Check(level.SolidGrid, offset);
+		}
+
 		public bool GroundCheck(int distance = 1)
 		{
-			return Check<Solid>(.(0, distance)) || Check(Scene, .(0, distance)) || CheckOutside<JumpThru>(.(0, distance));
+			return Check<Solid>(.(0, distance)) || Check(Level, .(0, distance)) || CheckOutside<JumpThru>(.(0, distance));
 		}
 
 		public virtual bool IsRiding(Solid solid)
@@ -92,7 +104,7 @@ namespace Strawberry
 				if (hit != null)
 				{
 					let c = Collision(
-						Point.Right * sign,
+						Cardinals.FromPoint(Point.Right * sign),
 						Math.Abs(amount),
 						Math.Abs(amount - move),
 						hit,
@@ -103,10 +115,10 @@ namespace Strawberry
 					return true;
 				}
 
-				if (Check(Scene, .(sign, 0)))
+				if (Check(Level, .(sign, 0)))
 				{
 					let c = Collision(
-						Point.Right * sign,
+						Cardinals.FromPoint(Point.Right * sign),
 						Math.Abs(amount),
 						Math.Abs(amount - move),
 						null,
@@ -141,7 +153,7 @@ namespace Strawberry
 				if (hit != null)
 				{
 					let c = Collision(
-						Point.Right * sign,
+						Cardinals.FromPoint(Point.Down * sign),
 						Math.Abs(amount),
 						Math.Abs(amount - move),
 						hit,
@@ -152,10 +164,10 @@ namespace Strawberry
 					return true;
 				}
 
-				if (Check(Scene, .(0, sign)))
+				if (Check(Level, .(0, sign)))
 				{
 					let c = Collision(
-						Point.Right * sign,
+						Cardinals.FromPoint(Point.Down * sign),
 						Math.Abs(amount),
 						Math.Abs(amount - move),
 						null,
@@ -195,7 +207,6 @@ namespace Strawberry
 			MovedByGeometry += amount;
 		}
 
-
 		public bool CornerCorrection(Cardinals direction, int maxAmount, int lookAhead = 1, int onlySign = 0)
 		{
 			Point dir = direction;
@@ -205,9 +216,9 @@ namespace Strawberry
 
 			delegate bool(Point) checker;
  			if (dir == Point.Down)
-				checker = scope:: (p) => !Check(Scene, p) && !Check<Solid>(p) && !CheckOutside<JumpThru>(p);
+				checker = scope:: (p) => !Check(Level, p) && !Check<Solid>(p) && !CheckOutside<JumpThru>(p);
 			else
-				checker = scope:: (p) => !Check(Scene, p) && !Check<Solid>(p);
+				checker = scope:: (p) => !Check(Level, p) && !Check<Solid>(p);
 
 			for (int i = 1; i <= maxAmount; i++)
 			{

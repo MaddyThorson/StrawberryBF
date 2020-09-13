@@ -103,7 +103,7 @@ namespace Strawberry.Sample
 			base.Draw();
 
 			DrawHitbox(.Green);
-			Game.Batcher.Tex(Assets.Textures["test"], X - 4, Y - 8);
+			//Game.Batcher.Tex(Assets.Textures["test"], X - 4, Y - 8);
 		}
 	}
 }

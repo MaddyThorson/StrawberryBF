@@ -2,6 +2,8 @@ namespace Strawberry.Sample
 {
 	public class Level : Scene
 	{
+		public Grid SolidGrid { get; private set; }
+
 		public this()
 		{
 			Add(new Player(.(50, 50)));

@@ -41,6 +41,11 @@ namespace Strawberry
 		public float Length => Math.Sqrt(LengthSquared);
 		public int LengthSquared => X * X + Y * Y;
 
+		public Vector Normalized()
+		{
+			return ((Vector)this).Normalized();
+		}
+
 		public override void ToString(String strBuffer)
 		{
 			strBuffer.Set("Point [ ");

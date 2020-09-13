@@ -6,7 +6,6 @@ namespace Strawberry
 	public class Scene
 	{
 		public float TimeStarted { get; private set; }
-		public Grid SolidGrid;
 		public Rect Bounds;
 
 		private List<Entity> entities;
@@ -32,9 +31,6 @@ namespace Strawberry
 
 		public ~this()
 		{
-			if (SolidGrid != null)
-				delete SolidGrid;
-
 			for (var e in entities)
 				if (e.DeleteOnRemove)
 					delete e;
@@ -183,6 +179,22 @@ namespace Strawberry
 			return entityTracker[typeof(T)].Count;
 		}
 
+		public bool Check<T>(Point point) where T : Entity
+		{
+			for (let e in entityTracker[typeof(T)])
+				if (e.Check(point))
+					return true;
+			return false;
+		}
+
+		public bool Check<T>(Rect rect) where T : Entity
+		{
+			for (let e in entityTracker[typeof(T)])
+				if (e.Check(rect))
+					return true;
+			return false;
+		}
+
 		public T First<T>() where T : Entity
 		{
 			for (let e in entityTracker[typeof(T)])
@@ -229,11 +241,14 @@ namespace Strawberry
 			return into;
 		}
 
-		// Finding Components
+		/*
+			Finding Components
+		*/
 
 		public int Count<T>() where T : Component
 		{
 			return componentTracker[typeof(T)].Count;
 		}
+
 	}
 }

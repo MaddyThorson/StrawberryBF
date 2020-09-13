@@ -1,7 +1,7 @@
 using System;
 using System.Collections;
 
-namespace Strawberry
+namespace Strawberry.Sample
 {
 	public abstract class Geometry : Entity
 	{

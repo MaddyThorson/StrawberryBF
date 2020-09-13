@@ -26,6 +26,9 @@ namespace Strawberry
 			return T.Parse<T>(String, true);
 		}
 
+		public Point Point => .(this["x"].Int, this["y"].Int);
+		public Vector Vector => .(this["x"].Number, this["y"].Number);
+
 		private List<JSON> array;
 		private Dictionary<String, JSON> children;
 

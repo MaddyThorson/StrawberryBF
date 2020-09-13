@@ -15,7 +15,10 @@ namespace Strawberry
 			CellSize = .(cellWidth, cellHeight);
 			Offset = .(offsetX, offsetY);
 
-			contents = new char8[cellsX, cellsY]; 
+			contents = new char8[cellsX, cellsY];
+			for (let x < CellsX)
+				for (let y < CellsY)
+					contents[x, y] = '0';
 		}
 
 		public this(JSON ogmoJson)
@@ -66,6 +69,13 @@ namespace Strawberry
 			{
 				contents[p.X, p.Y] = value;
 			}
+		}
+
+		public void Set(Rect r, char8 val)
+		{
+			for (let x < r.Width)
+				for (let y < r.Height)
+					contents[r.X + x, r.Y + y] = val;
 		}
 
 		public int CellsX => contents.GetLength(0);

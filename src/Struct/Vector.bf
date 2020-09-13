@@ -33,6 +33,11 @@ namespace Strawberry
 			return .(-Y, X);
 		}
 
+		public Vector Normalized()
+		{
+			return this / Length;
+		}
+
 		public float Length => Math.Sqrt(LengthSquared);
 		public float LengthSquared => X * X + Y * Y;
 
@@ -89,6 +94,20 @@ namespace Strawberry
 		static public Vector operator/(Vector a, float b)
 		{
 			return Vector(a.X / b, a.Y / b);
+		}
+
+		static public Vector Approach(Vector value, Vector target, float maxDelta)
+		{
+			Vector diff = target - value;
+			if (diff.Length < maxDelta)
+				return target;
+			else
+				return value + diff.Normalized() * maxDelta;
+		}
+
+		static public void Approach(Vector* value, Vector target, float maxDelta)
+		{
+			*value = Approach(*value, target, maxDelta);
 		}
 	}
 }

@@ -40,7 +40,7 @@ namespace Strawberry
 
 		}
 
-		public void Add(TIndex state, delegate TIndex() enter = null, delegate TIndex() update = null, delegate TIndex() exit = null)
+		public void Add(TIndex state, delegate void() enter = null, delegate TIndex() update = null, delegate void() exit = null)
 		{
 			let s = new State();
 			s.Enter = enter;
@@ -63,12 +63,9 @@ namespace Strawberry
 			if (to != state)
 			{
 				NextState = to;
-				if (CallExit())
-					return true;
-
+				CallExit();
 				PreviousState = state;
 				state = to;
-
 				CallEnter();
 				return true;
 			}
@@ -76,18 +73,15 @@ namespace Strawberry
 				return false;
 		}
 
-		private bool CallEnter()
+		private void CallEnter()
 		{
 			let s = states[state];
 			if (s != null && s.Enter != null)
 			{
 				inStateCall = true;
-				let set = s.Enter();
+				s.Enter();
 				inStateCall = false;
-				return Set(set);
 			}
-			else
-				return false;
 		}
 
 		private bool CallUpdate()
@@ -104,25 +98,22 @@ namespace Strawberry
 				return false;
 		}
 
-		private bool CallExit()
+		private void CallExit()
 		{
 			let s = states[state];
 			if (s != null && s.Exit != null)
 			{
 				inStateCall = true;
-				let set = s.Exit();
+				s.Exit();
 				inStateCall = false;
-				return Set(set);
 			}
-			else
-				return false;
 		}
 
 		public class State
 		{
-			public delegate TIndex() Enter;
+			public delegate void() Enter;
 			public delegate TIndex() Update;
-			public delegate TIndex() Exit;
+			public delegate void() Exit;
 
 			public ~this()
 			{

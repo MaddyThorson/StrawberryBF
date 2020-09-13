@@ -56,6 +56,7 @@ namespace Strawberry.SDL2
 					int32 num = 0;
 					GL.glUniform1iv(platformLayer.TextureMatrixLocation, 1, &num);
 				}
+
 				GL.glDrawElements(GL.GL_TRIANGLES, b.IndicesCount, GL.GL_UNSIGNED_INT, (void*)(b.IndicesStart * sizeof(uint32)));
 			}
 			
