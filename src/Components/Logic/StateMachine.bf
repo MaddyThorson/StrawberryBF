@@ -111,19 +111,9 @@ namespace Strawberry
 
 		public class State
 		{
-			public delegate void() Enter;
-			public delegate TIndex() Update;
-			public delegate void() Exit;
-
-			public ~this()
-			{
-				if (Enter != null)
-					delete Enter;
-				if (Update != null)
-					delete Update;
-				if (Exit != null)
-					delete Exit;
-			}
+			public delegate void() Enter ~ delete _;
+			public delegate TIndex() Update ~ delete _;
+			public delegate void() Exit ~ delete _;
 		}
 	}
 }
