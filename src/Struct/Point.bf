@@ -99,5 +99,10 @@ namespace Strawberry
 		{
 			return Point(a.X / b.X, a.Y / b.Y);
 		}
+
+		static public Point operator*(Point a, Facings f)
+		{
+			return .(a.X * (int)f, a.Y);
+		}
 	}
 }

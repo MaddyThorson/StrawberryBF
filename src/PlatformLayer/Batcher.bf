@@ -34,6 +34,23 @@ namespace Strawberry
 			Rect(rect.X, rect.Y, rect.Width, rect.Height, color);
 		}
 
+		public void Tri(Vector a, Vector b, Vector c, Color color)
+		{
+			PushTri(.Shape, null,
+				.Shape(a, color),
+				.Shape(b, color),
+				.Shape(c, color));
+		}
+
+		public void Quad(Vector a, Vector b, Vector c, Vector d, Color color)
+		{
+			PushQuad(.Shape, null,
+				.Shape(a, color),
+				.Shape(b, color),
+				.Shape(c, color),
+				.Shape(d, color)); 
+		}
+
 		public void Tex(Texture texture, float x, float y)
 		{
 			PushQuad(.TextureTint, texture,
