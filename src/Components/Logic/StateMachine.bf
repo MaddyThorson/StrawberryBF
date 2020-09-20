@@ -35,11 +35,6 @@ namespace Strawberry
 			CallUpdate();
 		}
 
-		public override void Draw()
-		{
-
-		}
-
 		public void Add(TIndex state, delegate void() enter = null, delegate TIndex() update = null, delegate void() exit = null)
 		{
 			let s = new State();

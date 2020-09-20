@@ -36,6 +36,7 @@ namespace Strawberry
 
 		private void Removed()
 		{
+			Ended();
 			Scene = null;
 		}
 
@@ -43,6 +44,12 @@ namespace Strawberry
 		{
 			for (var c in components)
 				c.Started();
+		}
+
+		public virtual void Ended()
+		{
+			for (var c in components)
+				c.Ended();
 		}
 
 		public virtual void Update()
@@ -380,6 +387,46 @@ namespace Strawberry
 					return e;
 
 			return null;
+		}
+
+		public T LeftmostOutside<T>(Point offset) where T : Entity
+		{
+			T ret = null;
+			for (var e in Scene.All<T>(scope List<T>()))
+				if (CheckOutside(e, offset) && (ret == null || e.Left < ret.Left))
+					ret = e;
+
+			return ret;
+		}
+
+		public T RightmostOutside<T>(Point offset) where T : Entity
+		{
+			T ret = null;
+			for (var e in Scene.All<T>(scope List<T>()))
+				if (CheckOutside(e, offset) && (ret == null || e.Right > ret.Right))
+					ret = e;
+
+			return ret;
+		}
+
+		public T TopmostOutside<T>(Point offset) where T : Entity
+		{
+			T ret = null;
+			for (var e in Scene.All<T>(scope List<T>()))
+				if (CheckOutside(e, offset) && (ret == null || e.Top < ret.Top))
+					ret = e;
+
+			return ret;
+		}
+
+		public T BottommostOutside<T>(Point offset) where T : Entity
+		{
+			T ret = null;
+			for (var e in Scene.All<T>(scope List<T>()))
+				if (CheckOutside(e, offset) && (ret == null || e.Bottom > ret.Bottom))
+					ret = e;
+
+			return ret;
 		}
 
 		public List<T> All<T>(List<T> into) where T : Entity

@@ -92,6 +92,11 @@ namespace Strawberry
 			}
 		}
 
+		static public Cardinals operator -(Cardinals c)
+		{
+			return c.Opposite();
+		}
+
 		static public implicit operator Cardinals(Facings f)
 		{
 			if (f == Facings.Right)

@@ -35,7 +35,10 @@ namespace Strawberry
 
 		public Vector Normalized()
 		{
-			return this / Length;
+			if (X == 0 && Y == 0)
+				return this;
+			else
+				return this / Length;
 		}
 
 		public float Length => Math.Sqrt(LengthSquared);

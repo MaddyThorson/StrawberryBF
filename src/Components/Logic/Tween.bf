@@ -27,11 +27,6 @@ namespace Strawberry
 			Active = true;
 		}
 
-		public override void Started()
-		{
-
-		}
-
 		public override void Update()
 		{
 			T = Math.Min(T + Time.Delta, 1);
@@ -44,11 +39,6 @@ namespace Strawberry
 				if (RemoveOnComplete)
 					RemoveSelf();
 			}
-		}
-
-		public override void Draw()
-		{
-
 		}
 	}
 }

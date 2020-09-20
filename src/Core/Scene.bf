@@ -250,5 +250,27 @@ namespace Strawberry
 			return componentTracker[typeof(T)].Count;
 		}
 
+		public List<T> All<T>(List<T> into) where T : Component
+		{
+			for (let c in componentTracker[typeof(T)])
+				into.Add(c as T);
+			return into;
+		}
+
+		public List<T> All<T>(Point point, List<T> into) where T : Component
+		{
+			for (let c in componentTracker[typeof(T)])
+				if (c.Entity.Check(point))
+					into.Add(c as T);
+			return into;
+		}
+
+		public List<T> All<T>(Rect rect, List<T> into) where T : Component
+		{
+			for (let c in componentTracker[typeof(T)])
+				if (c.Entity.Check(rect))
+					into.Add(c as T);
+			return into;
+		}
 	}
 }

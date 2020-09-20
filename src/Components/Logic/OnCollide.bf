@@ -17,11 +17,6 @@ namespace Strawberry
 			delete Action;
 		}
 
-		public override void Started()
-		{
-
-		}
-
 		public override void Update()
 		{
 			if (Action != null)
@@ -31,11 +26,6 @@ namespace Strawberry
 					if (Entity.Check(t) && !Action(t))
 						break;
 			}
-		}
-
-		public override void Draw()
-		{
-
 		}
 	}
 }

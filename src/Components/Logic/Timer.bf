@@ -31,11 +31,6 @@ namespace Strawberry
 			RemoveOnComplete = destroyOnComplete;
 		}
 
-		public override void Started()
-		{
-
-		}
-
 		public override void Update()
 		{
 			if (value > 0)
@@ -51,11 +46,6 @@ namespace Strawberry
 						RemoveSelf();
 				}
 			}
-		}
-
-		public override void Draw()
-		{
-
 		}
 
 		public float Value

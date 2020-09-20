@@ -25,9 +25,10 @@ namespace Strawberry
 			Entity = null;
 		}
 
-		public abstract void Started();
-		public abstract void Update();
-		public abstract void Draw();
+		public virtual void Started() { }
+		public virtual void Ended() { }
+		public virtual void Update() { }
+		public virtual void Draw() { }
 
 		[Inline]
 		public void RemoveSelf()
