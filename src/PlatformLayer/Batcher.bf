@@ -8,12 +8,27 @@ namespace Strawberry
 		protected List<Vertex> vertices = new .() ~ delete _;
 		protected List<uint32> indices = new .() ~ delete _;
 
+		public Mat4x4 Matrix;
+
+		public this()
+		{
+			Reset();
+		}
+
+		public void Reset()
+		{
+			Matrix = Game.PlatformLayer.ScreenMatrix;
+			batches.Clear();
+			vertices.Clear();
+			indices.Clear();
+		}
+
 		public abstract void Draw();
 
 		protected ref Batch GetBatch(BatchModes mode, Texture texture)
 		{
-			if (batches.Count == 0 || !batches.Back.Matches(mode, texture))
-				batches.Add(Batch(mode, texture, indices.Count));
+			if (batches.Count == 0 || !batches.Back.Matches(Matrix, mode, texture))
+				batches.Add(Batch(Matrix, mode, texture, indices.Count));
 			return ref batches.Back;
 		}
 

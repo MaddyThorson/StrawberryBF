@@ -3,6 +3,15 @@ namespace Strawberry
 {
 	public abstract class PlatformLayer
 	{
+		public Mat4x4 ScreenMatrix { get; private set; }
+
+		public void UpdateScreenMatrix()
+		{
+			ScreenMatrix = Mat4x4.CreateOrthographic(Game.Width, Game.Height * 0.5f, 0, 1)
+				* Mat4x4.CreateScale(.(1, -1, 1))
+				* Mat4x4.CreateTranslation(.(-1, 1, 0));
+		}
+
 		public abstract void Init();
 		public abstract bool Closed();			// Returns whether the game window has been closed
 

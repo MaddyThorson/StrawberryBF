@@ -154,12 +154,6 @@ namespace Strawberry.SDL2
 			GL.glClearColor(Game.ClearColor.Rf, Game.ClearColor.Gf, Game.ClearColor.Bf, Game.ClearColor.Af);
 			GL.glClear(GL.GL_COLOR_BUFFER_BIT | GL.GL_DEPTH_BUFFER_BIT);
 			GL.glUseProgram(glProgram);
-
-			Mat4x4 mat = Mat4x4.CreateOrthographic(Game.Width, Game.Height * 0.5f, 0, 1);
-			mat *= Mat4x4.CreateScale(.(1, -1, 1));
-			mat *= Mat4x4.CreateTranslation(.(-1, 1, 0));
-
-			GL.glUniformMatrix4fv(TransformMatrixLocation, 1, GL.GL_FALSE, &mat.Values);
 		}
 
 		public override void RenderEnd()

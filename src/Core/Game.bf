@@ -53,6 +53,7 @@ namespace Strawberry
 			Path.GetDirectoryPath(exePath, exeDir);
 			Directory.SetCurrentDirectory(exeDir);
 
+			platformLayer.UpdateScreenMatrix();
 			platformLayer.Init();
 			Batcher = platformLayer.CreateBatcher();
 

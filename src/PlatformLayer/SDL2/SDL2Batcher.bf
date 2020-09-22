@@ -45,8 +45,10 @@ namespace Strawberry.SDL2
 			GL.glBindBuffer(GL.GL_ELEMENT_ARRAY_BUFFER, indexBufferID);
 			GL.glBufferData(GL.GL_ELEMENT_ARRAY_BUFFER, indices.Count * sizeof(uint32), indices.Ptr, GL.GL_DYNAMIC_DRAW);
 
-			for (let b in batches)
+			for (var b in batches)
 			{
+				GL.glUniformMatrix4fv(platformLayer.TransformMatrixLocation, 1, GL.GL_FALSE, &b.Matrix.Values);
+
 				if (b.Mode == .Shape)
 					GL.glBindTexture(GL.GL_TEXTURE_2D, 0);
 				else
@@ -62,9 +64,7 @@ namespace Strawberry.SDL2
 			
 			GL.glBindVertexArray(0);
 
-			vertices.Clear();
-			indices.Clear();
-			batches.Clear();
+			Reset();
 		}
 
 		protected override void PushQuad(BatchModes mode, Texture texture, Vertex a, Vertex b, Vertex c, Vertex d)
