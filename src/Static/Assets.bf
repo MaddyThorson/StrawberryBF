@@ -14,6 +14,18 @@ namespace Strawberry
 		static public readonly String Root = "assets/";
 		#endif
 
+		static public String GetDir(String outStr, params String[] subDirectories)
+		{
+			outStr.Append(Root);
+			for (int i = 0; i < subDirectories.Count; i++)
+			{
+				outStr.Append(subDirectories[i]);
+				if (i < subDirectories.Count - 1)
+					outStr.Append(Path.DirectorySeparatorChar);
+			}
+			return outStr;
+		}
+
 		static public void LoadAll()
 		{
 			Textures = new Dictionary<String, Texture>();

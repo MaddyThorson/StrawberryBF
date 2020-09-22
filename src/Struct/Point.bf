@@ -2,7 +2,7 @@ using System;
 
 namespace Strawberry
 {
-	public struct Point
+	public struct Point : IHashable
 	{
 		static public readonly Point Right = .(1, 0);
 		static public readonly Point Left = .(-1, 0);
@@ -103,6 +103,11 @@ namespace Strawberry
 		static public Point operator*(Point a, Facings f)
 		{
 			return .(a.X * (int)f, a.Y);
+		}
+
+		public int GetHashCode()
+		{
+			return X + 9973 * Y;
 		}
 	}
 }
