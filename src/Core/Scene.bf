@@ -6,7 +6,6 @@ namespace Strawberry
 	public class Scene
 	{
 		public float TimeStarted { get; private set; }
-		public Rect Bounds;
 
 		private List<Entity> entities;
 		private HashSet<Entity> toRemove;

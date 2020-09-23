@@ -21,14 +21,22 @@ namespace Strawberry
 
 		//Move toward a target value without crossing it
 		[Inline]
-		static public float Approach(float value, float target, float maxDelta)
+		static public T Approach<T>(T value, T target, T maxDelta)
+			where bool : operator T < T
+			where bool : operator T > T
+			where T : operator T - T
+			where T : operator T + T
 		{
 			return value > target ? Math.Max(value - maxDelta, target) : Math.Min(value + maxDelta, target);
 		}
 
 		//Move toward a target value without crossing it
 		[Inline]
-		static public void Approach(float* value, float target, float maxDelta)
+		static public void Approach<T>(T* value, T target, T maxDelta)
+			where bool : operator T < T
+			where bool : operator T > T
+			where T : operator T - T
+			where T : operator T + T
 		{
 			*value = *value > target ? Math.Max(*value - maxDelta, target) : Math.Min(*value + maxDelta, target);
 		}
