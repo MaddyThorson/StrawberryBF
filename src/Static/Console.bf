@@ -229,7 +229,7 @@ namespace Strawberry
 				{
 					let name = scope String();
 					type.GetName(name);
-					let error = Calc.StringArgs("{0} type arguments not supported in commands.", scope Object[] { name });
+					let error = Calc.StringArgs("{0} type arguments not supported in commands.", scope Object[]({ name }));
 					Runtime.FatalError(error);
 				}
 				

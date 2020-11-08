@@ -560,7 +560,7 @@ namespace Strawberry
 			delete BlendModes;
 		}
 
-		private static readonly Blend[] BlendModes = new Blend[]
+		private static readonly Blend[] BlendModes = new Blend[](
 		{
 		    // 0 - NORMAL
 		    new (dest, index, src, opacity) =>
@@ -596,7 +596,7 @@ namespace Strawberry
 					dest[index + 3] = a;
 		        }
 		    }
-		};
+		});
 
 		[Inline]
 		private static int MUL_UN8(int a, int b)
