@@ -12,7 +12,7 @@ namespace Strawberry.Sample
 		public this(Point pos)
 			: base(pos)
 		{
-			Hitbox = Rect(-4, -8, 8, 8);
+			Hitbox = Rect(-4, -8, 16, 16);
 
 			Add(tJumpGrace = new Timer());
 			Add(tVarJump = new Timer());
@@ -102,8 +102,8 @@ namespace Strawberry.Sample
 		{
 			base.Draw();
 
-			DrawHitbox(.Green);
-			//Game.Batcher.Tex(Assets.Textures["test"], X - 4, Y - 8);
+			DrawHitboxOutline(.Green);
+			Game.Batcher.Tex(Assets.Textures["test"], X - 4, Y - 8);
 		}
 	}
 }
