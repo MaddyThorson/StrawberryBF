@@ -8,6 +8,7 @@ namespace Strawberry.Sample
 		static public int Main(String[] args)
 		{
 			let sdl = scope SDL2PlatformLayer();
+			sdl.TexturesEnableEdgeClamping = true;
 			let game = scope SampleGame(sdl);
 
 			game.Run();

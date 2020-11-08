@@ -69,10 +69,10 @@ namespace Strawberry
 		public void Tex(Texture texture, float x, float y)
 		{
 			PushQuad(.TextureTint, texture,
-				.Tex(.(x, y), .(0, 1), Color.White),
-				.Tex(.(x + texture.Width, y), .(1, 1), Color.White),
-				.Tex(.(x + texture.Width, y + texture.Height), .(1, 0), Color.White),
-				.Tex(.(x, y + texture.Height), .(0, 0), Color.White));
+				.Tex(.(x, y), .(0, 0), Color.White),
+				.Tex(.(x + texture.Width, y), .(1, 0), Color.White),
+				.Tex(.(x + texture.Width, y + texture.Height), .(1, 1), Color.White),
+				.Tex(.(x, y + texture.Height), .(0, 1), Color.White));
 		}
 	}
 }
