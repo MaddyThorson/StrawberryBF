@@ -238,6 +238,20 @@ namespace Strawberry
 			}
 		}
 
+		public Rect SceneHitboxOutline
+		{
+			[Inline]
+			get
+			{
+				Rect hb = Hitbox + Position;
+				hb.X -= 1;
+				hb.Y -= 1;
+				hb.Width += 2;
+				hb.Height += 2;
+				return hb;
+			}
+		}
+
 		public int Left
 		{
 			[Inline]
@@ -461,6 +475,11 @@ namespace Strawberry
 		public void DrawHitbox(Color color)
 		{
 			Game.Batcher.Rect(SceneHitbox, color);
+		}
+
+		public void DrawHitboxOutline(Color color)
+		{
+			Game.Batcher.Rect(SceneHitboxOutline, color);
 		}
 
 		public T SceneAs<T>() where T : Scene

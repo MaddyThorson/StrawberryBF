@@ -221,6 +221,7 @@ namespace Strawberry
         public const uint GL_TEXTURE_DEPTH = 0x8071;
         public const uint GL_TEXTURE_WRAP_R = 0x8072;
         public const uint GL_MAX_3D_TEXTURE_SIZE = 0x8073;
+        public const uint GL_GENERATE_MIPMAP = 0x8191;
         public const uint GL_UNSIGNED_BYTE_2_3_3_REV = 0x8362;
         public const uint GL_UNSIGNED_SHORT_5_6_5 = 0x8363;
         public const uint GL_UNSIGNED_SHORT_5_6_5_REV = 0x8364;
