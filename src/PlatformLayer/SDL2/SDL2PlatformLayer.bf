@@ -58,6 +58,10 @@ namespace Strawberry.SDL2
 				SDL.GL_SetSwapInterval(1);
 				GL.Init(=> SdlGetProcAddress);
 
+				//We need to activate this somehwere to make use of the alpha layer
+				GL.glEnable(GL.GL_BLEND);
+				GL.glBlendFunc(GL.GL_SRC_ALPHA, GL.GL_ONE_MINUS_SRC_ALPHA);
+				
 				shader = new Shader(String[2] (
 					// vertex shader
 					"""
