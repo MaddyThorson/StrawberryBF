@@ -34,7 +34,7 @@ namespace Strawberry
 
 		static public void DisposeAll()
 		{
-			DeleteDictionaryAndKeysAndItems!(Textures);
+			DeleteDictionaryAndKeysAndValues!(Textures);
 			Sprite.[Friend]Dispose();
 		}
 

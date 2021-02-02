@@ -96,7 +96,7 @@ namespace Strawberry
 		[Command("clear", "Clears the console window")]
 		static public void Clear()
 		{
-			DeleteAndClearItems!(messages);
+			ClearAndDeleteItems!(messages);
 		}
 
 		static private void Update()

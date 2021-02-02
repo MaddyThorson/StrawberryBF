@@ -171,7 +171,7 @@ namespace Strawberry
 		{
 			Scene?.Draw();
 
-			if (Console.Enabled)
+			if (Strawberry.Console.Enabled)
 				Strawberry.Console.[Friend]Draw();
 
 			Batcher.Draw();

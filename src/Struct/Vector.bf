@@ -74,6 +74,7 @@ namespace Strawberry
 			return Vector(a.X, a.Y);
 		}
 
+		[Commutable]
 		static public bool operator==(Vector a, Vector b)
 		{
 			return a.X == b.X && a.Y == b.Y;
