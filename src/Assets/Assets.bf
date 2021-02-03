@@ -7,6 +7,7 @@ namespace Strawberry
 	static public class Assets
 	{
 		static public Dictionary<String, Texture> Textures { get; private set; }
+		static public Dictionary<String, Sprite> Sprites { get; private set; }
 
 		#if DEBUG
 		static public readonly String Root = "../../../src/assets/";
@@ -28,13 +29,17 @@ namespace Strawberry
 
 		static public void LoadAll()
 		{
-			Textures = new Dictionary<String, Texture>();
+			Textures = new .();
 			Load<Texture>("textures", "*.png", Textures, (path) => Game.PlatformLayer.LoadTexture(path));
+
+			Sprites = new .();
+			Load<Sprite>("sprites", "*.ase", Sprites, (path) => { return new Sprite(new String(path)); });
 		}
 
 		static public void DisposeAll()
 		{
 			DeleteDictionaryAndKeysAndValues!(Textures);
+			DeleteDictionaryAndKeysAndValues!(Sprites);
 			Sprite.[Friend]Dispose();
 		}
 

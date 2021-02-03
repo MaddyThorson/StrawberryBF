@@ -18,7 +18,7 @@ namespace Strawberry
 		private List<Slice> slices;
 		private Modes mode;
 
-		private this(String path)
+		public this(String path)
 			: base(path)
 		{
 			Load();
