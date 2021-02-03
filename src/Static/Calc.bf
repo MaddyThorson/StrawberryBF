@@ -113,6 +113,7 @@ namespace Strawberry
 		static public void Log()
 		{
 			Debug.WriteLine("***");
+			System.Console.WriteLine("***");
 		}
 
 		[Inline]
@@ -120,7 +121,9 @@ namespace Strawberry
 		{
 			String string = scope String();
 			v.ToString(string);
+
 			Debug.WriteLine(string);
+			System.Console.WriteLine(string);
 		}
 
 		[Inline]
@@ -128,21 +131,27 @@ namespace Strawberry
 		{
 			String string = scope String();
 			del(string);
+
 			Debug.WriteLine(string);
+			System.Console.WriteLine(string);
 		}
 
 		[Inline]
 		static public void Log(StringView str, params Object[] args)
 		{
 			let string = StringArgs(scope String(str), params args);
+
 			Debug.WriteLine(string);
+			System.Console.WriteLine(string);
 		}
 
 		[Inline]
 		static public void Log(char8* str, int len)
 		{
 			String s = scope String(str, len);
+
 			Debug.WriteLine(s);
+			System.Console.WriteLine(s);
 		}
 	}
 }
