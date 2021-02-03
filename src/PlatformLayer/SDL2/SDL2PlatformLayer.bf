@@ -8,8 +8,8 @@ namespace Strawberry.SDL2
 	{
 		public int TransformMatrixLocation { get; private set; }
 		public int TextureMatrixLocation { get; private set; }
-		public bool TexturesEnableLinearFilter = false;
-		public bool TexturesEnableEdgeClamping = false;
+		public Texture.Filters TextureFilter = .Nearest;
+		public bool TextureClamping = false;
 
 		private SDL.Window* window;
 		private SDL.Surface* screen;
@@ -180,7 +180,7 @@ namespace Strawberry.SDL2
 			Debug.Assert(surface != null, "Could not load from path.");
 			Debug.Assert(surface.format.bytesPerPixel == 4, "Surface format incorrect.");
 
-			var tex = new Texture(surface.w, surface.h, (uint8*)surface.pixels, TexturesEnableLinearFilter, TexturesEnableEdgeClamping);
+			var tex = new Texture(surface.w, surface.h, (uint8*)surface.pixels, TextureFilter, TextureClamping);
 			SDL.FreeSurface(surface);
 
 			return tex;

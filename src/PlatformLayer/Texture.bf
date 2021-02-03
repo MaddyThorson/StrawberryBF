@@ -2,13 +2,15 @@ namespace Strawberry
 {
 	public class Texture
 	{
+		public enum Filters { Nearest, Linear }
+
 		public uint32 Handle { get; private set; }
 		public int Width { get; private set; }
 		public int Height { get; private set; }
 
 		private static int32 OGLMajorV = -1;
 
-		public this(int width, int height, uint8* pixels, bool indLinear, bool indClamp)
+		public this(int width, int height, uint8* pixels, Filters filter = .Nearest, bool clamp = false)
 		{
 			Width = width;
 			Height = height;
@@ -19,14 +21,20 @@ namespace Strawberry
 			GL.glGenTextures(1, &Handle);
 			GL.glBindTexture(GL.GL_TEXTURE_2D, Handle);
 
-			// (OPTIONAL) Set linear Mipmaps
-			if (indLinear) {
+			// Set Filter
+			switch (filter)
+			{
+			case .Nearest:
+				GL.glTexParameteri(GL.GL_TEXTURE_2D, GL.GL_TEXTURE_MAG_FILTER, GL.GL_NEAREST);
+				GL.glTexParameteri(GL.GL_TEXTURE_2D, GL.GL_TEXTURE_MIN_FILTER, GL.GL_NEAREST_MIPMAP_NEAREST);
+
+			case .Linear:
 				GL.glTexParameteri(GL.GL_TEXTURE_2D, GL.GL_TEXTURE_MAG_FILTER, GL.GL_LINEAR);
 				GL.glTexParameteri(GL.GL_TEXTURE_2D, GL.GL_TEXTURE_MIN_FILTER, GL.GL_LINEAR_MIPMAP_LINEAR);
 			}
 			
-			// (OPTIONAL) Apply edge clamping
-			if (indClamp) {
+			// Edge Clamp
+			if (clamp) {
 				GL.glTexParameteri(GL.GL_TEXTURE_2D, GL.GL_TEXTURE_WRAP_S, GL.GL_CLAMP_TO_EDGE);
 				GL.glTexParameteri(GL.GL_TEXTURE_2D, GL.GL_TEXTURE_WRAP_T, GL.GL_CLAMP_TO_EDGE);
 			}
