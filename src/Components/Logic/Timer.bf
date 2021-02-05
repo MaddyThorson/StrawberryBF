@@ -3,35 +3,27 @@ using System.Diagnostics;
 
 namespace Strawberry
 {
-	public class Timer : Component
+	public class Timer : Component, IUpdate
 	{
 		private float value;
 
 		public Action OnComplete ~ delete _;
 		public bool RemoveOnComplete;
 
-		public this()
-			: base(false, false)
-		{
-			
-		}
-
 		public this(Action onComplete, bool destroyOnComplete = false)
-			: base(false, false)
 		{
 			OnComplete = onComplete;
 			RemoveOnComplete = destroyOnComplete;
 		}
 
 		public this(float value, Action onComplete, bool destroyOnComplete = false)
-			: base(false, false)
 		{
 			Value = value;
 			OnComplete = onComplete;
 			RemoveOnComplete = destroyOnComplete;
 		}
 
-		public override void Update()
+		public void Update()
 		{
 			if (value > 0)
 			{
@@ -39,8 +31,6 @@ namespace Strawberry
 				if (value <= 0)
 				{
 					value = 0;
-					Active = false;
-
 					OnComplete?.Invoke();
 					if (RemoveOnComplete)
 						RemoveSelf();
@@ -60,7 +50,6 @@ namespace Strawberry
 			set
 			{
 				this.value = Math.Max(0, value);
-				Active = (this.value > 0);
 			}
 		}
 
@@ -68,7 +57,6 @@ namespace Strawberry
 		public void Clear()
 		{
 			value = 0;
-			Active = false;
 		}
 
 		static public implicit operator bool(Timer timer)

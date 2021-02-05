@@ -25,8 +25,6 @@ namespace Strawberry
 		private Scene scene;
 		private Scene switchToScene;
 		private bool updating;
-		private Dictionary<Type, List<Type>> entityAssignableLists;
-		private Dictionary<Type, List<Type>> componentAssignableLists;
 
 		public PlatformLayer PlatformLayer { get; private set; }
 		public Batcher Batcher { get; private set; }
@@ -60,9 +58,9 @@ namespace Strawberry
 			VirtualInputs = new List<VirtualInput>();
 			Input.[Friend]Init();
 
-			BuildTypeLists();
+			Tracker.[Friend]BuildAssignmentLists();
 			Assets.LoadAll();
-			Strawberry.Console.Init();
+			Strawberry.StrwConsole.Init();
 		}
 
 		public ~this()
@@ -83,9 +81,8 @@ namespace Strawberry
 			}
 
 			Assets.DisposeAll();
-			DisposeTypeLists();
 			Input.[Friend]Dispose();
-			Strawberry.Console.Dispose();
+			Strawberry.StrwConsole.Dispose();
 
 			delete Batcher;
 
@@ -157,7 +154,7 @@ namespace Strawberry
 				Time.Elapsed += Time.Delta;
 			}
 
-			Strawberry.Console.[Friend]Update();
+			Strawberry.StrwConsole.[Friend]Update();
 		}
 
 		private void Render()
@@ -171,8 +168,8 @@ namespace Strawberry
 		{
 			Scene?.Draw();
 
-			if (Strawberry.Console.Enabled)
-				Strawberry.Console.[Friend]Draw();
+			if (Strawberry.StrwConsole.Enabled)
+				Strawberry.StrwConsole.[Friend]Draw();
 
 			Batcher.Draw();
 		}
@@ -190,58 +187,6 @@ namespace Strawberry
 					delete switchToScene;
 				switchToScene = value;
 			}
-		}
-
-		// Type assignable caching
-
-		private void BuildTypeLists()
-		{
-			/*
-				For each Type that extends Entity, we build a list of all the other Entity Types that it is assignable to.
-				We cache these lists, and use them later to bucket Entities as they are added to the Scene.
-				This allows us to retrieve Entities by type very easily.
-			*/
-
-			entityAssignableLists = new Dictionary<Type, List<Type>>();
-			for (let type in Type.Enumerator())
-			{	
-				if (type != typeof(Entity) && type.IsSubtypeOf(typeof(Entity)))
-				{
-					let list = new List<Type>();
-					for (let check in Type.Enumerator())
-						if (check != typeof(Entity) && check.IsSubtypeOf(typeof(Entity)) && type.IsSubtypeOf(check))
-							list.Add(check);
-					entityAssignableLists.Add(type, list);
-				}
-			}
-
-			/*
-				And then we also do this for components
-			*/
-
-			componentAssignableLists = new Dictionary<Type, List<Type>>();
-			for (let type in Type.Enumerator())
-			{	
-				if (type != typeof(Component) && type.IsSubtypeOf(typeof(Component)))
-				{
-					let list = new List<Type>();
-					for (let check in Type.Enumerator())
-						if (check != typeof(Component) && check.IsSubtypeOf(typeof(Component)) && type.IsSubtypeOf(check))
-							list.Add(check);
-					componentAssignableLists.Add(type, list);
-				}
-			}
-		}
-
-		private void DisposeTypeLists()
-		{
-			for (let list in entityAssignableLists.Values)
-				delete list;
-			delete entityAssignableLists;
-
-			for (let list in componentAssignableLists.Values)
-				delete list;
-			delete componentAssignableLists;
 		}
 	}
 }

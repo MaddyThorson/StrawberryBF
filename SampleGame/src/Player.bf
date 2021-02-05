@@ -2,7 +2,7 @@ using System;
 
 namespace Strawberry.Sample
 {
-	public class Player	: Actor
+	public class Player	: Component, IUpdate
 	{
 		public Vector Speed;
 
@@ -18,10 +18,8 @@ namespace Strawberry.Sample
 			Add(tVarJump = new Timer());
 		}
 
-		public override void Update()
+		public void Update()
 		{
-			base.Update();
-
 			const float coyoteTime = 0.1f;		// Time after leaving a ledge when you can still jump
 			const float varJumpTime = 0.2f;		// Time after jumping that you can hold the jump button to continue gaining upward speed
 			const float jumpSpeed = -160;

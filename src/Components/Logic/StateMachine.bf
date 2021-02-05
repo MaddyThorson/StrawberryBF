@@ -4,7 +4,7 @@ using System.Diagnostics;
 
 namespace Strawberry
 {
-	public class StateMachine<TIndex> : Component where TIndex : struct, IHashable
+	public class StateMachine<TIndex> : Component, IUpdate where TIndex : struct, IHashable
 	{
 		private Dictionary<TIndex, State> states = new Dictionary<TIndex, State>() ~ delete _;
 		private TIndex state;
@@ -14,7 +14,6 @@ namespace Strawberry
 		public TIndex NextState { get; private set; }
 
 		public this(TIndex startState)
-			: base(true, false)
 		{
 			NextState = PreviousState = state = startState;
 		}
@@ -30,7 +29,7 @@ namespace Strawberry
 			CallEnter();
 		}
 
-		public override void Update()
+		public void Update()
 		{
 			CallUpdate();
 		}

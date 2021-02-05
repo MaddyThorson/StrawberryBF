@@ -19,7 +19,7 @@ namespace Strawberry
 	}
 
 	[Reflect]
-	static public class Console
+	static public class StrwConsole
 	{
 		static public bool Open;
 

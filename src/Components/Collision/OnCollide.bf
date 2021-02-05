@@ -1,14 +1,16 @@
 using System.Collections;
 namespace Strawberry
 {
-	public class OnCollide<T> : Component where T : Entity
+	public class OnCollide<T> : Component, IHasHitbox, IUpdate where T : Component, IHasHitbox
 	{
+		public Hitbox Hitbox { get; private set; }
+
 		// Takes as parameter the T collided with. Return false to stop checking for collisions until next frame.
 		public delegate bool(T) Action;
 
-		public this(delegate bool(T) action)
-			: base(true, false)
+		public this(Hitbox hitbox, delegate bool(T) action)
 		{
+			Hitbox = hitbox;
 			Action = action;
 		}
 
@@ -17,13 +19,13 @@ namespace Strawberry
 			delete Action;
 		}
 
-		public override void Update()
+		public void Update()
 		{
 			if (Action != null)
 			{
 				let list = Entity.Scene.All<T>(scope List<T>());
 				for (let t in list)
-					if (Entity.Check(t) && !Action(t))
+					if (Hitbox.Check(t) && !Action(t))
 						break;
 			}
 		}

@@ -1,33 +1,42 @@
 using System;
 namespace Strawberry
 {
-	public class Tween : Component
+	public class Tween : Component, IUpdate
 	{
 		public Ease.Easer Easer ~ delete _;
 		public delegate void(float) OnUpdate ~ delete _;
 		public delegate void() OnComplete ~ delete _;
 		public bool RemoveOnComplete;
 
+		public bool Playing { get; private set; }
 		public float T { get; private set; }
 
 		public this(Ease.Easer easer = null, delegate void(float) onUpdate = null, delegate void() onComplete = null, bool removeOnComplete = true, bool start = true)
-			: base(start, false)
 		{
+			Playing = start;
 			Easer = easer;
 			OnUpdate = onUpdate;
 			OnComplete = onComplete;
 			RemoveOnComplete = removeOnComplete;
 		}
 
+		[Inline]
 		public float Eased => Easer != null ? Easer(T) : T;
 
+		[Inline]
 		public void Play()
 		{
 			T = 0;
-			Active = true;
+			Playing = true;
 		}
 
-		public override void Update()
+		[Inline]
+		public void Stop()
+		{
+			Playing = false;
+		}
+
+		public void Update()
 		{
 			T = Math.Min(T + Time.Delta, 1);
 			OnUpdate?.Invoke(Eased);
@@ -35,7 +44,7 @@ namespace Strawberry
 			if (T >= 1)
 			{
 				OnComplete?.Invoke();
-				Active = false;
+				Playing = false;
 				if (RemoveOnComplete)
 					RemoveSelf();
 			}

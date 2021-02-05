@@ -10,7 +10,6 @@ namespace Strawberry
 		private List<Entity> entities;
 		private HashSet<Entity> toRemove;
 		private HashSet<Entity> toAdd;
-		private Dictionary<Type, List<Entity>> entityTracker;
 		private Dictionary<Type, List<Component>> componentTracker;
 
 		public this()
@@ -19,12 +18,10 @@ namespace Strawberry
 			toAdd = new HashSet<Entity>();
 			toRemove = new HashSet<Entity>();
 
-			entityTracker = new Dictionary<Type, List<Entity>>();
-			for (let type in Game.[Friend]entityAssignableLists.Keys)
-				entityTracker.Add(type, new List<Entity>());
-
 			componentTracker = new Dictionary<Type, List<Component>>();
-			for (let type in Game.[Friend]componentAssignableLists.Keys)
+			for (let type in Tracker.AssignmentLists.Keys)
+				componentTracker.Add(type, new List<Component>());
+			for (let type in Tracker.Interfaces)
 				componentTracker.Add(type, new List<Component>());
 		}
 
@@ -42,10 +39,6 @@ namespace Strawberry
 
 			delete toRemove;
 
-			for (let list in entityTracker.Values)
-				delete list;
-			delete entityTracker;
-
 			for (let list in componentTracker.Values)
 				delete list;
 			delete componentTracker;
@@ -59,26 +52,23 @@ namespace Strawberry
 		public virtual void Update()
 		{
 			UpdateLists();
-			for (let e in entities)
-				if (e.Active)
-					e.Update();
+
+			
 		}
 
 		public virtual void Draw()
 		{
-			for (let e in entities)
-				if (e.Visible)
-					e.Draw();
+			
 		}
 
-		public T Add<T>(T e) where T : Entity
+		public Entity Add(Entity e)
 		{
 			if (e.Scene == null)
 				toAdd.Add(e);
 			return e;
 		}
 
-		public T Remove<T>(T e) where T : Entity
+		public Entity Remove(Entity e)
 		{
 			if (e.Scene == this)
 				toRemove.Add(e);
@@ -92,7 +82,6 @@ namespace Strawberry
 				for (let e in toRemove)
 				{
 					entities.Remove(e);
-					UntrackEntity(e);
 					e.[Friend]Removed();
 					if (e.DeleteOnRemove)
 						delete e;
@@ -106,11 +95,8 @@ namespace Strawberry
 				for (let e in toAdd)
 				{
 					entities.Add(e);
-					TrackEntity(e);
 					e.[Friend]Added(this);
 				}
-
-				entities.Sort(scope => Entity.Compare);
 			}
 
 			for (let e in entities)
@@ -126,33 +112,15 @@ namespace Strawberry
 
 		// Tracking
 
-		private void TrackEntity(Entity e)
-		{
-			for (let t in Game.[Friend]entityAssignableLists[e.GetType()])
-				entityTracker[t].Add(e);
-
-			for (let c in e.[Friend]components)
-				TrackComponent(c);
-		}
-
-		private void UntrackEntity(Entity e)
-		{
-			for (let t in Game.[Friend]entityAssignableLists[e.GetType()])
-				entityTracker[t].Remove(e);
-
-			for (let c in e.[Friend]components)
-				UntrackComponent(c);
-		}
-
 		private void TrackComponent(Component c)
 		{
-			for (let t in Game.[Friend]componentAssignableLists[c.GetType()])
+			for (let t in Tracker.AssignmentLists[c.GetType()])
 				componentTracker[t].Add(c);
 		}
 
 		private void UntrackComponent(Component c)
 		{
-			for (let t in Game.[Friend]componentAssignableLists[c.GetType()])
+			for (let t in Tracker.AssignmentLists[c.GetType()])
 				componentTracker[t].Remove(c);
 		}
 
@@ -171,75 +139,6 @@ namespace Strawberry
 			return (TimeElapsed - offset) % (interval * 2) >= interval;
 		}
 
-		// Finding Entities
-
-		public int Count<T>() where T : Entity
-		{
-			return entityTracker[typeof(T)].Count;
-		}
-
-		public bool Check<T>(Point point) where T : Entity
-		{
-			for (let e in entityTracker[typeof(T)])
-				if (e.Check(point))
-					return true;
-			return false;
-		}
-
-		public bool Check<T>(Rect rect) where T : Entity
-		{
-			for (let e in entityTracker[typeof(T)])
-				if (e.Check(rect))
-					return true;
-			return false;
-		}
-
-		public T First<T>() where T : Entity
-		{
-			for (let e in entityTracker[typeof(T)])
-				return e as T;
-			return null;
-		}
-
-		public T First<T>(Point point) where T : Entity
-		{
-			for (let e in entityTracker[typeof(T)])
-				if (e.Check(point))
-					return e as T;
-			return null;
-		}
-
-		public T First<T>(Rect rect) where T : Entity
-		{
-			for (let e in entityTracker[typeof(T)])
-				if (e.Check(rect))
-					return e as T;
-			return null;
-		}
-
-		public List<T> All<T>(List<T> into) where T : Entity
-		{
-			for (let e in entityTracker[typeof(T)])
-				into.Add(e as T);
-			return into;
-		}
-
-		public List<T> All<T>(Point point, List<T> into) where T : Entity
-		{
-			for (let e in entityTracker[typeof(T)])
-				if (e.Check(point))
-					into.Add(e as T);
-			return into;
-		}
-
-		public List<T> All<T>(Rect rect, List<T> into) where T : Entity
-		{
-			for (let e in entityTracker[typeof(T)])
-				if (e.Check(rect))
-					into.Add(e as T);
-			return into;
-		}
-
 		/*
 			Finding Components
 		*/
@@ -249,25 +148,64 @@ namespace Strawberry
 			return componentTracker[typeof(T)].Count;
 		}
 
-		public List<T> All<T>(List<T> into) where T : Component
+		public bool Check<T>(Point point) where T : Component, IHasHitbox
 		{
-			for (let c in componentTracker[typeof(T)])
+			for (T c in componentTracker[typeof(T)])
+				if (c.Hitbox.Check(point))
+					return true;
+			return false;
+		}
+
+		public bool Check<T>(Rect rect) where T : Component, IHasHitbox
+		{
+			for (T c in componentTracker[typeof(T)])
+				if (c.Hitbox.Check(rect))
+					return true;
+			return false;
+		}
+
+		public T First<T>() where T : Component, IHasHitbox
+		{
+			for (T c in componentTracker[typeof(T)])
+				return c;
+			return null;
+		}
+
+		public T First<T>(Point point) where T : Component, IHasHitbox
+		{
+			for (T c in componentTracker[typeof(T)])
+				if (c.Hitbox.Check(point))
+					return c as T;
+			return null;
+		}
+
+		public T First<T>(Rect rect) where T : Component, IHasHitbox
+		{
+			for (T c in componentTracker[typeof(T)])
+				if (c.Hitbox.Check(rect))
+					return c as T;
+			return null;
+		}
+
+		public List<T> All<T>(List<T> into) where T : Component, IHasHitbox
+		{
+			for (T c in componentTracker[typeof(T)])
 				into.Add(c as T);
 			return into;
 		}
 
-		public List<T> All<T>(Point point, List<T> into) where T : Component
+		public List<T> All<T>(Point point, List<T> into) where T : Component, IHasHitbox
 		{
-			for (let c in componentTracker[typeof(T)])
-				if (c.Entity.Check(point))
+			for (T c in componentTracker[typeof(T)])
+				if (c.Hitbox.Check(point))
 					into.Add(c as T);
 			return into;
 		}
 
-		public List<T> All<T>(Rect rect, List<T> into) where T : Component
+		public List<T> All<T>(Rect rect, List<T> into) where T : Component, IHasHitbox
 		{
-			for (let c in componentTracker[typeof(T)])
-				if (c.Entity.Check(rect))
+			for (T c in componentTracker[typeof(T)])
+				if (c.Hitbox.Check(rect))
 					into.Add(c as T);
 			return into;
 		}

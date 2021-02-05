@@ -143,9 +143,14 @@ namespace Strawberry
 			return p.X >= 0 && p.Y >= 0 && p.X < CellsX && p.Y < CellsY;
 		}
 
-		public bool Check(Entity entity)
+		public bool Check(Hitbox hitbox)
 		{
-			return Check(entity.SceneHitbox);
+			return Check(hitbox.SceneHitbox);
+		}
+
+		public bool Check(IHasHitbox other)
+		{
+			return Check(other.Hitbox.SceneHitbox);
 		}
 
 		public bool Check(Rect rect)
