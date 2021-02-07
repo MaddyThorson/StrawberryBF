@@ -62,7 +62,9 @@ namespace Strawberry
 			Scene?.Remove(this);
 		}
 
-		// ===== Components =====
+		/*
+			Components
+		*/
 
 		public T First<T>() where T : Component
 		{
@@ -132,7 +134,9 @@ namespace Strawberry
 			}
 		}
 
-		// ===== Position =====
+		/*
+			Position
+		*/
 
 		public Vector Positionf;
 
@@ -186,7 +190,7 @@ namespace Strawberry
 			[Inline]
 			get
 			{
-				return (int)Math.Round(Positionf.X);
+				return Calc.RoundToInt(Positionf.X);
 			}
 
 			[Inline]
@@ -201,7 +205,7 @@ namespace Strawberry
 			[Inline]
 			get
 			{
-				return (int)Math.Round(Positionf.Y);
+				return Calc.RoundToInt(Positionf.Y);
 			}
 
 			[Inline]
