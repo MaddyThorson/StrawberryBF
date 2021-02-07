@@ -8,6 +8,16 @@ namespace Strawberry
 		public bool Collidable = true;
 		public Rect Rect;
 
+		public this(Rect rect)
+		{
+			Rect = rect;
+		}
+
+		public this(int x, int y, int width, int height)
+		{
+			Rect = .(x, y, width, height);
+		}
+
 		public void DebugDraw()
 		{
 			Game.Batcher.Rect(SceneHitbox, .Red);
@@ -116,52 +126,62 @@ namespace Strawberry
 			Single Collisions
 		*/
 
+		[Inline]
 		public bool Check(Point point)
 		{
 			return SceneHitbox.Contains(point);
 		}
 
+		[Inline]
 		public bool Check(Rect rect)
 		{
 			return SceneHitbox.Intersects(rect);
 		}
 
+		[Inline]
 		public bool Check(Grid grid)
 		{
 			return grid != null && grid.Check(SceneHitbox);
 		}
 
+		[Inline]
 		public bool Check(Grid grid, Point offset)
 		{
 			return grid != null && grid.Check(SceneHitbox + offset);
 		}
 
+		[Inline]
 		public bool Check(Hitbox other)
 		{
 			return other.Collidable && SceneHitbox.Intersects(other.SceneHitbox);
 		}
 
+		[Inline]
 		public bool Check(Hitbox other, Point offset)
 		{
 			return other.Collidable && (SceneHitbox + offset).Intersects(other.SceneHitbox);
 		}
 
+		[Inline]
 		public bool CheckOutside(Hitbox other, Point offset)
 		{
 			return other.Collidable && !SceneHitbox.Intersects(other.SceneHitbox) && (SceneHitbox + offset).Intersects(other.SceneHitbox);
 		}
 
-		public bool Check<T>(T other) where T : Component, IHasHitbox
+		[Inline]
+		public bool Check(IHasHitbox other)
 		{
 			return Check(other.Hitbox);
 		}
 
-		public bool Check<T>(T other, Point offset) where T : Component, IHasHitbox
+		[Inline]
+		public bool Check(IHasHitbox other, Point offset)
 		{
 			return Check(other.Hitbox, offset);
 		}
 
-		public bool CheckOutside<T>(T other, Point offset) where T : Component, IHasHitbox
+		[Inline]
+		public bool CheckOutside(IHasHitbox other, Point offset)
 		{
 			return CheckOutside(other.Hitbox, offset);
 		}

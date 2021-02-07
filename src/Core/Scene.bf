@@ -7,18 +7,13 @@ namespace Strawberry
 	{
 		public float TimeStarted { get; private set; }
 
-		private List<Entity> entities;
-		private HashSet<Entity> toRemove;
-		private HashSet<Entity> toAdd;
-		private Dictionary<Type, List<Component>> componentTracker;
+		private List<Entity> entities = new .() ~ delete _;
+		private HashSet<Entity> toRemove = new .() ~ delete _;
+		private HashSet<Entity> toAdd = new .() ~ delete _;
+		private Dictionary<Type, List<Component>> componentTracker = new .() ~ DeleteDictionaryAndValues!(_);
 
 		public this()
 		{
-			entities = new List<Entity>();
-			toAdd = new HashSet<Entity>();
-			toRemove = new HashSet<Entity>();
-
-			componentTracker = new Dictionary<Type, List<Component>>();
 			for (let type in Tracker.AssignmentLists.Keys)
 				componentTracker.Add(type, new List<Component>());
 			for (let type in Tracker.Interfaces)
@@ -30,18 +25,10 @@ namespace Strawberry
 			for (var e in entities)
 				if (e.DeleteOnRemove)
 					delete e;
-			delete entities;
 
 			for (var e in toAdd)
 				if (e.DeleteOnRemove)
 					delete e;
-			delete toAdd;
-
-			delete toRemove;
-
-			for (let list in componentTracker.Values)
-				delete list;
-			delete componentTracker;
 		}
 
 		public virtual void Started()
@@ -51,15 +38,19 @@ namespace Strawberry
 
 		public virtual void Update()
 		{
+			ForEach<IUpdate>(scope (u) => u.Update());
+			ForEach<ILateUpdate>(scope (u) => u.LateUpdate());
 			UpdateLists();
-
-			
 		}
 
 		public virtual void Draw()
 		{
-			
+			ForEach<IDraw>(scope (d) => d.Draw());
 		}
+
+		/*
+			Entities
+		*/
 
 		public Entity Add(Entity e)
 		{
@@ -106,7 +97,9 @@ namespace Strawberry
 				e.[Friend]AwakeCheck();
 		}
 
-		// Tracking
+		/*
+			Tracking
+		*/
 
 		private void TrackComponent(Component c)
 		{
@@ -120,7 +113,9 @@ namespace Strawberry
 				componentTracker[t].Remove(c);
 		}
 
-		// Time
+		/*
+			Time
+		*/
 
 		public float TimeElapsed =>	Time.Elapsed - TimeStarted;
 		public float PreviousTimeElapsed =>	Time.PreviousElapsed - TimeStarted;
@@ -262,6 +257,22 @@ namespace Strawberry
 				if (c.Hitbox.Check(rect) && condition(c))
 					into.Add(c as T);
 			return into;
+		}
+
+		public void ForEach<T>(delegate void(T) action) where T : interface
+		{
+			List<Component> list;
+			if (componentTracker.TryGetValue(typeof(T), out list))
+				for (let c in list)
+					action(c as T);
+		}
+
+		public void ForEach<T>(delegate void(T) action) where T : Component
+		{
+			List<Component> list;
+			if (componentTracker.TryGetValue(typeof(T), out list))
+				for (T c in list)
+					action(c);
 		}
 	}
 }
