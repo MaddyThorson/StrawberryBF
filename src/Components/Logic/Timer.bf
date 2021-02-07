@@ -10,7 +10,7 @@ namespace Strawberry
 		public Action OnComplete ~ delete _;
 		public bool RemoveOnComplete;
 
-		public this(Action onComplete, bool destroyOnComplete = false)
+		public this(Action onComplete = null, bool destroyOnComplete = false)
 		{
 			OnComplete = onComplete;
 			RemoveOnComplete = destroyOnComplete;
