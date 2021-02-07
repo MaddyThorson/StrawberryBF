@@ -38,6 +38,7 @@ namespace Strawberry
 
 		public virtual void Update()
 		{
+			ForEach<IEarlyUpdate>(scope (u) => u.EarlyUpdate());
 			ForEach<IUpdate>(scope (u) => u.Update());
 			ForEach<ILateUpdate>(scope (u) => u.LateUpdate());
 			UpdateLists();
