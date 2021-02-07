@@ -37,6 +37,7 @@ namespace Strawberry
 			{
 				c.End();
 				c.[Friend]IsAwake = false;
+				Scene.[Friend]UntrackComponent(c);
 			}
 			Scene = null;
 			IsAwake = false;
