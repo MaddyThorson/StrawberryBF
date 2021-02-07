@@ -19,6 +19,12 @@ namespace Strawberry
 		    return (bits & (1 << pos)) != 0;
 		}
 
+		[Inline]
+		static public int RoundToInt(float f)
+		{
+			return (int)Math.Round(f);
+		}
+
 		//Move toward a target value without crossing it
 		[Inline]
 		static public T Approach<T>(T value, T target, T maxDelta)

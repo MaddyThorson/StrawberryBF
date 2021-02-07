@@ -298,7 +298,7 @@ namespace Strawberry
 		public bool Check<T>(delegate bool(T) condition) where T : Component, IHasHitbox
 		{
 			for (var e in Scene.All<T>(scope List<T>()))
-				if (condition(e) && Check(e.Hitbox))
+				if (Check(e.Hitbox) && condition(e))
 					return true;
 
 			return false;
@@ -307,7 +307,7 @@ namespace Strawberry
 		public bool Check<T>(Point offset, delegate bool(T) condition) where T : Component, IHasHitbox
 		{
 			for (var e in Scene.All<T>(scope List<T>()))
-				if (condition(e) && Check(e.Hitbox, offset))
+				if (Check(e.Hitbox, offset) && condition(e))
 					return true;
 
 			return false;
@@ -316,7 +316,7 @@ namespace Strawberry
 		public bool CheckOutside<T>(Point offset, delegate bool(T) condition) where T : Component, IHasHitbox
 		{
 			for (var e in Scene.All<T>(scope List<T>()))
-				if (condition(e) && CheckOutside(e.Hitbox, offset))
+				if (CheckOutside(e.Hitbox, offset) && condition(e))
 					return true;
 
 			return false;
@@ -325,7 +325,7 @@ namespace Strawberry
 		public T First<T>(delegate bool(T) condition) where T : Component, IHasHitbox
 		{
 			for (var e in Scene.All<T>(scope List<T>()))
-				if (condition(e) && Check(e.Hitbox))
+				if (Check(e.Hitbox) && condition(e))
 					return e;
 
 			return null;
@@ -334,7 +334,7 @@ namespace Strawberry
 		public T First<T>(Point offset, delegate bool(T) condition) where T : Component, IHasHitbox
 		{
 			for (var e in Scene.All<T>(scope List<T>()))
-				if (condition(e) && Check(e.Hitbox, offset))
+				if (Check(e.Hitbox, offset) && condition(e))
 					return e;
 
 			return null;
@@ -343,56 +343,16 @@ namespace Strawberry
 		public T FirstOutside<T>(Point offset, delegate bool(T) condition) where T : Component, IHasHitbox
 		{
 			for (var e in Scene.All<T>(scope List<T>()))
-				if (condition(e) && CheckOutside(e.Hitbox, offset))
+				if (CheckOutside(e.Hitbox, offset) && condition(e))
 					return e;
 
 			return null;
 		}
 
-		public T LeftmostOutside<T>(Point offset, delegate bool(T) condition) where T : Component, IHasHitbox
-		{
-			T ret = null;
-			for (var e in Scene.All<T>(scope List<T>()))
-				if (condition(e) && CheckOutside(e.Hitbox, offset) && (ret == null || e.Hitbox.Left < ret.Hitbox.Left))
-					ret = e;
-
-			return ret;
-		}
-
-		public T RightmostOutside<T>(Point offset, delegate bool(T) condition) where T : Component, IHasHitbox
-		{
-			T ret = null;
-			for (var e in Scene.All<T>(scope List<T>()))
-				if (condition(e) && CheckOutside(e.Hitbox, offset) && (ret == null || e.Hitbox.Right > ret.Hitbox.Right))
-					ret = e;
-
-			return ret;
-		}
-
-		public T TopmostOutside<T>(Point offset, delegate bool(T) condition) where T : Component, IHasHitbox
-		{
-			T ret = null;
-			for (var e in Scene.All<T>(scope List<T>()))
-				if (condition(e) && CheckOutside(e.Hitbox, offset) && (ret == null || e.Hitbox.Top < ret.Hitbox.Top))
-					ret = e;
-
-			return ret;
-		}
-
-		public T BottommostOutside<T>(Point offset, delegate bool(T) condition) where T : Component, IHasHitbox
-		{
-			T ret = null;
-			for (var e in Scene.All<T>(scope List<T>()))
-				if (condition(e) && CheckOutside(e.Hitbox, offset) && (ret == null || e.Hitbox.Bottom > ret.Hitbox.Bottom))
-					ret = e;
-
-			return ret;
-		}
-
 		public List<T> All<T>(List<T> into, delegate bool(T) condition) where T : Component, IHasHitbox
 		{
 			for (var e in Scene.All<T>(scope List<T>()))
-				if (condition(e) && Check(e.Hitbox))
+				if (Check(e.Hitbox) && condition(e))
 					into.Add(e);
 
 			return into;
@@ -401,7 +361,7 @@ namespace Strawberry
 		public List<T> All<T>(Point offset, List<T> into, delegate bool(T) condition) where T : Component, IHasHitbox
 		{
 			for (var e in Scene.All<T>(scope List<T>()))
-				if (condition(e) && Check(e.Hitbox, offset))
+				if (Check(e.Hitbox, offset) && condition(e))
 					into.Add(e);
 
 			return into;
@@ -410,7 +370,7 @@ namespace Strawberry
 		public List<T> AllOutside<T>(Point offset, List<T> into, delegate bool(T) condition) where T : Component, IHasHitbox
 		{
 			for (var e in Scene.All<T>(scope List<T>()))
-				if (condition(e) && CheckOutside(e.Hitbox, offset))
+				if (CheckOutside(e.Hitbox, offset) && condition(e))
 					into.Add(e);
 
 			return into;

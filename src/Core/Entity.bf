@@ -64,6 +64,22 @@ namespace Strawberry
 
 		// ===== Components =====
 
+		public T First<T>() where T : Component
+		{
+			for (let c in components)
+				if (c is T)
+					return c as T;
+			return null;
+		}
+
+		public List<T> All<T>(List<T> into) where T : Component
+		{
+			for (let c in components)
+				if (c is T)
+					into.Add(c as T);
+			return into;
+		}
+
 		public T Add<T>(T component) where T : Component
 		{
 			if (component.Entity == null)

@@ -204,7 +204,7 @@ namespace Strawberry
 		public T First<T>(Point point, delegate bool(T) condition) where T : Component, IHasHitbox
 		{
 			for (T c in componentTracker[typeof(T)])
-				if (condition(c) && c.Hitbox.Check(point))
+				if (c.Hitbox.Check(point) && condition(c))
 					return c as T;
 			return null;
 		}
@@ -220,7 +220,7 @@ namespace Strawberry
 		public T First<T>(Rect rect, delegate bool(T) condition) where T : Component, IHasHitbox
 		{
 			for (T c in componentTracker[typeof(T)])
-				if (condition(c) && c.Hitbox.Check(rect))
+				if (c.Hitbox.Check(rect) && condition(c))
 					return c as T;
 			return null;
 		}
@@ -251,7 +251,7 @@ namespace Strawberry
 		public List<T> All<T>(Point point, List<T> into, delegate bool(T) condition) where T : Component, IHasHitbox
 		{
 			for (T c in componentTracker[typeof(T)])
-				if (condition(c) && c.Hitbox.Check(point))
+				if (c.Hitbox.Check(point) && condition(c))
 					into.Add(c as T);
 			return into;
 		}
@@ -259,7 +259,7 @@ namespace Strawberry
 		public List<T> All<T>(Rect rect, List<T> into, delegate bool(T) condition) where T : Component, IHasHitbox
 		{
 			for (T c in componentTracker[typeof(T)])
-				if (condition(c) && c.Hitbox.Check(rect))
+				if (c.Hitbox.Check(rect) && condition(c))
 					into.Add(c as T);
 			return into;
 		}
