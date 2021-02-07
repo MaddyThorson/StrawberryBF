@@ -57,9 +57,6 @@ namespace Strawberry
 
 				AssignmentLists.Add(type, list);
 			}
-
-			Calc.Log(scope => GetTrackedInterfacesInfo);
-			Calc.Log(scope => GetTrackedTypesInfo);
 		}
 
 		static public void GetTrackedInterfacesInfo(String buffer)

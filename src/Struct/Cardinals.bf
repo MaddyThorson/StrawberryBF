@@ -47,6 +47,9 @@ namespace Strawberry
 			}
 		}
 
+		public bool IsHorizontal => this == .Right || this == .Left;
+		public bool IsVertical => this == .Down || this == .Up;
+
 		public Cardinals Opposite()
 		{
 			switch (this)
