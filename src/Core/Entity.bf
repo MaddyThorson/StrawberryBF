@@ -6,6 +6,7 @@ namespace Strawberry
 	public sealed class Entity
 	{
 		public Scene Scene { get; private set; }
+		public bool IsAwake { get; private set; }
 		public bool DeleteOnRemove = true;
 
 		private List<Component> components = new List<Component>() ~ delete _;
@@ -32,20 +33,27 @@ namespace Strawberry
 
 		private void Removed()
 		{
-			Ended();
+			for (var c in components)
+			{
+				c.End();
+				c.[Friend]IsAwake = false;
+			}
 			Scene = null;
+			IsAwake = false;
 		}
 
-		public void Started()
+		private void AwakeCheck()
 		{
 			for (var c in components)
-				c.Started();
-		}
+			{
+				if (!c.[Friend]IsAwake)
+				{
+					c.Awake();
+					c.[Friend]IsAwake = true;
+				}
+			}
 
-		public void Ended()
-		{
-			for (var c in components)
-				c.Ended();
+			IsAwake = true;
 		}
 
 		[Inline]
@@ -78,7 +86,7 @@ namespace Strawberry
 				{
 					components.Remove(c);
 					Scene.[Friend]UntrackComponent(c);
-					c.[Friend]Removed();
+					c.[Friend]Entity = null;
 					delete c;
 				}
 
@@ -91,7 +99,17 @@ namespace Strawberry
 				{
 					components.Add(c);
 					Scene.[Friend]TrackComponent(c);
-					c.[Friend]Added(this);
+					c.[Friend]Entity = this;
+					c.Added();
+				}
+
+				if (IsAwake)
+				{
+					for (var c in toAdd)
+					{
+						c.Awake();
+						c.[Friend]IsAwake = true;
+					}
 				}
 
 				toAdd.Clear();

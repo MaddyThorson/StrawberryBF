@@ -112,7 +112,9 @@ namespace Strawberry
 			}
 		}
 
-		// ===== Collisions =====
+		/*
+			Single Collisions
+		*/
 
 		public bool Check(Point point)
 		{
@@ -163,6 +165,10 @@ namespace Strawberry
 		{
 			return CheckOutside(other.Hitbox, offset);
 		}
+
+		/*
+			Type Collisions
+		*/
 
 		public bool Check<T>() where T : Component, IHasHitbox
 		{
@@ -280,6 +286,131 @@ namespace Strawberry
 		{
 			for (var e in Scene.All<T>(scope List<T>()))
 				if (CheckOutside(e.Hitbox, offset))
+					into.Add(e);
+
+			return into;
+		}
+
+		/*
+			Type Collision w/ Conditions
+		*/
+
+		public bool Check<T>(delegate bool(T) condition) where T : Component, IHasHitbox
+		{
+			for (var e in Scene.All<T>(scope List<T>()))
+				if (condition(e) && Check(e.Hitbox))
+					return true;
+
+			return false;
+		}
+
+		public bool Check<T>(Point offset, delegate bool(T) condition) where T : Component, IHasHitbox
+		{
+			for (var e in Scene.All<T>(scope List<T>()))
+				if (condition(e) && Check(e.Hitbox, offset))
+					return true;
+
+			return false;
+		}
+
+		public bool CheckOutside<T>(Point offset, delegate bool(T) condition) where T : Component, IHasHitbox
+		{
+			for (var e in Scene.All<T>(scope List<T>()))
+				if (condition(e) && CheckOutside(e.Hitbox, offset))
+					return true;
+
+			return false;
+		}
+
+		public T First<T>(delegate bool(T) condition) where T : Component, IHasHitbox
+		{
+			for (var e in Scene.All<T>(scope List<T>()))
+				if (condition(e) && Check(e.Hitbox))
+					return e;
+
+			return null;
+		}
+
+		public T First<T>(Point offset, delegate bool(T) condition) where T : Component, IHasHitbox
+		{
+			for (var e in Scene.All<T>(scope List<T>()))
+				if (condition(e) && Check(e.Hitbox, offset))
+					return e;
+
+			return null;
+		}
+
+		public T FirstOutside<T>(Point offset, delegate bool(T) condition) where T : Component, IHasHitbox
+		{
+			for (var e in Scene.All<T>(scope List<T>()))
+				if (condition(e) && CheckOutside(e.Hitbox, offset))
+					return e;
+
+			return null;
+		}
+
+		public T LeftmostOutside<T>(Point offset, delegate bool(T) condition) where T : Component, IHasHitbox
+		{
+			T ret = null;
+			for (var e in Scene.All<T>(scope List<T>()))
+				if (condition(e) && CheckOutside(e.Hitbox, offset) && (ret == null || e.Hitbox.Left < ret.Hitbox.Left))
+					ret = e;
+
+			return ret;
+		}
+
+		public T RightmostOutside<T>(Point offset, delegate bool(T) condition) where T : Component, IHasHitbox
+		{
+			T ret = null;
+			for (var e in Scene.All<T>(scope List<T>()))
+				if (condition(e) && CheckOutside(e.Hitbox, offset) && (ret == null || e.Hitbox.Right > ret.Hitbox.Right))
+					ret = e;
+
+			return ret;
+		}
+
+		public T TopmostOutside<T>(Point offset, delegate bool(T) condition) where T : Component, IHasHitbox
+		{
+			T ret = null;
+			for (var e in Scene.All<T>(scope List<T>()))
+				if (condition(e) && CheckOutside(e.Hitbox, offset) && (ret == null || e.Hitbox.Top < ret.Hitbox.Top))
+					ret = e;
+
+			return ret;
+		}
+
+		public T BottommostOutside<T>(Point offset, delegate bool(T) condition) where T : Component, IHasHitbox
+		{
+			T ret = null;
+			for (var e in Scene.All<T>(scope List<T>()))
+				if (condition(e) && CheckOutside(e.Hitbox, offset) && (ret == null || e.Hitbox.Bottom > ret.Hitbox.Bottom))
+					ret = e;
+
+			return ret;
+		}
+
+		public List<T> All<T>(List<T> into, delegate bool(T) condition) where T : Component, IHasHitbox
+		{
+			for (var e in Scene.All<T>(scope List<T>()))
+				if (condition(e) && Check(e.Hitbox))
+					into.Add(e);
+
+			return into;
+		}
+
+		public List<T> All<T>(Point offset, List<T> into, delegate bool(T) condition) where T : Component, IHasHitbox
+		{
+			for (var e in Scene.All<T>(scope List<T>()))
+				if (condition(e) && Check(e.Hitbox, offset))
+					into.Add(e);
+
+			return into;
+		}
+
+		public List<T> AllOutside<T>(Point offset, List<T> into, delegate bool(T) condition) where T : Component, IHasHitbox
+		{
+			for (var e in Scene.All<T>(scope List<T>()))
+				if (condition(e) && CheckOutside(e.Hitbox, offset))
 					into.Add(e);
 
 			return into;

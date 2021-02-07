@@ -49,6 +49,11 @@ namespace Strawberry
 			Rect(rect.X, rect.Y, rect.Width, rect.Height, color);
 		}
 
+		public void Pixel(int x, int y, Color color)
+		{
+			Rect(x, y, 1, 1, color);
+		}
+
 		public void Tri(Vector a, Vector b, Vector c, Color color)
 		{
 			PushTri(.Shape, null,

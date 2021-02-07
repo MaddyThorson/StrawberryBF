@@ -97,17 +97,13 @@ namespace Strawberry
 					entities.Add(e);
 					e.[Friend]Added(this);
 				}
+				toAdd.Clear();
 			}
 
 			for (let e in entities)
 				e.[Friend]UpdateLists();
-
-			if (toAdd.Count > 0)
-			{
-				for (let e in toAdd)
-					e.Started();
-				toAdd.Clear();
-			}
+			for (let e in entities)
+				e.[Friend]AwakeCheck();
 		}
 
 		// Tracking
@@ -148,6 +144,24 @@ namespace Strawberry
 			return componentTracker[typeof(T)].Count;
 		}
 
+		public int Count<T>(delegate bool(T) condition) where T : Component
+		{
+			int count = 0;
+			for (T c in componentTracker[typeof(T)])
+				if (condition(c))
+					count++;
+			return count;
+		}
+
+		public bool Check<T>(delegate bool(T) condition) where T : Component
+		{
+			for (T c in componentTracker[typeof(T)])
+				if (condition(c))
+					return true;
+			return false;
+		}
+
+
 		public bool Check<T>(Point point) where T : Component, IHasHitbox
 		{
 			for (T c in componentTracker[typeof(T)])
@@ -164,10 +178,18 @@ namespace Strawberry
 			return false;
 		}
 
-		public T First<T>() where T : Component, IHasHitbox
+		public T First<T>() where T : Component
 		{
 			for (T c in componentTracker[typeof(T)])
 				return c;
+			return null;
+		}
+
+		public T First<T>(delegate bool(T) condition) where T : Component
+		{
+			for (T c in componentTracker[typeof(T)])
+				if (condition(c))
+					return c;
 			return null;
 		}
 
@@ -175,6 +197,14 @@ namespace Strawberry
 		{
 			for (T c in componentTracker[typeof(T)])
 				if (c.Hitbox.Check(point))
+					return c as T;
+			return null;
+		}
+
+		public T First<T>(Point point, delegate bool(T) condition) where T : Component, IHasHitbox
+		{
+			for (T c in componentTracker[typeof(T)])
+				if (condition(c) && c.Hitbox.Check(point))
 					return c as T;
 			return null;
 		}
@@ -187,10 +217,26 @@ namespace Strawberry
 			return null;
 		}
 
-		public List<T> All<T>(List<T> into) where T : Component, IHasHitbox
+		public T First<T>(Rect rect, delegate bool(T) condition) where T : Component, IHasHitbox
+		{
+			for (T c in componentTracker[typeof(T)])
+				if (condition(c) && c.Hitbox.Check(rect))
+					return c as T;
+			return null;
+		}
+
+		public List<T> All<T>(List<T> into) where T : Component
 		{
 			for (T c in componentTracker[typeof(T)])
 				into.Add(c as T);
+			return into;
+		}
+
+		public List<T> All<T>(List<T> into, delegate bool(T) condition) where T : Component
+		{
+			for (T c in componentTracker[typeof(T)])
+				if (condition(c))
+					into.Add(c as T);
 			return into;
 		}
 
@@ -202,10 +248,18 @@ namespace Strawberry
 			return into;
 		}
 
-		public List<T> All<T>(Rect rect, List<T> into) where T : Component, IHasHitbox
+		public List<T> All<T>(Point point, List<T> into, delegate bool(T) condition) where T : Component, IHasHitbox
 		{
 			for (T c in componentTracker[typeof(T)])
-				if (c.Hitbox.Check(rect))
+				if (condition(c) && c.Hitbox.Check(point))
+					into.Add(c as T);
+			return into;
+		}
+
+		public List<T> All<T>(Rect rect, List<T> into, delegate bool(T) condition) where T : Component, IHasHitbox
+		{
+			for (T c in componentTracker[typeof(T)])
+				if (condition(c) && c.Hitbox.Check(rect))
 					into.Add(c as T);
 			return into;
 		}

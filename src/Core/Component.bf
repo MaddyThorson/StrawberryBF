@@ -5,19 +5,11 @@ namespace Strawberry
 	public abstract class Component
 	{
 		public Entity Entity { get; private set; }
+		public bool IsAwake { get; private set; }
 
-		private void Added(Entity entity)
-		{
-			Entity = entity;
-		}
-
-		private void Removed()
-		{
-			Entity = null;
-		}
-
-		public virtual void Started() { }
-		public virtual void Ended() { }
+		public virtual void Added() { }
+		public virtual void Awake() { }
+		public virtual void End() { }
 
 		[Inline]
 		public void RemoveSelf()
