@@ -6,7 +6,7 @@ namespace Strawberry
 		public Ease.Easer Easer ~ delete _;
 		public delegate void(float) OnUpdate ~ delete _;
 		public delegate void() OnComplete ~ delete _;
-		public bool RemoveOnComplete;
+		public bool DestroyOnComplete;
 
 		public bool Playing { get; private set; }
 		public float T { get; private set; }
@@ -17,7 +17,7 @@ namespace Strawberry
 			Easer = easer;
 			OnUpdate = onUpdate;
 			OnComplete = onComplete;
-			RemoveOnComplete = removeOnComplete;
+			DestroyOnComplete = removeOnComplete;
 		}
 
 		[Inline]
@@ -45,8 +45,8 @@ namespace Strawberry
 			{
 				OnComplete?.Invoke();
 				Playing = false;
-				if (RemoveOnComplete)
-					RemoveSelf();
+				if (DestroyOnComplete)
+					Destroy();
 			}
 		}
 	}

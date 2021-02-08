@@ -12,9 +12,9 @@ namespace Strawberry
 		public virtual void End() { }
 
 		[Inline]
-		public void RemoveSelf()
+		public void Destroy()
 		{
-			Entity?.Remove(this);
+			Entity.Destroy();
 		}
 
 		[Inline]

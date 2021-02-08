@@ -58,7 +58,7 @@ namespace Strawberry
 		}
 
 		[Inline]
-		public void RemoveSelf()
+		public void Destroy()
 		{
 			Scene?.Remove(this);
 		}

@@ -33,7 +33,7 @@ namespace Strawberry
 					value = 0;
 					OnComplete?.Invoke();
 					if (RemoveOnComplete)
-						RemoveSelf();
+						Entity.Remove(this);
 				}
 			}
 		}

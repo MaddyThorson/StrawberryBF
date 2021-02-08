@@ -46,7 +46,7 @@ namespace Strawberry
 			[Inline]
 			get 
 			{
-				return contents[x, y];
+				return contents[Math.Clamp(x, 0, CellsX - 1), Math.Clamp(y, 0, CellsY - 1)];
 			}
 
 			[Inline]
@@ -61,13 +61,13 @@ namespace Strawberry
 			[Inline]
 			get 
 			{
-				return contents[p.X, p.Y];
+				return this[p.X, p.Y];
 			}
 
 			[Inline]
 			set
 			{
-				contents[p.X, p.Y] = value;
+				this[p.X, p.Y] = value;
 			}
 		}
 
@@ -169,130 +169,18 @@ namespace Strawberry
 				for (int y = from.Y; y < to.Y; y++)
 				{
 					let p = Point(x, y);
-					if (IsInBounds(p) && this[p] != '0')
+					if (this[p] != '0')
 						return true;
 				}
 			}
 
-			return false;
-		}
-
-		public bool CheckTop(Rect rect, out int top)
-		{
-			Point from = .(
-				(int)Math.Floor((rect.X - Offset.X) / (float)CellSize.X),
-				(int)Math.Floor((rect.Y - Offset.Y) / (float)CellSize.Y)
-			);
-			Point to = .(
-				(int)Math.Ceiling((rect.Right - Offset.X) / (float)CellSize.X),
-				(int)Math.Ceiling((rect.Bottom - Offset.Y) / (float)CellSize.Y)
-			);
-
-			for (int y = from.Y; y < to.Y; y++)
-			{
-				for (int x = from.X; x < to.X; x++)
-				{
-					let p = Point(x, y);
-					if (IsInBounds(p) && this[p] != '0')
-					{
-						top = Offset.Y + y * CellSize.Y;
-						return true;
-					}
-				}
-			}
-
-			top = 0;
-			return false;
-		}
-
-		public bool CheckBottom(Rect rect, out int bottom)
-		{
-			Point from = .(
-				(int)Math.Floor((rect.X - Offset.X) / (float)CellSize.X),
-				(int)Math.Floor((rect.Y - Offset.Y) / (float)CellSize.Y)
-			);
-			Point to = .(
-				(int)Math.Ceiling((rect.Right - Offset.X) / (float)CellSize.X),
-				(int)Math.Ceiling((rect.Bottom - Offset.Y) / (float)CellSize.Y)
-			);
-
-			for (int y = to.Y - 1; y >= from.Y; y--)
-			{
-				for (int x = from.X; x < to.X; x++)
-				{
-					let p = Point(x, y);
-					if (IsInBounds(p) && this[p] != '0')
-					{
-						bottom = Offset.Y + (y + 1) * CellSize.Y;
-						return true;
-					}
-				}
-			}
-
-			bottom = 0;
-			return false;
-		}
-
-		public bool CheckLeft(Rect rect, out int left)
-		{
-			Point from = .(
-				(int)Math.Floor((rect.X - Offset.X) / (float)CellSize.X),
-				(int)Math.Floor((rect.Y - Offset.Y) / (float)CellSize.Y)
-			);
-			Point to = .(
-				(int)Math.Ceiling((rect.Right - Offset.X) / (float)CellSize.X),
-				(int)Math.Ceiling((rect.Bottom - Offset.Y) / (float)CellSize.Y)
-			);
-
-			for (int x = from.X; x < to.X; x++)
-			{
-				for (int y = from.Y; y < to.Y; y++)
-				{
-					let p = Point(x, y);
-					if (IsInBounds(p) && this[p] != '0')
-					{
-						left = Offset.X + x * CellSize.X;
-						return true;
-					}
-				}
-			}
-
-			left = 0;
-			return false;
-		}
-
-		public bool CheckRight(Rect rect, out int right)
-		{
-			Point from = .(
-				(int)Math.Floor((rect.X - Offset.X) / (float)CellSize.X),
-				(int)Math.Floor((rect.Y - Offset.Y) / (float)CellSize.Y)
-			);
-			Point to = .(
-				(int)Math.Ceiling((rect.Right - Offset.X) / (float)CellSize.X),
-				(int)Math.Ceiling((rect.Bottom - Offset.Y) / (float)CellSize.Y)
-			);
-
-			for (int x = to.X - 1; x >= from.X; x--)
-			{
-				for (int y = from.Y; y < to.Y; y++)
-				{
-					let p = Point(x, y);
-					if (IsInBounds(p) && this[p] != '0')
-					{
-						right = Offset.X + (x + 1) * CellSize.X;
-						return true;
-					}
-				}
-			}
-
-			right = 0;
 			return false;
 		}
 
 		public bool Check(Point point)
 		{
 			Point check = (point - Offset) / CellSize;
-			return IsInBounds(check) && this[check] != '0';
+			return this[check] != '0';
 		}
 
 		public void Draw(Color color)
