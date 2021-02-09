@@ -15,12 +15,12 @@ namespace Strawberry
 			Offset = offset;
 		}
 
-		public Point DrawPosition => Entity.Position + Offset - Origin;
+		public Point DrawPosition => Entity.Position + Offset;
 
 		public void Draw()
 		{
 			if (Texture != null)
-				Game.Batcher.Tex(Texture, DrawPosition);
+				Game.Batcher.Tex(Texture, DrawPosition, Origin, Scale, Rotation);
 		}
 	}
 }

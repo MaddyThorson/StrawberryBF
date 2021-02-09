@@ -102,12 +102,16 @@ namespace Strawberry
 
 		public void Tex(Texture texture, Vector pos, Vector origin, Vector scale, float rotation)
 		{
-			//TODO!
+			Mat3x2 mat = Mat3x2.CreateTranslation(-origin)
+				* Mat3x2.CreateScale(scale)
+				* Mat3x2.CreateRotation(rotation)
+				* Mat3x2.CreateTranslation(pos);
+
 			PushQuad(.TextureTint, texture,
-				.Tex(.(pos.X, pos.Y), .(0, 0), Color.White),
-				.Tex(.(pos.X + texture.Width, pos.Y), .(1, 0), Color.White),
-				.Tex(.(pos.X + texture.Width, pos.Y + texture.Height), .(1, 1), Color.White),
-				.Tex(.(pos.X, pos.Y + texture.Height), .(0, 1), Color.White));
+				.Tex(.(0, 0) * mat, .(0, 0), Color.White),
+				.Tex(.(texture.Width, 0) * mat, .(1, 0), Color.White),
+				.Tex(.(texture.Width, texture.Height) * mat, .(1, 1), Color.White),
+				.Tex(.(0, texture.Height) * mat, .(0, 1), Color.White));
 		}
 	}
 }
