@@ -33,19 +33,25 @@ namespace Strawberry
 
 		}
 
+		[Inline]
 		public Point Perpendicular()
 		{
 			return .(-Y, X);
 		}
 
+		[Inline]
 		public float Length => Math.Sqrt(LengthSquared);
+
+		[Inline]
 		public int LengthSquared => X * X + Y * Y;
 
+		[Inline]
 		public Vector Normalized()
 		{
 			return ((Vector)this).Normalized();
 		}
 
+		[Inline]
 		public override void ToString(String strBuffer)
 		{
 			strBuffer.Set("Point [ ");
@@ -55,56 +61,73 @@ namespace Strawberry
 			strBuffer.Append(" ]");
 		}
 
+		[Inline]
 		static public explicit operator Point(Vector a)
 		{
 			return Point((int)a.X, (int)a.Y);
 		}
 
+		[Inline]
 		static public implicit operator SDL2.SDL.Point(Point a)
 		{
 			return .((int32)a.X, (int32)a.Y);
 		}
 
+		[Inline]
 		static public bool operator==(Point a, Point b)
 		{
 			return a.X == b.X && a.Y == b.Y;
 		}
 
+		[Inline]
 		static public Point operator+(Point a, Point b)
 		{
 			return Point(a.X + b.X, a.Y + b.Y);
 		}
 
+		[Inline]
 		static public Point operator-(Point a, Point b)
 		{
 			return Point(a.X - b.X, a.Y - b.Y);
 		}
 
+		[Inline, Commutable]
 		static public Point operator*(Point a, int b)
 		{
 			return Point(a.X * b, a.Y * b);
 		}
 
+		[Inline]
 		static public Point operator*(Point a, Point b)
 		{
 			return Point(a.X * b.X, a.Y * b.Y);
 		}
 
+		[Inline]
 		static public Point operator/(Point a, int b)
 		{
 			return Point(a.X / b, a.Y / b);
 		}
 
+		[Inline]
 		static public Point operator/(Point a, Point b)
 		{
 			return Point(a.X / b.X, a.Y / b.Y);
 		}
 
+		[Inline, Commutable]
 		static public Point operator*(Point a, Facings f)
 		{
 			return .(a.X * (int)f, a.Y);
 		}
 
+		[Inline]
+		static public Point operator-(Point p)
+		{
+			return .(-p.X, -p.Y);
+		}
+
+		[Inline]
 		public int GetHashCode()
 		{
 			return X + 9973 * Y;

@@ -1,4 +1,5 @@
 using System.Collections;
+using System.Diagnostics;
 
 namespace Strawberry
 {
@@ -7,8 +8,9 @@ namespace Strawberry
 		protected List<Batch> batches = new .() ~ delete _;
 		protected List<Vertex> vertices = new .() ~ delete _;
 		protected List<uint32> indices = new .() ~ delete _;
+		private List<Mat4x4> matrixStack = new .(20) ~ delete _;
 
-		public Mat4x4 Matrix;
+		public Mat4x4 Matrix => matrixStack.Back;
 
 		public this()
 		{
@@ -17,10 +19,28 @@ namespace Strawberry
 
 		public void Reset()
 		{
-			Matrix = Game.PlatformLayer.ScreenMatrix;
+			ClearMatrix();
+
 			batches.Clear();
 			vertices.Clear();
 			indices.Clear();
+		}
+
+		public void ClearMatrix()
+		{
+			matrixStack.Clear();
+			matrixStack.Add(Game.PlatformLayer.ScreenMatrix);
+		}
+
+		public void PushMatrix(Mat4x4 mat)
+		{
+			matrixStack.Add(mat * matrixStack.Back);
+		}
+
+		public void PopMatrix()
+		{
+			Debug.Assert(matrixStack.Count > 0, "Cannot pop the Matrix Stack when it is empty");
+			matrixStack.PopBack();
 		}
 
 		public abstract void Draw();
@@ -71,13 +91,23 @@ namespace Strawberry
 				.Shape(d, color)); 
 		}
 
-		public void Tex(Texture texture, float x, float y)
+		public void Tex(Texture texture, Vector pos)
 		{
 			PushQuad(.TextureTint, texture,
-				.Tex(.(x, y), .(0, 0), Color.White),
-				.Tex(.(x + texture.Width, y), .(1, 0), Color.White),
-				.Tex(.(x + texture.Width, y + texture.Height), .(1, 1), Color.White),
-				.Tex(.(x, y + texture.Height), .(0, 1), Color.White));
+				.Tex(.(pos.X, pos.Y), .(0, 0), Color.White),
+				.Tex(.(pos.X + texture.Width, pos.Y), .(1, 0), Color.White),
+				.Tex(.(pos.X + texture.Width, pos.Y + texture.Height), .(1, 1), Color.White),
+				.Tex(.(pos.X, pos.Y + texture.Height), .(0, 1), Color.White));
+		}
+
+		public void Tex(Texture texture, Vector pos, Vector origin, Vector scale, float rotation)
+		{
+			//TODO!
+			PushQuad(.TextureTint, texture,
+				.Tex(.(pos.X, pos.Y), .(0, 0), Color.White),
+				.Tex(.(pos.X + texture.Width, pos.Y), .(1, 0), Color.White),
+				.Tex(.(pos.X + texture.Width, pos.Y + texture.Height), .(1, 1), Color.White),
+				.Tex(.(pos.X, pos.Y + texture.Height), .(0, 1), Color.White));
 		}
 	}
 }
