@@ -5,6 +5,7 @@ namespace Strawberry
 {
 	static public class Calc
 	{
+		public const float Pi		= Math.PI_f;
 		public const float Circle 	= Math.PI_f * 2;
 		public const float Right 	= 0;
 		public const float Left 	= Math.PI_f;
