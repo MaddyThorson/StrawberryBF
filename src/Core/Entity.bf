@@ -75,7 +75,7 @@ namespace Strawberry
 			return null;
 		}
 
-		public List<T> All<T>(List<T> into) where T : Component
+		public ICollection<T> All<T>(ICollection<T> into) where T : Component
 		{
 			for (let c in components)
 				if (c is T)
