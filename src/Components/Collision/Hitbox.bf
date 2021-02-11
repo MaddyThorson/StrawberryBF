@@ -62,6 +62,10 @@ namespace Strawberry
 			}
 		}
 
+		/*
+			Edges
+		*/
+
 		public int Left
 		{
 			[Inline]
@@ -119,6 +123,184 @@ namespace Strawberry
 			set
 			{
 				Entity.Y = value - Rect.Bottom;
+			}
+		}
+
+		public int CenterX
+		{
+			[Inline]
+			get
+			{
+				return Entity.X + Rect.X + Rect.Width / 2;
+			}
+
+			[Inline]
+			set
+			{
+				Entity.X = value - (Rect.X + Rect.Width / 2);
+			}
+		}
+
+		public int CenterY
+		{
+			[Inline]
+			get
+			{
+				return Entity.Y + Rect.Y + Rect.Height / 2;
+			}
+
+			[Inline]
+			set
+			{
+				Entity.Y = value - (Rect.Y + Rect.Height / 2);
+			}
+		}
+
+		/*
+			Points
+		*/
+
+		public Point TopLeft
+		{
+			[Inline]
+			get
+			{
+				return .(Left, Top);
+			}
+
+			[Inline]
+			set
+			{
+				Left = value.X;
+				Top = value.Y;
+			}
+		}
+
+		public Point TopCenter
+		{
+			[Inline]
+			get
+			{
+				return .(CenterX, Top);
+			}
+
+			[Inline]
+			set
+			{
+				CenterX = value.X;
+				Top = value.Y;
+			}
+		}
+
+		public Point TopRight
+		{
+			[Inline]
+			get
+			{
+				return .(Right, Top);
+			}
+
+			[Inline]
+			set
+			{
+				Right = value.X;
+				Top = value.Y;
+			}
+		}
+
+		public Point CenterLeft
+		{
+			[Inline]
+			get
+			{
+				return .(Left, CenterY);
+			}
+
+			[Inline]
+			set
+			{
+				Left = value.X;
+				CenterY = value.Y;
+			}
+		}
+
+		public Point Center
+		{
+			[Inline]
+			get
+			{
+				return .(CenterX, CenterY);
+			}
+
+			[Inline]
+			set
+			{
+				CenterX = value.X;
+				CenterY = value.Y;
+			}
+		}
+
+		public Point CenterRight
+		{
+			[Inline]
+			get
+			{
+				return .(Right, CenterY);
+			}
+
+			[Inline]
+			set
+			{
+				Right = value.X;
+				CenterY = value.Y;
+			}
+		}
+
+		public Point BottomLeft
+		{
+			[Inline]
+			get
+			{
+				return .(Left, Bottom);
+			}
+
+			[Inline]
+			set
+			{
+				Left = value.X;
+				Bottom = value.Y;
+			}
+		}
+
+		public Point BottomCenter
+		{
+			[Inline]
+			get
+			{
+				return .(CenterX, Bottom);
+			}
+
+			[Inline]
+			set
+			{
+				CenterX = value.X;
+				Bottom = value.Y;
+			}
+		}
+
+		public Point BottomRight
+		{
+			[Inline]
+			get
+			{
+				return .(Right, Bottom);
+			}
+
+			[Inline]
+			set
+			{
+				Right = value.X;
+				Bottom = value.Y;
 			}
 		}
 
@@ -242,46 +424,6 @@ namespace Strawberry
 					return e;
 
 			return null;
-		}
-
-		public T LeftmostOutside<T>(Point offset) where T : Component, IHasHitbox
-		{
-			T ret = null;
-			for (var e in Scene.All<T>(scope List<T>()))
-				if (CheckOutside(e.Hitbox, offset) && (ret == null || e.Hitbox.Left < ret.Hitbox.Left))
-					ret = e;
-
-			return ret;
-		}
-
-		public T RightmostOutside<T>(Point offset) where T : Component, IHasHitbox
-		{
-			T ret = null;
-			for (var e in Scene.All<T>(scope List<T>()))
-				if (CheckOutside(e.Hitbox, offset) && (ret == null || e.Hitbox.Right > ret.Hitbox.Right))
-					ret = e;
-
-			return ret;
-		}
-
-		public T TopmostOutside<T>(Point offset) where T : Component, IHasHitbox
-		{
-			T ret = null;
-			for (var e in Scene.All<T>(scope List<T>()))
-				if (CheckOutside(e.Hitbox, offset) && (ret == null || e.Hitbox.Top < ret.Hitbox.Top))
-					ret = e;
-
-			return ret;
-		}
-
-		public T BottommostOutside<T>(Point offset) where T : Component, IHasHitbox
-		{
-			T ret = null;
-			for (var e in Scene.All<T>(scope List<T>()))
-				if (CheckOutside(e.Hitbox, offset) && (ret == null || e.Hitbox.Bottom > ret.Hitbox.Bottom))
-					ret = e;
-
-			return ret;
 		}
 
 		public List<T> All<T>(List<T> into) where T : Component, IHasHitbox
