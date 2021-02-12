@@ -1,3 +1,4 @@
+using System;
 namespace Strawberry
 {
 	public enum Facings
@@ -19,6 +20,18 @@ namespace Strawberry
 				return ifZero;
 			else
 				return i;
+		}
+
+		[Inline, Commutable]
+		static public int operator*(Facings a, int b)
+		{
+			return b * (int)a;
+		}
+
+		[Inline, Commutable]
+		static public float operator*(Facings a, float b)
+		{
+			return b * (int)a;
 		}
 
 		static public implicit operator Facings(int i)
