@@ -22,6 +22,14 @@ namespace Strawberry
 			Height = height;
 		}
 
+		public this(Point pos, int width, int height)
+		{
+			X = pos.X;
+			Y = pos.Y;
+			Width = width;
+			Height = height;
+		}
+
 		public this(JSON json)
 			: this(json["x"], json["y"], json["width"], json["height"])
 		{

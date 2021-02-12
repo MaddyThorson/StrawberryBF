@@ -147,6 +147,18 @@ namespace Strawberry
 		}
 
 		[Inline, Commutable]
+		static public Vector operator*(Vector a, int b)
+		{
+			return .(a.X * b, a.Y * b);
+		}
+
+		[Inline, Commutable]
+		static public Vector operator/(Vector a, int b)
+		{
+			return .(a.X / b, a.Y / b);
+		}
+
+		[Inline, Commutable]
 		static public Vector operator*(Vector a, float b)
 		{
 			return .(a.X * b, a.Y * b);
@@ -156,6 +168,12 @@ namespace Strawberry
 		static public Vector operator/(Vector a, float b)
 		{
 			return .(a.X / b, a.Y / b);
+		}
+
+		[Inline, Commutable]
+		static public Vector operator*(Vector a, Facings f)
+		{
+			return .(a.X * (int)f, a.Y);
 		}
 
 		[Inline]

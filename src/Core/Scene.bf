@@ -166,10 +166,26 @@ namespace Strawberry
 			return false;
 		}
 
+		public bool Check<T>(Point point, delegate bool(T) condition) where T : Component, IHasHitbox
+		{
+			for (T c in componentTracker[typeof(T)])
+				if (c.Hitbox.Check(point) && condition(c))
+					return true;
+			return false;
+		}
+
 		public bool Check<T>(Rect rect) where T : Component, IHasHitbox
 		{
 			for (T c in componentTracker[typeof(T)])
 				if (c.Hitbox.Check(rect))
+					return true;
+			return false;
+		}
+
+		public bool Check<T>(Rect rect, delegate bool(T) condition) where T : Component, IHasHitbox
+		{
+			for (T c in componentTracker[typeof(T)])
+				if (c.Hitbox.Check(rect) && condition(c))
 					return true;
 			return false;
 		}
