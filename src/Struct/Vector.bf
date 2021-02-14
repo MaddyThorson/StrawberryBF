@@ -50,6 +50,9 @@ namespace Strawberry
 		public float LengthSquared => X * X + Y * Y;
 
 		[Inline]
+		public float Angle => Math.Atan2(Y, X);
+
+		[Inline]
 		public Point Round()
 		{
 			return .((int)Math.Round(X), (int)Math.Round(Y));
@@ -65,6 +68,12 @@ namespace Strawberry
 		public Vector Transform(Mat4x4 mat)
 		{
 			return Transform(this, mat);
+		}
+
+		[Inline]
+		static public Vector FromAngle(float radians)
+		{
+			return .(Math.Cos(radians), Math.Sin(radians));
 		}
 
 		[Inline]

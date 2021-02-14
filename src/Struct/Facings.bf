@@ -6,6 +6,9 @@ namespace Strawberry
 		case Right = 1;
 		case Left = -1;
 
+		[Inline]
+		public float Angle => this == .Right ? Calc.Right : Calc.Left;
+
 		public Facings Opposite()
 		{
 			if (this == .Right)

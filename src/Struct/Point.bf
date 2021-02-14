@@ -64,7 +64,7 @@ namespace Strawberry
 		[Inline]
 		static public explicit operator Point(Vector a)
 		{
-			return Point((int)a.X, (int)a.Y);
+			return .((int)a.X, (int)a.Y);
 		}
 
 		[Inline]
@@ -82,37 +82,49 @@ namespace Strawberry
 		[Inline]
 		static public Point operator+(Point a, Point b)
 		{
-			return Point(a.X + b.X, a.Y + b.Y);
+			return .(a.X + b.X, a.Y + b.Y);
 		}
 
 		[Inline]
 		static public Point operator-(Point a, Point b)
 		{
-			return Point(a.X - b.X, a.Y - b.Y);
+			return .(a.X - b.X, a.Y - b.Y);
 		}
 
 		[Inline, Commutable]
 		static public Point operator*(Point a, int b)
 		{
-			return Point(a.X * b, a.Y * b);
+			return .(a.X * b, a.Y * b);
 		}
 
 		[Inline]
 		static public Point operator*(Point a, Point b)
 		{
-			return Point(a.X * b.X, a.Y * b.Y);
+			return .(a.X * b.X, a.Y * b.Y);
 		}
 
 		[Inline]
 		static public Point operator/(Point a, int b)
 		{
-			return Point(a.X / b, a.Y / b);
+			return .(a.X / b, a.Y / b);
+		}
+
+		[Inline, Commutable]
+		static public Vector operator*(Point a, float b)
+		{
+			return .(a.X * b, a.Y * b);
+		}
+
+		[Inline]
+		static public Vector operator/(Point a, float b)
+		{
+			return .(a.X / b, a.Y / b);
 		}
 
 		[Inline]
 		static public Point operator/(Point a, Point b)
 		{
-			return Point(a.X / b.X, a.Y / b.Y);
+			return .(a.X / b.X, a.Y / b.Y);
 		}
 
 		[Inline, Commutable]
