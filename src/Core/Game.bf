@@ -5,6 +5,7 @@ using System.Reflection;
 using System.IO;
 using System.Diagnostics;
 using System.Threading;
+using ImGui;
 
 namespace Strawberry
 {
@@ -159,8 +160,9 @@ namespace Strawberry
 
 		private void Render()
 		{
-			PlatformLayer.RenderBegin();
+			PlatformLayer.GameRenderBegin();
 			Draw();
+			PlatformLayer.GameRenderEnd();
 			PlatformLayer.RenderEnd();
 		}
 

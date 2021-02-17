@@ -1,5 +1,5 @@
 FileVersion = 1
-Dependencies = {corlib = "*", SDL2 = "*", MiniZ = "*"}
+Dependencies = {corlib = "*", SDL2 = "*", MiniZ = "*", ImGui = "*", ImGuiImplSDL = "*", ImGuiImplOpenGL3 = "*"}
 
 [Project]
 Name = "Strawberry"

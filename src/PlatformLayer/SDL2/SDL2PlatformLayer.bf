@@ -1,6 +1,7 @@
 using SDL2;
 using System;
 using System.Diagnostics;
+using ImGui;
 
 namespace Strawberry.SDL2
 {
@@ -128,6 +129,15 @@ namespace Strawberry.SDL2
 				for (let i < gamepads.Count)
 					gamepads[i] = SDL.GameControllerOpen((int32)i);
 			}
+
+			//ImGui
+			{
+				ImGui.CHECKVERSION();
+				ImGui.CreateContext();
+				ImGui.StyleColorsDark();
+				ImGuiImplSDL2.InitForOpenGL(window, &glContext);
+				ImGuiImplOpenGL3.Init();
+			}
 		}
 
 		public ~this()
@@ -139,6 +149,12 @@ namespace Strawberry.SDL2
 			SDL.GL_DeleteContext(glContext);
 			SDL.DestroyWindow(window);
 			SDL.Quit();
+
+			#if EDITOR
+			ImGui.ImGuiImplOpenGL3.Shutdown();
+			ImGui.ImGuiImplSDL2.Shutdown();
+			ImGui.ImGui.DestroyContext();
+			#endif
 		}
 
 		static void* SdlGetProcAddress(StringView string)
@@ -154,7 +170,20 @@ namespace Strawberry.SDL2
 
 		public override uint32 Ticks => SDL.GetTicks();
 
-		public override void RenderBegin()
+		public override void EditorRenderBegin()
+		{
+			ImGuiImplOpenGL3.NewFrame();
+			ImGuiImplSDL2.NewFrame(window);
+			ImGui.NewFrame();
+		}
+
+		public override void EditorRenderEnd()
+		{
+			ImGui.Render();
+			ImGuiImplOpenGL3.RenderDrawData(ImGui.ImGui.GetDrawData());
+		}
+
+		public override void GameRenderBegin()
 		{
 			GL.glBindFramebuffer(GL.GL_FRAMEBUFFER, 0);
 			GL.glClearColor(Game.ClearColor.Rf, Game.ClearColor.Gf, Game.ClearColor.Bf, Game.ClearColor.Af);
@@ -162,10 +191,14 @@ namespace Strawberry.SDL2
 			GL.glUseProgram(glProgram);
 		}
 
-		public override void RenderEnd()
+		public override void GameRenderEnd()
 		{
 			GL.glUseProgram(0);
 			GL.glFlush();
+		}
+
+		public override void RenderEnd()
+		{
 			SDL.GL_SwapWindow(window);
 		}
 
