@@ -14,7 +14,7 @@ namespace Strawberry
 		static public Game Game;
 	}
 
-	public class Game
+	public abstract class Game
 	{
 		public readonly List<VirtualInput> VirtualInputs;
 		public readonly String Title;
@@ -30,6 +30,7 @@ namespace Strawberry
 		public PlatformLayer PlatformLayer { get; private set; }
 		public Batcher Batcher { get; private set; }
 		public Color ClearColor = .Black;
+		public bool DebugOverlay = false;
 
 		private bool* keyboardState;
 		private int32 updateCounter;
@@ -61,7 +62,6 @@ namespace Strawberry
 
 			Tracker.[Friend]BuildAssignmentLists();
 			Assets.LoadAll();
-			Strawberry.StrwConsole.Init();
 		}
 
 		public ~this()
@@ -83,7 +83,6 @@ namespace Strawberry
 
 			Assets.DisposeAll();
 			Input.[Friend]Dispose();
-			Strawberry.StrwConsole.Dispose();
 
 			delete Batcher;
 
@@ -132,6 +131,10 @@ namespace Strawberry
 			for (var i in VirtualInputs)
 				i.Update();
 
+			//Debug Overlay
+			if (Input.KeyPressed(.Grave))
+				DebugOverlay = !DebugOverlay;
+
 			//Switch scenes
 			if (switchToScene != scene)
 			{
@@ -154,8 +157,6 @@ namespace Strawberry
 				Time.PreviousElapsed = Time.Elapsed;
 				Time.Elapsed += Time.Delta;
 			}
-
-			Strawberry.StrwConsole.[Friend]Update();
 		}
 
 		private void Render()
@@ -163,16 +164,20 @@ namespace Strawberry
 			PlatformLayer.GameRenderBegin();
 			Draw();
 			PlatformLayer.GameRenderEnd();
+
+			if (DebugOverlay)
+			{
+				PlatformLayer.EditorRenderBegin();
+				DebugOverlay();
+				PlatformLayer.EditorRenderEnd();
+			}
+
 			PlatformLayer.RenderEnd();
 		}
 
 		public virtual void Draw()
 		{
 			Scene?.Draw();
-
-			if (Strawberry.StrwConsole.Enabled)
-				Strawberry.StrwConsole.[Friend]Draw();
-
 			Batcher.Draw();
 		}
 
@@ -189,6 +194,11 @@ namespace Strawberry
 					delete switchToScene;
 				switchToScene = value;
 			}
+		}
+
+		public virtual void DebugOverlay()
+		{
+
 		}
 	}
 }
