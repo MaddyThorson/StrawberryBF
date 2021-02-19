@@ -5,17 +5,18 @@ namespace Strawberry
 {
 	static public class Input
 	{
-		
+		public const int GamepadLimit = 4;
+
 		static private bool[] previousKeyboard;
 		static private float[] lastKeypressTimes;
 		
-		static private void Init()
+		static private void Startup()
 		{
 			previousKeyboard = new bool[Keys.Count];
 			lastKeypressTimes = new float[Keys.Count];
 		}
 
-		static private void Dispose()
+		static private void Shutdown()
 		{
 			delete previousKeyboard;
 			delete lastKeypressTimes;

@@ -3,16 +3,28 @@ namespace Strawberry
 {
 	public abstract class PlatformLayer
 	{
+		public readonly String Title;
+		public readonly int ScreenWidth;
+		public readonly int ScreenHeight;
+		public readonly int WindowScale;
+
 		public Mat4x4 ScreenMatrix { get; private set; }
+
+		public this(String title, int screenWidth, int screenHeight, int windowScale)
+		{
+			Title = title;
+			ScreenWidth = screenWidth;
+			ScreenHeight = screenHeight;
+			WindowScale = windowScale;
+		}
 
 		public void UpdateScreenMatrix()
 		{
-			ScreenMatrix = Mat4x4.CreateOrthographic(Game.Width, Game.Height * 0.5f, 0, 1)
+			ScreenMatrix = Mat4x4.CreateOrthographic(ScreenWidth, ScreenHeight * 0.5f, 0, 1)
 				* Mat4x4.CreateScale(.(1, -1, 1))
 				* Mat4x4.CreateTranslation(.(-1, 1, 0));
 		}
 
-		public abstract void Init();
 		public abstract bool Closed();			// Returns whether the game window has been closed
 
 		//Rendering

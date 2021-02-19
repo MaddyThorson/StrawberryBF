@@ -23,15 +23,16 @@ namespace Strawberry.SDL2
 		private SDL.SDL_GLContext glContext;
 		private uint glProgram;
 
-		public override void Init()
+		public this(String title, int screenWidth, int screenHeight, int windowScale)
+			: base(title, screenWidth, screenHeight, windowScale)
 		{
 			SDL.Version version;
 			SDL.GetVersion(out version);
-			Calc.Log("Init SDL Version {0}.{1}.{2}", version.major, version.minor, version.patch);
+			Calc.Log("SDL Version {0}.{1}.{2}", version.major, version.minor, version.patch);
 
 			{
 				SDL.InitFlag init = .Video | .Events | .Audio | .Timer;
-				if (Game.GamepadLimit > 0)
+				if (Input.GamepadLimit > 0)
 					init |= .GameController;
 	
 				if (SDL.Init(init) != 0)
@@ -48,8 +49,8 @@ namespace Strawberry.SDL2
 
 			//Graphics
 			{
-				screenRect = SDL.Rect(0, 0, (int32)(Game.Width * Game.WindowScale), (int32)(Game.Height * Game.WindowScale));
-				window = SDL.CreateWindow(Game.Title, .Centered, .Centered, screenRect.w, screenRect.h, .Shown | .OpenGL);
+				screenRect = SDL.Rect(0, 0, (int32)(ScreenWidth * WindowScale), (int32)(ScreenHeight * WindowScale));
+				window = SDL.CreateWindow(Title, .Centered, .Centered, screenRect.w, screenRect.h, .Shown | .OpenGL);
 				renderer = SDL.CreateRenderer(window, -1, .Accelerated);
 				screen = SDL.GetWindowSurface(window);
 				SDLImage.Init(.PNG | .JPG);
@@ -125,7 +126,7 @@ namespace Strawberry.SDL2
 			//Input
 			{
 				keyboard = SDL.GetKeyboardState(null);
-				gamepads = new SDL.SDL_GameController*[Game.GamepadLimit];
+				gamepads = new SDL.SDL_GameController*[Input.GamepadLimit];
 				for (let i < gamepads.Count)
 					gamepads[i] = SDL.GameControllerOpen((int32)i);
 			}

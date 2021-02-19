@@ -14,53 +14,29 @@ namespace Strawberry
 		static public Game Game;
 	}
 
-	public abstract class Game
+	public abstract class Game : Module
 	{
 		public readonly List<VirtualInput> VirtualInputs;
-		public readonly String Title;
-		public readonly int Width;
-		public readonly int Height;
-		public readonly int WindowScale;
-		public readonly int GamepadLimit;
 		
 		private Scene scene;
 		private Scene switchToScene;
 		private bool updating;
 
-		public PlatformLayer PlatformLayer { get; private set; }
 		public Batcher Batcher { get; private set; }
 		public Color ClearColor = .Black;
 		public bool DebugOverlay = false;
 
 		private bool* keyboardState;
 		private int32 updateCounter;
+		private float msCounter;
 
-		public this(PlatformLayer platformLayer, String windowTitle, int32 width, int32 height, int32 windowScale, int gamepadLimit)
-			: base()
+		public this(PlatformLayer platformLayer)
+			: base(platformLayer)
 		{
 			Game = this;
-			PlatformLayer = platformLayer;
 
-			Title = windowTitle;
-			Width = width;
-			Height = height;
-			WindowScale = windowScale;
-			GamepadLimit = gamepadLimit;
-
-			String exePath = scope .();
-			Environment.GetExecutableFilePath(exePath);
-			String exeDir = scope .();
-			Path.GetDirectoryPath(exePath, exeDir);
-			Directory.SetCurrentDirectory(exeDir);
-
-			platformLayer.UpdateScreenMatrix();
-			platformLayer.Init();
 			Batcher = platformLayer.CreateBatcher();
-
 			VirtualInputs = new List<VirtualInput>();
-			Input.[Friend]Init();
-
-			Tracker.[Friend]BuildAssignmentLists();
 			Assets.LoadAll();
 		}
 
@@ -82,50 +58,12 @@ namespace Strawberry
 			}
 
 			Assets.DisposeAll();
-			Input.[Friend]Dispose();
-
 			delete Batcher;
 
 			Game = null;
 		}
 
-		public void Run()
-		{
-			float msCounter = 0;
-			uint32 prevTick = 0;
-			while (true)
-			{
-				if (PlatformLayer.Closed())
-					return;
-
-				uint32 tick = PlatformLayer.Ticks;
-				msCounter += (tick - prevTick);
-
-				if (Time.FixedTimestep)
-				{
-					Time.RawDelta = Time.TargetDeltaTime;
-					while (msCounter >= Time.TargetMilliseconds)
-					{
-						msCounter -= Time.TargetMilliseconds;
-						PlatformLayer.UpdateInput();
-						Update();
-						Input.AfterUpdate();
-					}
-				}
-				else
-				{
-					Time.RawDelta = (tick - prevTick) / 1000f;
-					PlatformLayer.UpdateInput();
-					Update();
-					Input.AfterUpdate();
-				}
-
-				Render();
-				prevTick = tick;
-			}
-		}
-
-		public virtual void Update()
+		protected override void Update()
 		{
 			//Input
 			for (var i in VirtualInputs)
@@ -159,7 +97,7 @@ namespace Strawberry
 			}
 		}
 
-		private void Render()
+		protected override void Render()
 		{
 			PlatformLayer.GameRenderBegin();
 			Draw();
@@ -199,6 +137,11 @@ namespace Strawberry
 		public virtual void DebugOverlay()
 		{
 
+		}
+
+		public virtual Editor CreateEditor()
+		{
+			return null;
 		}
 	}
 }

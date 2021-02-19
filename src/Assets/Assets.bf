@@ -10,7 +10,7 @@ namespace Strawberry
 		static public Dictionary<String, Sprite> Sprites { get; private set; }
 
 		#if DEBUG
-		static public readonly String Root = "../../../src/assets/";
+		static public readonly String Root = "src/assets/";
 		#else
 		static public readonly String Root = "assets/";
 		#endif

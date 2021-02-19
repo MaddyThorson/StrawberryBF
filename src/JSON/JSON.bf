@@ -396,7 +396,15 @@ namespace Strawberry
 		static public JSON FromFile(String filePath)
 		{
 			FileStream stream = scope FileStream();
-			stream.Open(filePath, .Read);
+
+			let str = scope String();
+			Directory.GetCurrentDirectory(str);
+			Calc.Log(str);
+
+			
+
+			if (stream.Open(filePath, .Read) case .Err)
+				Runtime.FatalError("Unable to open FileStream");
 			let json = FromStream(stream);
 			stream.Close();
 
