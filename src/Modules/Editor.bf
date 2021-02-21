@@ -2,11 +2,6 @@ namespace Strawberry
 {
 	public abstract class Editor : Module
 	{
-		public this(PlatformLayer platformLayer)
-			: base(platformLayer)
-		{
-			
-		}
 
 		protected override void Update()
 		{

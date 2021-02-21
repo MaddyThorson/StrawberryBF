@@ -1,6 +1,12 @@
 using System;
+using System.Diagnostics;
 namespace Strawberry
 {
+	static
+	{
+		static public PlatformLayer PlatformLayer = null;
+	}
+
 	public abstract class PlatformLayer
 	{
 		public readonly String Title;
@@ -12,6 +18,9 @@ namespace Strawberry
 
 		public this(String title, int screenWidth, int screenHeight, int windowScale)
 		{
+			Debug.Assert(PlatformLayer == null, "Cannot create more than one PlatformLayer");
+			PlatformLayer = this;
+
 			Title = title;
 			ScreenWidth = screenWidth;
 			ScreenHeight = screenHeight;

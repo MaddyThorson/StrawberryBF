@@ -30,12 +30,11 @@ namespace Strawberry
 		private int32 updateCounter;
 		private float msCounter;
 
-		public this(PlatformLayer platformLayer)
-			: base(platformLayer)
+		public this()
 		{
 			Game = this;
 
-			Batcher = platformLayer.CreateBatcher();
+			Batcher = PlatformLayer.CreateBatcher();
 			VirtualInputs = new List<VirtualInput>();
 			Assets.LoadAll();
 		}

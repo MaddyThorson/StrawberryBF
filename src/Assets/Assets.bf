@@ -30,7 +30,7 @@ namespace Strawberry
 		static public void LoadAll()
 		{
 			Textures = new .();
-			Load<Texture>("textures", "*.png", Textures, (path) => Game.PlatformLayer.LoadTexture(path));
+			Load<Texture>("textures", "*.png", Textures, (path) => PlatformLayer.LoadTexture(path));
 
 			Sprites = new .();
 			Load<Sprite>("sprites", "*.ase", Sprites, (path) => { return new Sprite(new String(path)); });

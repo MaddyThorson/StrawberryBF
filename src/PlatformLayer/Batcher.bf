@@ -29,7 +29,7 @@ namespace Strawberry
 		public void ClearMatrix()
 		{
 			matrixStack.Clear();
-			matrixStack.Add(Game.PlatformLayer.ScreenMatrix);
+			matrixStack.Add(PlatformLayer.ScreenMatrix);
 		}
 
 		public void PushMatrix(Mat4x4 mat)

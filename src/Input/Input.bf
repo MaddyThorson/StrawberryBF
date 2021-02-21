@@ -26,31 +26,31 @@ namespace Strawberry
 		{
 			for (let i < previousKeyboard.Count)
 			{
-				if (!previousKeyboard[i] && Game.PlatformLayer.PollKey((Keys)i))
+				if (!previousKeyboard[i] && PlatformLayer.PollKey((Keys)i))
 					lastKeypressTimes[i] = Time.Elapsed;
-				previousKeyboard[i] = Game.PlatformLayer.PollKey((Keys)i);
+				previousKeyboard[i] = PlatformLayer.PollKey((Keys)i);
 			}
 		}
 
 		static public bool Ctrl => KeyCheck(Keys.LCtrl) || KeyCheck(Keys.RCtrl);
 		static public bool Alt => KeyCheck(Keys.LCtrl) || KeyCheck(Keys.RCtrl);
 		static public bool Shift => KeyCheck(Keys.LCtrl) || KeyCheck(Keys.RCtrl);
-		static public bool CapsLock => Game.PlatformLayer.CapsLock;
-		static public bool NumLock => Game.PlatformLayer.NumLock;
+		static public bool CapsLock => PlatformLayer.CapsLock;
+		static public bool NumLock => PlatformLayer.NumLock;
 
 		static public bool KeyCheck(Keys key)
 		{
-			return Game.PlatformLayer.PollKey(key);
+			return PlatformLayer.PollKey(key);
 		}
 
 		static public bool KeyPressed(Keys key)
 		{
-			return Game.PlatformLayer.PollKey(key) && !previousKeyboard[(int)key];
+			return PlatformLayer.PollKey(key) && !previousKeyboard[(int)key];
 		}
 
 		static public bool KeyPressed(Keys key, float repeatDelay, float repeatInterval)
 		{
-			if (Game.PlatformLayer.PollKey(key))
+			if (PlatformLayer.PollKey(key))
 				return !previousKeyboard[(int)key] || Time.OnInterval(repeatInterval, lastKeypressTimes[(int)key] + repeatDelay);
 			else
 				return false;
@@ -58,7 +58,7 @@ namespace Strawberry
 
 		static public bool KeyReleased(Keys key)
 		{
-			return !Game.PlatformLayer.PollKey(key) && previousKeyboard[(int)key];
+			return !PlatformLayer.PollKey(key) && previousKeyboard[(int)key];
 		}
 
 		static public void KeystrokesIntoString(String toString, float keyRepeatDelay, float keyRepeatInterval)
@@ -172,12 +172,12 @@ namespace Strawberry
 
 		static public bool GamepadButtonCheck(int gamepadID, Buttons button)
 		{
-			return Game.PlatformLayer.PollGamepadButton(gamepadID, button);
+			return PlatformLayer.PollGamepadButton(gamepadID, button);
 		}
 
 		static public float GamepadAxisCheck(int gamepadID, Axes axis)
 		{
-			return Game.PlatformLayer.PollGamepadAxis(gamepadID, axis);
+			return PlatformLayer.PollGamepadAxis(gamepadID, axis);
 		}
 	}
 }

@@ -1,17 +1,16 @@
+using System.Diagnostics;
 namespace Strawberry
 {
 	public abstract class Module
 	{
 		public enum RunResults { Quit, Swap }
 
-		public PlatformLayer PlatformLayer { get; private set; }
-
 		private float msCounter;
 		private uint32 prevTicks;
 
-		public this(PlatformLayer platformLayer)
+		public this()
 		{
-			PlatformLayer = platformLayer;
+			Debug.Assert(PlatformLayer != null, "Must create PlatformLayer before Modules.");
 		}
 
 		private Module Run()
