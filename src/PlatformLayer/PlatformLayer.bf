@@ -16,6 +16,8 @@ namespace Strawberry
 			ScreenWidth = screenWidth;
 			ScreenHeight = screenHeight;
 			WindowScale = windowScale;
+
+			UpdateScreenMatrix();
 		}
 
 		public void UpdateScreenMatrix()

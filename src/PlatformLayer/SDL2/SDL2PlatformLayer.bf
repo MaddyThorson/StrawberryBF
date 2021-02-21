@@ -146,16 +146,14 @@ namespace Strawberry.SDL2
 			delete gamepads;
 			delete shader;
 
+			ImGui.ImGuiImplOpenGL3.Shutdown();
+			ImGui.ImGuiImplSDL2.Shutdown();
+			ImGui.ImGui.DestroyContext();
+
 			GL.glDeleteProgram(glProgram);
 			SDL.GL_DeleteContext(glContext);
 			SDL.DestroyWindow(window);
 			SDL.Quit();
-
-			#if EDITOR
-			ImGui.ImGuiImplOpenGL3.Shutdown();
-			ImGui.ImGuiImplSDL2.Shutdown();
-			ImGui.ImGui.DestroyContext();
-			#endif
 		}
 
 		static void* SdlGetProcAddress(StringView string)
@@ -194,8 +192,8 @@ namespace Strawberry.SDL2
 
 		public override void GameRenderEnd()
 		{
-			GL.glFlush();
 			GL.glUseProgram(0);
+			GL.glFlush();
 		}
 
 		public override void RenderEnd()
