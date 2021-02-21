@@ -23,7 +23,6 @@ namespace Strawberry
 		private bool updating;
 
 		public Batcher Batcher { get; private set; }
-		public Color ClearColor = .Black;
 		public bool DebugOverlay = false;
 
 		private bool* keyboardState;
@@ -92,14 +91,20 @@ namespace Strawberry
 
 		protected override void Render()
 		{
+			PlatformLayer.RenderBegin();
+
+			// game
 			PlatformLayer.GameRenderBegin();
 			Draw();
 			PlatformLayer.GameRenderEnd();
 
+			// debug overlay
 			if (DebugOverlay)
 			{
 				PlatformLayer.ImGuiRenderBegin();
+				ImGui.PushID("DebugOverlay");
 				DebugOverlay();
+				ImGui.PopID();
 				PlatformLayer.ImGuiRenderEnd();
 			}
 

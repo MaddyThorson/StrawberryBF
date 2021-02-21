@@ -27,6 +27,7 @@ namespace Strawberry
 		static private void Shutdown()
 		{
 			Input.[Friend]Shutdown();
+			Sprite.[Friend]Dispose();
 		}
 	}
 }

@@ -11,6 +11,7 @@ namespace Strawberry.SDL2
 		public int TextureMatrixLocation { get; private set; }
 		public Texture.Filters TextureFilter = .Nearest;
 		public bool TextureClamping = false;
+		public Color ClearColor = .Black;
 
 		private SDL.Window* window;
 		private SDL.Surface* screen;
@@ -169,6 +170,24 @@ namespace Strawberry.SDL2
 
 		public override uint32 Ticks => SDL.GetTicks();
 
+		public override void RenderBegin()
+		{
+			GL.glBindFramebuffer(GL.GL_FRAMEBUFFER, 0);
+			GL.glClearColor(ClearColor.Rf, ClearColor.Gf, ClearColor.Bf, ClearColor.Af);
+			GL.glClear(GL.GL_COLOR_BUFFER_BIT | GL.GL_DEPTH_BUFFER_BIT);
+		}
+
+		public override void GameRenderBegin()
+		{
+			GL.glUseProgram(glProgram);
+		}
+
+		public override void GameRenderEnd()
+		{
+			GL.glUseProgram(0);
+			GL.glFlush();
+		}
+
 		public override void ImGuiRenderBegin()
 		{
 			ImGuiImplOpenGL3.NewFrame();
@@ -180,20 +199,6 @@ namespace Strawberry.SDL2
 		{
 			ImGui.Render();
 			ImGuiImplOpenGL3.RenderDrawData(ImGui.ImGui.GetDrawData());
-		}
-
-		public override void GameRenderBegin()
-		{
-			GL.glBindFramebuffer(GL.GL_FRAMEBUFFER, 0);
-			GL.glClearColor(Game.ClearColor.Rf, Game.ClearColor.Gf, Game.ClearColor.Bf, Game.ClearColor.Af);
-			GL.glClear(GL.GL_COLOR_BUFFER_BIT | GL.GL_DEPTH_BUFFER_BIT);
-			GL.glUseProgram(glProgram);
-		}
-
-		public override void GameRenderEnd()
-		{
-			GL.glUseProgram(0);
-			GL.glFlush();
 		}
 
 		public override void RenderEnd()

@@ -29,9 +29,13 @@ namespace Strawberry
 
 		static public void LoadAll()
 		{
+			if (Textures != null)
+				DeleteDictionaryAndKeysAndValues!(Textures);
 			Textures = new .();
 			Load<Texture>("textures", "*.png", Textures, (path) => PlatformLayer.LoadTexture(path));
 
+			if (Sprites != null)
+				DeleteDictionaryAndKeysAndValues!(Sprites);
 			Sprites = new .();
 			Load<Sprite>("sprites", "*.ase", Sprites, (path) => { return new Sprite(new String(path)); });
 		}
@@ -39,8 +43,9 @@ namespace Strawberry
 		static public void DisposeAll()
 		{
 			DeleteDictionaryAndKeysAndValues!(Textures);
+			Textures = null;
 			DeleteDictionaryAndKeysAndValues!(Sprites);
-			Sprite.[Friend]Dispose();
+			Sprites = null;
 		}
 
 		static private void Load<T>(String directory, String wildcard, Dictionary<String, T> putInto, function T(String) loader)
