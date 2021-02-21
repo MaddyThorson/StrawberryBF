@@ -7,23 +7,12 @@ namespace Strawberry
 		{
 			Startup();
 
-			Module current = module;
-			current.[Friend]Started();
-			while (true)
+			Module currentModule = module;
+			while (currentModule != null)
 			{
-				let newModule = current.Run();
-
-				if (newModule != null)
-				{
-					delete current;
-					current = newModule;
-					current.[Friend]Started();
-				}
-				else
-				{
-					delete current;
-					break;
-				}
+				let newModule = currentModule.[Friend]Run();
+				delete currentModule;
+				currentModule = newModule;
 			}
 
 			Shutdown();

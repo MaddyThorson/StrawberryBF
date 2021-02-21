@@ -15,9 +15,9 @@ namespace Strawberry
 
 		protected override void Render()
 		{
-			PlatformLayer.EditorRenderBegin();
+			PlatformLayer.ImGuiRenderBegin();
 			UI();
-			PlatformLayer.EditorRenderEnd();
+			PlatformLayer.ImGuiRenderEnd();
 			PlatformLayer.RenderEnd();
 		}
 

@@ -99,9 +99,9 @@ namespace Strawberry
 
 			if (DebugOverlay)
 			{
-				PlatformLayer.EditorRenderBegin();
+				PlatformLayer.ImGuiRenderBegin();
 				DebugOverlay();
-				PlatformLayer.EditorRenderEnd();
+				PlatformLayer.ImGuiRenderEnd();
 			}
 
 			PlatformLayer.RenderEnd();

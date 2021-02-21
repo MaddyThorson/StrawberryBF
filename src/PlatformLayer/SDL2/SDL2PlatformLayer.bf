@@ -171,14 +171,14 @@ namespace Strawberry.SDL2
 
 		public override uint32 Ticks => SDL.GetTicks();
 
-		public override void EditorRenderBegin()
+		public override void ImGuiRenderBegin()
 		{
 			ImGuiImplOpenGL3.NewFrame();
 			ImGuiImplSDL2.NewFrame(window);
 			ImGui.NewFrame();
 		}
 
-		public override void EditorRenderEnd()
+		public override void ImGuiRenderEnd()
 		{
 			ImGui.Render();
 			ImGuiImplOpenGL3.RenderDrawData(ImGui.ImGui.GetDrawData());

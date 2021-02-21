@@ -28,10 +28,10 @@ namespace Strawberry
 		public abstract bool Closed();			// Returns whether the game window has been closed
 
 		//Rendering
-		public abstract void EditorRenderBegin();
-		public abstract void EditorRenderEnd();
 		public abstract void GameRenderBegin();
 		public abstract void GameRenderEnd();
+		public abstract void ImGuiRenderBegin();
+		public abstract void ImGuiRenderEnd();
 		public abstract void RenderEnd();
 		
 		//Update

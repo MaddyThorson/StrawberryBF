@@ -14,13 +14,15 @@ namespace Strawberry
 			PlatformLayer = platformLayer;
 		}
 
-		public Module Run()
+		private Module Run()
 		{
 			Time.RawPreviousElapsed = 0;
 			Time.RawElapsed = 0;
 			Time.PreviousElapsed = 0;
 			Time.Elapsed = 0;
 			Time.Freeze = 0;
+
+			Started();
 
 			while (true)
 			{
