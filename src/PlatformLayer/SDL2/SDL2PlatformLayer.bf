@@ -194,8 +194,8 @@ namespace Strawberry.SDL2
 
 		public override void GameRenderEnd()
 		{
-			GL.glUseProgram(0);
 			GL.glFlush();
+			GL.glUseProgram(0);
 		}
 
 		public override void RenderEnd()

@@ -16,6 +16,12 @@ namespace Strawberry
 
 		public Module Run()
 		{
+			Time.RawPreviousElapsed = 0;
+			Time.RawElapsed = 0;
+			Time.PreviousElapsed = 0;
+			Time.Elapsed = 0;
+			Time.Freeze = 0;
+
 			while (true)
 			{
 				let tick = PlatformLayer.Ticks;
@@ -41,6 +47,14 @@ namespace Strawberry
 					Input.AfterUpdate();
 				}
 
+				//Update elapsed
+				{
+					Time.RawPreviousElapsed = Time.RawElapsed;
+					Time.RawElapsed += Time.RawDelta;
+					Time.PreviousElapsed = Time.Elapsed;
+					Time.Elapsed += Time.Delta;
+				}
+
 				// render
 				Render();
 
@@ -58,6 +72,7 @@ namespace Strawberry
 			}	
 		}
 
+		protected abstract void Started();
 		protected abstract void Update();
 		protected abstract void Render();
 

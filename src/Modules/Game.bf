@@ -88,12 +88,6 @@ namespace Strawberry
 			{
 				if (scene != null)
 					scene.Update();
-
-				Time.RawPreviousElapsed = Time.RawElapsed;
-				Time.RawElapsed += Time.RawDelta;
-
-				Time.PreviousElapsed = Time.Elapsed;
-				Time.Elapsed += Time.Delta;
 			}
 		}
 
@@ -137,11 +131,6 @@ namespace Strawberry
 		public virtual void DebugOverlay()
 		{
 
-		}
-
-		public virtual Editor CreateEditor()
-		{
-			return null;
 		}
 	}
 }
