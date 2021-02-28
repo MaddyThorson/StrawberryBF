@@ -7,6 +7,7 @@ namespace Strawberry
 
 		private float msCounter;
 		private uint32 prevTicks;
+		private bool swap;
 
 		public this()
 		{
@@ -62,7 +63,7 @@ namespace Strawberry
 				// exit or swap to another module
 				if (PlatformLayer.Closed())
 					return null;
-				else if (Input.KeyPressed(.F1))
+				else if (swap || Input.KeyPressed(.F1))
 				{
 					let swapTo = CreateSwapModule();
 					if (swapTo != null)
@@ -80,6 +81,11 @@ namespace Strawberry
 		public virtual Module CreateSwapModule()
 		{
 			return null;
+		}
+
+		public void Swap()
+		{
+			swap = true;
 		}
 	}
 }
