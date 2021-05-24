@@ -104,7 +104,6 @@ namespace Strawberry
 
 		private void TrackComponent(Component c)
 		{
-			for (let t in Tracker.AssignmentLists[c.GetType()])
 				componentTracker[t].Add(c);
 		}
 
