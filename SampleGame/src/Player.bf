@@ -2,20 +2,36 @@ using System;
 
 namespace Strawberry.Sample
 {
-	public class Player	: Component, IUpdate
+	public class Player	: Component, IUpdate, IDraw
 	{
+		static public Entity Create(Point pos)
+		{
+			let e = new Entity(pos);
+
+			e.Add(new Player());
+			let hitbox = e.Add(new Hitbox(-4, -8, 16, 16));
+			e.Add(new Physics(hitbox));
+
+			return e;
+		}
+
 		public Vector Speed;
 
+		private Physics physics;
 		private Timer tJumpGrace;
 		private Timer tVarJump;
 
-		public this(Point pos)
-			: base(pos)
+		public override void Added()
 		{
-			Hitbox = Rect(-4, -8, 16, 16);
+			base.Added();
 
-			Add(tJumpGrace = new Timer());
-			Add(tVarJump = new Timer());
+			tJumpGrace = Entity.Add(new Timer());
+			tVarJump = Entity.Add(new Timer());
+		}
+
+		public override void Awake()
+		{
+			physics = Entity.First<Physics>();
 		}
 
 		public void Update()
@@ -31,7 +47,7 @@ namespace Strawberry.Sample
 			const float runAccel = 800;
 			const float runAccelAirMult = 0.8f;	// Gives you slightly less control of horizontal motion in the air
 
-			let onGround = GroundCheck();
+			let onGround = physics.GroundCheck();
 			if (onGround)
 				tJumpGrace.Value = coyoteTime;
 
@@ -80,28 +96,25 @@ namespace Strawberry.Sample
 			}
 			
 			//Resolve Speed
-			MoveX(Speed.X * Time.Delta, scope => OnCollideX);
-			MoveY(Speed.Y * Time.Delta, scope => OnCollideY);
+			physics.MoveX(Speed.X * Time.Delta, scope => OnCollideX);
+			physics.MoveY(Speed.Y * Time.Delta, scope => OnCollideY);
 		}
 
 		private void OnCollideX(Collision col)
 		{
 			Speed.X = 0;
-			ZeroRemainderX();
+			physics.ZeroRemainderX();
 		}
 
 		private void OnCollideY(Collision col)
 		{
 			Speed.Y = 0;
-			ZeroRemainderY();
+			physics.ZeroRemainderY();
 		}
 
-		public override void Draw()
+		public void Draw()
 		{
-			base.Draw();
-
-			DrawHitboxOutline(.Green);
-			Game.Batcher.Tex(Assets.Textures["test"], X - 4, Y - 8);
+			physics.Hitbox.DebugDraw();
 		}
 	}
 }
