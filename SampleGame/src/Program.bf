@@ -7,11 +7,12 @@ namespace Strawberry.Sample
 	{
 		static public int Main(String[] args)
 		{
-			let sdl = scope SDL2PlatformLayer();
-			sdl.TexturesEnableEdgeClamping = true;
-			let game = scope SampleGame(sdl);
+			let sdl = scope SDL2PlatformLayer("Strawberry Sample Game!", 320, 180, 3);
+			sdl.TextureClamping = true;
+			PlatformLayer = sdl;
 
-			game.Run();
+			Engine.Run(scope SampleGame());
+
 			return 0;
 		}
 	}

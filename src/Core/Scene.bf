@@ -276,6 +276,44 @@ namespace Strawberry
 			return into;
 		}
 
+		public T CheckForEach<T>(delegate bool(T) func) where T : interface
+		{
+			List<Component> list;
+			if (componentTracker.TryGetValue(typeof(T), out list))
+				for (let c in list)
+					if (func(c as T))
+						return c as T;
+			return null;
+		}
+
+		public T CheckForEach<T>(delegate bool(T) func) where T : Component
+		{
+			List<Component> list;
+			if (componentTracker.TryGetValue(typeof(T), out list))
+				for (let c in list)
+					if (func(c as T))
+						return c as T;
+			return null;
+		}
+
+		public void CheckForEach<T>(delegate bool(T) func, List<T> into) where T : interface
+		{
+			List<Component> list;
+			if (componentTracker.TryGetValue(typeof(T), out list))
+				for (let c in list)
+					if (func(c as T))
+						into.Add(c as T);
+		}
+
+		public void CheckForEach<T>(delegate bool(T) func, List<T> into) where T : Component
+		{
+			List<Component> list;
+			if (componentTracker.TryGetValue(typeof(T), out list))
+				for (let c in list)
+					if (func(c as T))
+						into.Add(c as T);
+		}
+
 		public void ForEach<T>(delegate void(T) action) where T : interface
 		{
 			List<Component> list;

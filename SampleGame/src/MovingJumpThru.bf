@@ -1,6 +1,6 @@
 namespace Strawberry.Sample
 {
-	public class MovingJumpThru	: OldJumpThru
+	public class MovingJumpThru	: JumpThru
 	{
 		private Point moveFrom;
 		private Point moveTo;
