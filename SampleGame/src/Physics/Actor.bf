@@ -1,20 +1,32 @@
 using System;
+using System.Collections;
 
 namespace Strawberry.Sample
 {
-	public class Physics : Component, IHasHitbox, IUpdate
+	public class Actor : Component, IHasHitbox, IUpdate
 	{
 		public Hitbox Hitbox { get; private set; }
 		public Vector Speed;
 
 		private Vector remainder;
 
+		public Level Level => Entity.SceneAs<Level>();
+		public Vector ExactPosition => Entity.Position + remainder;
+
 		public this(Hitbox hitbox)
 		{
 			Hitbox = hitbox;
 		}
 
-		public Level Level => Entity.SceneAs<Level>();
+		public void Update()
+		{
+			MoveX(Speed.X * Time.Delta);
+			MoveY(Speed.Y * Time.Delta);
+		}
+
+		/*
+			Collision Helpers
+		*/
 
 		public bool Check(Level level)
 		{
@@ -31,21 +43,19 @@ namespace Strawberry.Sample
 			return Hitbox.Check<Solid>(.(0, distance)) || Check(Level, .(0, distance)) || Hitbox.CheckOutside<JumpThru>(.(0, distance));
 		}
 
-		public virtual bool IsRiding(Solid solid)
+		public bool IsRiding(Solid solid)
 		{
 			return Hitbox.Check(solid, .(0, 1));
 		}
 
-		public virtual bool IsRiding(JumpThru jumpThru)
+		public bool IsRiding(JumpThru jumpThru)
 		{
 			return Hitbox.CheckOutside(jumpThru, .(0, 1));
 		}
 
-		public void Update()
-		{
-			MoveX(Speed.X * Time.Delta);
-			MoveY(Speed.Y * Time.Delta);
-		}
+		/*
+			Movement
+		*/
 
 		public bool MoveX(float amount, delegate void(Collision) onCollide = null)
 		{
@@ -74,15 +84,15 @@ namespace Strawberry.Sample
 		}
 
 		[Inline]
-		public void MoveToX(float x)
+		public void MoveToX(float x, delegate void(Collision) onCollide = null)
 		{
-			MoveX(x - (Entity.X + remainder.X), null);
+			MoveX(x - (Entity.X + remainder.X), onCollide);
 		}
 
 		[Inline]
-		public void MoveToY(float y)
+		public void MoveToY(float y, delegate void(Collision) onCollide = null)
 		{
-			MoveY(y - (Entity.Y + remainder.Y), null);
+			MoveY(y - (Entity.Y + remainder.Y), onCollide);
 		}
 
 		public bool MoveExactX(int amount, delegate void(Collision) onCollide = null)
@@ -116,22 +126,45 @@ namespace Strawberry.Sample
 			int move = amount;
 			int sign = Math.Sign(amount);
 
-			while (move != 0)
+			if (move > 0)
 			{
-				if (Check(Level, .(0, sign)) || Hitbox.Check<Solid>(.(0, sign)) || Hitbox.CheckOutside<JumpThru>(.(0, sign)))
+				while (move != 0)
 				{
-					let c = Collision(
-						Cardinals.FromPoint(Point.Down * sign),
-						Math.Abs(amount),
-						Math.Abs(amount - move)
-					);
+					if (Check(Level, .(0, sign)) || Hitbox.Check<Solid>(.(0, sign)) || Hitbox.CheckOutside<JumpThru>(.(0, sign)))
+					{
+						let c = Collision(
+							Cardinals.FromPoint(Point.Down * sign),
+							Math.Abs(amount),
+							Math.Abs(amount - move)
+						);
 
-					onCollide?.Invoke(c);
-					return true;
+						onCollide?.Invoke(c);
+						return true;
+					}
+
+					Entity.Y += sign;
+					move -= sign;
 				}
+			}
+			else
+			{
+				while (move != 0)
+				{
+					if (Check(Level, .(0, sign)) || Hitbox.Check<Solid>(.(0, sign)))
+					{
+						let c = Collision(
+							Cardinals.FromPoint(Point.Down * sign),
+							Math.Abs(amount),
+							Math.Abs(amount - move)
+						);
 
-				Entity.Y += sign;
-				move -= sign;
+						onCollide?.Invoke(c);
+						return true;
+					}
+
+					Entity.Y += sign;
+					move -= sign;
+				}
 			}
 
 			return false;

@@ -335,19 +335,19 @@ namespace Strawberry
 		[Inline]
 		public bool Check(Hitbox other)
 		{
-			return other.Collidable && SceneHitbox.Intersects(other.SceneHitbox);
+			return other.Collidable && other.Entity != Entity && SceneHitbox.Intersects(other.SceneHitbox);
 		}
 
 		[Inline]
 		public bool Check(Hitbox other, Point offset)
 		{
-			return other.Collidable && (SceneHitbox + offset).Intersects(other.SceneHitbox);
+			return other.Collidable && other.Entity != Entity && (SceneHitbox + offset).Intersects(other.SceneHitbox);
 		}
 
 		[Inline]
 		public bool CheckOutside(Hitbox other, Point offset)
 		{
-			return other.Collidable && !SceneHitbox.Intersects(other.SceneHitbox) && (SceneHitbox + offset).Intersects(other.SceneHitbox);
+			return other.Collidable && other.Entity != Entity && !SceneHitbox.Intersects(other.SceneHitbox) && (SceneHitbox + offset).Intersects(other.SceneHitbox);
 		}
 
 		[Inline]

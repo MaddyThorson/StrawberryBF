@@ -2,7 +2,7 @@ using System;
 
 namespace Strawberry.Sample
 {
-	public class Player	: Component, IUpdate, IDraw
+	public class Player	: Component, IUpdate
 	{
 		static public Entity Create(Point pos)
 		{
@@ -10,18 +10,19 @@ namespace Strawberry.Sample
 
 			e.Add(new Player());
 			let hitbox = e.Add(new Hitbox(-4, -8, 16, 16));
-			e.Add(new Physics(hitbox));
+			e.Add(new Actor(hitbox));
+			e.Add(new DrawHitbox(hitbox, .Red));
 
 			return e;
 		}
 
 		public Vector Speed;
 
-		private Physics physics;
+		private Actor physics;
 		private Timer tJumpGrace;
 		private Timer tVarJump;
 
-		public override void Added()
+		protected override void Added()
 		{
 			base.Added();
 
@@ -29,9 +30,9 @@ namespace Strawberry.Sample
 			tVarJump = Entity.Add(new Timer());
 		}
 
-		public override void Awake()
+		protected override void Awake()
 		{
-			physics = Entity.First<Physics>();
+			physics = Entity.First<Actor>();
 		}
 
 		public void Update()
@@ -110,11 +111,6 @@ namespace Strawberry.Sample
 		{
 			Speed.Y = 0;
 			physics.ZeroRemainderY();
-		}
-
-		public void Draw()
-		{
-			physics.Hitbox.DebugDraw();
 		}
 	}
 }

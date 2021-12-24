@@ -7,9 +7,9 @@ namespace Strawberry
 		public Entity Entity { get; private set; }
 		public bool IsAwake { get; private set; }
 
-		public virtual void Added() { }
-		public virtual void Awake() { }
-		public virtual void End() { }
+		protected virtual void Added() { }
+		protected virtual void Awake() { }
+		protected virtual void End() { }
 
 		[Inline]
 		public void Destroy()

@@ -4,14 +4,14 @@ namespace Strawberry
 {
 	public struct Point : IHashable
 	{
-		static public readonly Point Right = .(1, 0);
-		static public readonly Point Left = .(-1, 0);
-		static public readonly Point Up = .(0, -1);
-		static public readonly Point Down = .(0, 1);
-		static public readonly Point UnitX = .(1, 0);
-		static public readonly Point UnitY = .(0, 1);
-		static public readonly Point Zero = .(0, 0);
-		static public readonly Point One = .(1, 1);
+		public const Point Right = .(1, 0);
+		public const Point Left = .(-1, 0);
+		public const Point Up = .(0, -1);
+		public const Point Down = .(0, 1);
+		public const Point UnitX = .(1, 0);
+		public const Point UnitY = .(0, 1);
+		public const Point Zero = .(0, 0);
+		public const Point One = .(1, 1);
 
 		public int X;
 		public int Y;
@@ -73,7 +73,7 @@ namespace Strawberry
 			return .((int32)a.X, (int32)a.Y);
 		}
 
-		[Inline]
+		[Inline, Commutable]
 		static public bool operator==(Point a, Point b)
 		{
 			return a.X == b.X && a.Y == b.Y;

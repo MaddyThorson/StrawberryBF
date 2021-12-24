@@ -6,9 +6,15 @@ namespace Strawberry.Sample
 	{
 		public Hitbox Hitbox { get; private set; }
 
+		private Vector remainder;
+
+		public Vector ExactPosition => Entity.Position + remainder;
+
 		public this(Hitbox hitbox)
 		{
 			Hitbox = hitbox;
 		}
+
+
 	}
 }

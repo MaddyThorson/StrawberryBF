@@ -11,7 +11,6 @@ namespace Strawberry
 			while (currentModule != null)
 			{
 				let newModule = currentModule.[Friend]Run();
-				delete currentModule;
 				currentModule = newModule;
 			}
 

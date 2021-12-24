@@ -35,7 +35,7 @@ namespace Strawberry
 		{
 			for (var c in components)
 			{
-				c.End();
+				c.[Friend]End();
 				c.[Friend]IsAwake = false;
 				Scene.[Friend]UntrackComponent(c);
 			}
@@ -49,7 +49,7 @@ namespace Strawberry
 			{
 				if (!c.[Friend]IsAwake)
 				{
-					c.Awake();
+					c.[Friend]Awake();
 					c.[Friend]IsAwake = true;
 				}
 			}
@@ -67,6 +67,11 @@ namespace Strawberry
 			Components
 		*/
 
+		public bool Has<T>() where T : Component
+		{
+			return First<T>() != null;
+		}
+
 		public T First<T>() where T : Component
 		{
 			for (let c in components)
@@ -75,7 +80,7 @@ namespace Strawberry
 			return null;
 		}
 
-		public ICollection<T> All<T>(ICollection<T> into) where T : Component
+		public List<T> All<T>(List<T> into) where T : Component
 		{
 			for (let c in components)
 				if (c is T)
@@ -119,14 +124,14 @@ namespace Strawberry
 					components.Add(c);
 					Scene.[Friend]TrackComponent(c);
 					c.[Friend]Entity = this;
-					c.Added();
+					c.[Friend]Added();
 				}
 
 				if (IsAwake)
 				{
 					for (var c in toAdd)
 					{
-						c.Awake();
+						c.[Friend]Awake();
 						c.[Friend]IsAwake = true;
 					}
 				}

@@ -24,7 +24,7 @@ namespace Strawberry
 				 delete s;
 		}
 
-		public override void Awake()
+		protected override void Awake()
 		{
 			CallEnter();
 		}

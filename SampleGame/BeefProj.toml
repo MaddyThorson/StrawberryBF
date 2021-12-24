@@ -15,4 +15,3 @@ ReflectAlwaysInclude = "IncludeAll"
 Type = "Folder"
 Name = "Physics"
 AutoInclude = true
-Source = ["Physics.bf", "Solid.bf", "JumpThru.bf"]
